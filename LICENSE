@@ -1,0 +1,26 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 Martin Mölder
+
+These materials — the text, the code examples and the figures — are licensed
+under the Creative Commons Attribution 4.0 International License.
+
+You are free to share and adapt the material for any purpose, including
+commercially, provided you give appropriate credit:
+
+    Mölder, M. (2026). Quantitative Methods I: seminar materials.
+    University of Tartu.
+
+The full licence text is at https://creativecommons.org/licenses/by/4.0/
+
+
+THE DATA IS NOT COVERED BY THIS LICENCE
+
+The survey data in data/ is derived from the Comparative Study of Electoral
+Systems, which sets its own terms. It must be cited as:
+
+    The Comparative Study of Electoral Systems (www.cses.org). CSES MODULE 6
+    SECOND ADVANCE RELEASE [dataset and documentation]. December 16, 2025
+    version. doi:10.7804/cses.module6.2025-12-16
+
+data/world.csv is derived from World Bank Open Data.

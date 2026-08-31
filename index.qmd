@@ -198,3 +198,34 @@ All of these are available on Moodle.
 | 16 | 16.12.2026 | Final test |
 
 : {tbl-colwidths="[5,20,75]"}
+
+## How these materials were made
+
+The 2026 version of these materials was put together with the help of artificial intelligence — specifically Anthropic's language model Claude.
+
+The model helped with the following:
+
+- reviewing the previous year's materials and working out what had to change;
+- restructuring them to the new session plan and drafting the text;
+- writing the R code and checking it against the new Swedish data;
+- building the data preparation scripts and the `swirl` lessons;
+- checking the result by machine — that every function and argument is explained before it is used, that no number in the text is typed by hand rather than computed, and that the rules about measurement scales are applied consistently;
+- finding mistakes, including several in the previous version.
+
+All of the content has been reviewed, checked and edited by the author, and responsibility for these materials rests with the author.
+
+Why mention it here? Because the same transparency is expected of you. Using AI is not forbidden, but it has to be declared — see the [University of Tartu guidelines on using AI in teaching and studies](https://ut.ee/en/content/guidelines-using-ai-applications-teaching-and-studies){target="_blank"}.
+
+There is also a narrower point, which this course is partly about. A language model will write you code that runs and produces a number. Whether that number answers the question you asked is not something it can tell you, and not something you can see by looking at the output. Everything in these materials about checking your work — the limits of a scale, comparing a result against what it would be if nothing were going on, reading the residuals — applies with more force, not less, when the code was not written by you.
+
+## Using these materials
+
+These materials are published under the [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/){target="_blank"} licence.
+
+They may be freely used, copied, shared and adapted — in teaching and elsewhere — **provided the author is cited**:
+
+> Mölder, M. (2026). *Quantitative Methods I: seminar materials.* University of Tartu.
+
+This covers the materials themselves: the text, the code examples and the figures.
+
+**The data is not covered by that licence.** CSES sets its own terms, and the citation requirement given in [The data](#the-data) applies whenever the data is used, whether on its own or together with these materials.

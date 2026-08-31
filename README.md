@@ -73,3 +73,20 @@ The 86 MB source file is not in this repository.
 
 `data/world.csv` is built from the World Bank Open Data API by
 `data-raw/05_countries.R`.
+
+## Licence
+
+The materials are published under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — see `LICENSE`.
+
+> Mölder, M. (2026). *Quantitative Methods I: seminar materials.* University of Tartu.
+
+The data is not covered by that licence and carries the CSES citation
+requirement given above.
+
+## How these materials were made
+
+The 2026 version was put together with the help of Anthropic's language model
+Claude — reviewing the previous version, restructuring it, drafting text,
+writing and checking the R code against the new data, building the swirl
+lessons, and running the checks in `tools/`. All of it has been reviewed,
+checked and edited by the author, who is responsible for it.
