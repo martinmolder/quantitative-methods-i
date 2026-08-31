@@ -169,6 +169,38 @@ for (lesson in manifest) {
     }
   }
 
+  # Each lesson ships its own copy of the data it uses. A copy that has
+  # fallen behind data/ makes the lesson run on old numbers without saying
+  # so. tools/build_swirl_zip.R refreshes them; this reports the drift.
+  shipped <- list.files(
+    file.path(course_dir, lesson),
+    pattern = "\\.(rds|csv|sav)$"
+  )
+
+  for (f in shipped) {
+
+    canonical <- file.path("data", f)
+    target <- file.path(course_dir, lesson, f)
+
+    if (!file.exists(canonical)) {
+      note(lesson, paste0("ships ", f, ", which is not in data/"))
+      next
+    }
+
+    stale <- file.size(canonical) != file.size(target) ||
+      !identical(
+        readBin(canonical, "raw", file.size(canonical)),
+        readBin(target, "raw", file.size(target))
+      )
+
+    if (stale) {
+      note(lesson, paste0(
+        "its copy of ", f, " differs from data/", f,
+        " -- run tools/build_swirl_zip.R"
+      ))
+    }
+  }
+
   # length
   n_questions <- sum(classes %in% c("cmd_question", "mult_question"))
   if (n_questions < 15 || n_questions > 30) {

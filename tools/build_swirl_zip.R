@@ -20,6 +20,60 @@ if (length(old_builds) > 0) {
   file.remove(old_builds)
 }
 
+# Each lesson ships its own copy of whatever data it uses, so that nothing
+# needs an internet connection in the seminar. Those copies can fall behind
+# the files in data/ whenever the data is rebuilt -- and a stale copy does not
+# announce itself, it just makes the lesson run on old numbers.
+#
+# So refresh them here rather than trusting anyone to remember. Which files a
+# lesson needs is worked out from what it already contains, so adding a data
+# file to a lesson needs no change to this script.
+
+manifest <- readLines(file.path("swirl", course, "MANIFEST"), warn = FALSE)
+manifest <- manifest[nzchar(manifest)]
+
+same_file <- function(a, b) {
+  if (file.size(a) != file.size(b)) return(FALSE)
+  identical(
+    readBin(a, "raw", file.size(a)),
+    readBin(b, "raw", file.size(b))
+  )
+}
+
+refreshed <- 0
+
+for (lesson in manifest) {
+
+  lesson_dir <- file.path("swirl", course, lesson)
+  shipped <- list.files(lesson_dir, pattern = "\\.(rds|csv|sav)$")
+
+  for (f in shipped) {
+
+    canonical <- file.path("data", f)
+
+    if (!file.exists(canonical)) {
+      stop(
+        "Lesson ", lesson, " ships ", f,
+        ", but there is no data/", f, " to refresh it from."
+      )
+    }
+
+    target <- file.path(lesson_dir, f)
+
+    if (!same_file(canonical, target)) {
+      file.copy(canonical, target, overwrite = TRUE)
+      cat("  refreshed", lesson, "/", f, "\n")
+      refreshed <- refreshed + 1
+    }
+  }
+}
+
+if (refreshed == 0) {
+  cat("Lesson data was already current.\n")
+} else {
+  cat("Refreshed", refreshed, "stale lesson data file(s).\n")
+}
+
 # The course directory has to sit at the top level of the zip, so the zip is
 # built from inside swirl/ rather than from the project root.
 old_wd <- getwd()
