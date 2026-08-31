@@ -1,0 +1,157 @@
+/* ---------------------------------------------------------------------------
+   Quantitative Methods I, autumn 2026
+   --------------------------------------------------------------------------- */
+
+body {
+  font-size: 15px;
+  text-align: justify;
+}
+
+code {
+  font-size: 13px;
+}
+
+pre {
+  font-size: 13px;
+}
+
+/* Output blocks (the result of the code) on a grey background, so that they
+   are visibly different from the code itself */
+pre:not([class]) {
+  background-color: #ececec;
+  color: black;
+}
+
+h1 { text-align: left; font-weight: bold; }
+h2 { text-align: left; }
+h3 { text-align: left; }
+h4 { text-align: left; }
+
+/* ---------------------------------------------------------------------------
+   Block quotes -- the course "note this" remarks.
+   NB. The text must be PURE BLACK. Grey text on a coloured background is
+   not readable.
+   --------------------------------------------------------------------------- */
+
+blockquote,
+.quarto-container blockquote,
+div.quarto-layout-panel blockquote {
+  text-align: justify;
+  color: #000000 !important;
+  background-color: #d6ecff;
+  border-left: 5px solid #0083ff;
+  padding: 0.6em 1em;
+  margin: 1em 0;
+}
+
+/* The bootstrap theme (cosmo) sets grey text inside a block quote. Grey on
+   blue is not readable, so it is overridden here. */
+blockquote *,
+blockquote p,
+blockquote li,
+blockquote strong,
+blockquote em {
+  color: #000000 !important;
+}
+
+/* Code inside a block quote stays distinct, but dark */
+blockquote code {
+  color: #7d1a1a !important;
+}
+
+blockquote p:last-child { margin-bottom: 0; }
+
+/* The same applies to Quarto callout blocks */
+.callout,
+.callout-body,
+.callout-body p,
+.callout-body li,
+.callout-title,
+.callout-title-container {
+  color: #000000 !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Discussion questions
+   --------------------------------------------------------------------------- */
+
+.discussion {
+  border-left: 5px solid #d98200;
+  background-color: #fdf3e3;
+  color: #000000;
+  padding: 0.6em 1em;
+  margin: 1.5em 0;
+  border-radius: 4px;
+}
+
+.discussion p { color: #000000; }
+.discussion p:last-child { margin-bottom: 0; }
+
+/* The swirl practical at the end of each session */
+.swirl {
+  border-left: 5px solid #6a3d9a;
+  background-color: #f3eefa;
+  color: #000000;
+  padding: 0.6em 1em;
+  margin: 1.5em 0;
+  border-radius: 4px;
+}
+
+.swirl p { color: #000000; }
+.swirl p:last-child { margin-bottom: 0; }
+
+/* How to write up a result, and the mistakes to avoid */
+.reporting {
+  border-left: 5px solid #444444;
+  background-color: #f2f2f2;
+  color: #000000;
+  padding: 0.6em 1em;
+  margin: 1.5em 0;
+  border-radius: 4px;
+}
+
+.reporting p { color: #000000; }
+.reporting p:last-child { margin-bottom: 0; }
+
+/* ---------------------------------------------------------------------------
+   Tables. By default the rows are too far apart and the table holds a lot of
+   empty space -- squeeze it closer to the line spacing of ordinary text.
+   --------------------------------------------------------------------------- */
+
+table {
+  font-size: 14px;
+}
+
+table td,
+table th {
+  padding-top: 0.15em !important;
+  padding-bottom: 0.15em !important;
+  line-height: 1.3 !important;
+}
+
+/* modelsummary uses tinytable */
+.tinytable td,
+.tinytable th {
+  padding-top: 0.1em !important;
+  padding-bottom: 0.1em !important;
+  line-height: 1.25 !important;
+}
+
+.tinytable {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+/* Long tables and code lines must not stretch the page */
+.cell-output, .table-responsive {
+  overflow-x: auto;
+}
+
+/* ---------------------------------------------------------------------------
+   Sidebar: the chapter names have to be readable
+   --------------------------------------------------------------------------- */
+
+.sidebar-item-text {
+  font-size: 14px;
+  line-height: 1.35;
+}

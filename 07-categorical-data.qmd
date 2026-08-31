@@ -1,0 +1,265 @@
+# Analysing categorical data
+
+```{r}
+#| label: setup-07
+#| include: false
+Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
+options(width = 78)
+fmt <- function(x, digits = 2) formatC(x, format = "f", digits = digits)
+```
+
+The first application of last week's reasoning. Two categorical variables: are they related, and how strongly?
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+swe <- readRDS("data/swe.rds")
+```
+
+Gender is stored as `female`, a 0/1 variable. For tables we want something that prints as words rather than as numbers, so make a factor first.
+
+```{r}
+swe$sex <- factor(
+  swe$female,
+  levels = c(0, 1),
+  labels = c("Men", "Women")
+)
+```
+
+## Cross-tabulations
+
+The starting point is a table of counts. `table()` with two arguments gives rows by the first and columns by the second.
+
+```{r}
+swe$sd_vote <- factor(
+  swe$vote_sd,
+  levels = c(0, 1),
+  labels = c("Other party", "Sweden Democrats")
+)
+
+counts <- table(swe$sex, swe$sd_vote)
+counts
+```
+
+Counts alone are hard to read, because the groups are different sizes. Turn them into percentages with `prop.table()`.
+
+The second argument decides what adds up to 100, and choosing it wrongly is one of the commonest errors in student work.
+
+```{r}
+round(100 * prop.table(counts, 1), 1)
+```
+
+`1` means rows. Each row now adds to 100, so we are reading **"of men, what share voted SD"** — `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[1, 2], 1)`% — against `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[2, 2], 1)`% of women.
+
+```{r}
+round(100 * prop.table(counts, 2), 1)
+```
+
+`2` means columns, and it answers a completely different question: **"of Sweden Democrat voters, what share are men"**. And `prop.table(counts)` with no second argument makes the whole table add to 100.
+
+> **Percentage of what?** Pick the direction that matches your question. Almost always you want the percentage **within the explanatory variable** — here, within each sex — because the question is whether being a man makes SD voting more likely, not whether being an SD voter makes maleness more likely.
+
+A bar chart of the same thing:
+
+```{r}
+#| fig-height: 3.2
+swe |>
+  filter(!is.na(sex), !is.na(sd_vote)) |>
+  ggplot(aes(x = sex, fill = sd_vote)) +
+  geom_bar(position = "fill") +
+  scale_fill_viridis_d(end = 0.8) +
+  labs(
+    x = NULL,
+    y = "Share of respondents",
+    fill = NULL
+  ) +
+  theme_bw()
+```
+
+`position = "fill"` makes every bar the full height and shows composition — the visual equivalent of `prop.table(counts, 1)`.
+
+## Is the difference real?
+
+`r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[1, 2], 1)`% against `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[2, 2], 1)`% looks like a difference. But we have a sample, so the question from last week applies: could a gap this size come out of a population where men and women vote the same way?
+
+The test works by comparing what we **observed** with what we would **expect** if the two variables were unrelated.
+
+If sex made no difference, then the SD share among men and among women would both be the overall SD share. So the expected count in a cell is its row total times the overall proportion for that column.
+
+```{r}
+row_totals <- rowSums(counts)
+col_shares <- colSums(counts) / sum(counts)
+
+expected <- outer(row_totals, col_shares)
+round(expected, 1)
+```
+
+`rowSums()` and `colSums()` add up rows and columns. `outer()` multiplies every element of the first vector by every element of the second, giving a table of the same shape — each row total spread across the columns in the overall proportions.
+
+Compare the two:
+
+```{r}
+counts
+round(expected, 1)
+```
+
+More SD-voting men than expected, fewer SD-voting women. The **chi-squared statistic** turns that comparison into one number: for every cell, the difference between observed and expected, squared, divided by the expected count, all added up.
+
+$$\chi^2 = \sum \frac{(O_{ij} - E_{ij})^2}{E_{ij}}$$
+
+Squaring stops the positive and negative differences cancelling. Dividing by the expected count is what makes a discrepancy of 20 count for more in a cell where 10 were expected than in one where 500 were.
+
+```{r}
+sum((counts - expected)^2 / expected)
+```
+
+R does the whole thing, including the p-value, with `chisq.test()`.
+
+```{r}
+chisq.test(counts, correct = FALSE)
+```
+
+`correct = FALSE` switches off Yates' continuity correction, which R applies by default to 2×2 tables and which changes the statistic slightly. It is off here only so that the number matches the one we calculated by hand; leave it at the default in real work.
+
+The **degrees of freedom** are $(r-1) \times (c-1)$ — for a 2×2 table, 1. Once you know one cell and the totals, the rest of the table follows.
+
+The p-value is far below 0.05, so a gap this size would be very unusual if men and women voted alike.
+
+::: {.discussion}
+**A question.** The test answers "could this be chance?" and says no.
+
+It does not answer "is this a big difference?", and it does not answer "why?". What would you need in order to answer each of those? Which of the two do you think the chi-squared test is most often mistaken for answering?
+:::
+
+## How strong: odds and odds ratios
+
+A test tells you whether something is there. It says nothing about size — and with a large enough sample, a trivial difference will pass.
+
+For categorical data the standard measure of size is the **odds ratio**.
+
+**Odds** are the probability of something happening divided by the probability of it not happening. In a table, that is just one count divided by the other.
+
+```{r}
+men_sd <- counts["Men", "Sweden Democrats"]
+men_other <- counts["Men", "Other party"]
+odds_men <- men_sd / men_other
+women_sd <- counts["Women", "Sweden Democrats"]
+women_other <- counts["Women", "Other party"]
+odds_women <- women_sd / women_other
+
+round(c(men = odds_men, women = odds_women), 3)
+```
+
+For every man who voted SD, about `r fmt(1/(counts["Men","Sweden Democrats"]/counts["Men","Other party"]), 1)` voted for something else. For women the figure is about `r fmt(1/(counts["Women","Sweden Democrats"]/counts["Women","Other party"]), 1)`.
+
+The **odds ratio** is one divided by the other.
+
+```{r}
+odds_ratio <- odds_men / odds_women
+odds_ratio
+```
+
+The odds of voting SD are about `r fmt(odds_men/odds_women)` times higher for men than for women.
+
+**An odds ratio of 1 means no association** — the odds are the same in both groups. So 1 plays the role that 0 plays elsewhere.
+
+> **Odds are not probabilities**, and the two get confused constantly. `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[1, 2], 1)`% of men voted SD — that is a probability. The odds are `r fmt(counts["Men","Sweden Democrats"]/counts["Men","Other party"], 3)`. An odds ratio of `r fmt(odds_men/odds_women)` does **not** mean men were `r fmt(odds_men/odds_women)` times as likely to vote SD; the probabilities are `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[1, 2], 1)`% and `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[2, 2], 1)`%, a ratio closer to `r fmt(prop.table(table(swe$sex, swe$vote_sd), 1)[1, 2] / prop.table(table(swe$sex, swe$vote_sd), 1)[2, 2])`. Odds ratios overstate the relative risk, and the more common the outcome the worse it gets. Say "the odds are" and mean it.
+
+### A confidence interval for the odds ratio
+
+An odds ratio from a sample carries the same uncertainty as anything else. The interval is built on the log scale, because odds ratios are multiplicative — 2 and 0.5 are the same size of effect in opposite directions, but on the ordinary scale one is 1 away from no-effect and the other 0.5.
+
+```{r}
+se_log_or <- sqrt(sum(1 / counts))
+
+lower <- exp(log(odds_ratio) - 1.96 * se_log_or)
+upper <- exp(log(odds_ratio) + 1.96 * se_log_or)
+
+round(c(odds_ratio, lower, upper), 3)
+```
+
+`sum(1 / counts)` adds the reciprocals of the four cell counts, which is the standard error of the log odds ratio. `exp()` undoes `log()`, putting the interval back on the odds-ratio scale.
+
+From `r fmt(exp(log(odds_men/odds_women) - 1.96*sqrt(sum(1/counts))))` to `r fmt(exp(log(odds_men/odds_women) + 1.96*sqrt(sum(1/counts))))`. It excludes 1, which is the same conclusion the chi-squared test reached — as it must be.
+
+Note that the interval is not symmetric around the estimate. That is the log scale showing through, and it is correct.
+
+## Bigger tables
+
+Everything above works on tables of any size. The multiparty case is where it gets interesting.
+
+```{r}
+educ_vote <- table(swe$educ3, swe$vote)
+educ_vote
+```
+
+```{r}
+test <- chisq.test(educ_vote)
+test
+```
+
+Highly significant. But with 24 cells, "there is an association" is not much of a finding. **Where** is it?
+
+The answer is in the same observed-minus-expected comparison, scaled so that cells are comparable. `chisq.test()` keeps these as `residuals`.
+
+```{r}
+round(test$residuals, 2)
+```
+
+Each number says how far that cell is from what no-association would predict, in standard-error-like units. Positive means more cases than expected, negative means fewer. Anything beyond about ±2 is worth looking at.
+
+Read the two ends of the education scale:
+
+- **Sweden Democrats**: `r fmt(test$residuals["No degree", "SD"])` among those with no degree, `r fmt(test$residuals["Postgraduate", "SD"])` among postgraduates. Strongly over-represented at one end, strongly under-represented at the other.
+- **Greens**: `r fmt(test$residuals["No degree", "MP"])` and `r fmt(test$residuals["Postgraduate", "MP"])`. The same pattern in reverse, and even sharper.
+
+That is the education divide in Swedish politics, and it took one table.
+
+> With a table this size, do not report the odds ratio for the whole thing — there is no such number. Pick the 2×2 comparison you actually want to make and compute the odds ratio for that.
+
+::: {.discussion}
+**A question.** Here is the same kind of table for social class and bloc voting, which political sociology has a strong prediction about — workers vote left, the middle class votes right.
+
+```{r}
+#| echo: false
+round(100 * prop.table(table(swe$ses, swe$bloc), 1), 1)
+```
+
+Workers are `r fmt(100 * prop.table(table(swe$ses, swe$bloc), 1)["Worker", "Left"], 1)`% left. White collar respondents are `r fmt(100 * prop.table(table(swe$ses, swe$bloc), 1)["White collar", "Left"], 1)`% left. The self-employed are the group that stands out, at `r fmt(100 * prop.table(table(swe$ses, swe$bloc), 1)["Self-employed", "Left"], 1)`%.
+
+The chi-squared test on this table is significant. Does that mean class voting is alive in Sweden? What is the significant result actually detecting?
+:::
+
+## What the test assumes
+
+Two things, and the second catches people.
+
+**The observations must be independent** — one row per person, each person counted once. A table of "answers" where the same respondent contributes several is not valid input.
+
+**The expected counts must not be too small.** The usual rule is that no expected count should be below 5. Below that the chi-squared approximation breaks down, and R will warn you. Look at the expected table when the warning appears:
+
+```{r}
+round(chisq.test(swe$ses, swe$bloc)$expected, 1)
+```
+
+The Farmer row is thin — `r sum(!is.na(swe$ses) & !is.na(swe$bloc) & swe$ses == "Farmer")` cases in total. With small categories the options are to merge them into a neighbouring one, to drop them and say so, or to use `fisher.test()`, which does not rely on the approximation.
+
+::: {.reporting}
+**How to write it up.**
+
+> Men were more likely than women to vote for the Sweden Democrats (`r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[1, 2], 1)`% against `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[2, 2], 1)`%), χ²(1) = `r fmt(chisq.test(table(swe$sex, swe$sd_vote), correct = FALSE)$statistic)`, *p* < .001, *n* = `r sum(counts)`. The odds of voting for the party were `r fmt(odds_men/odds_women)` times higher for men (95% CI [`r fmt(exp(log(odds_men/odds_women) - 1.96*sqrt(sum(1/counts))))`, `r fmt(exp(log(odds_men/odds_women) + 1.96*sqrt(sum(1/counts))))`]).
+
+Give the percentages, the test with its degrees of freedom, the *n*, and a measure of size. Mistakes to avoid:
+
+- **Reporting the test without the table.** χ² on its own tells the reader nothing about which way the association runs.
+- **Percentaging in the wrong direction.** Decide what should add to 100 before you produce the table, not after.
+- **Calling an odds ratio a probability ratio.** They differ, sometimes a lot.
+- **Reporting one χ² for a large table and stopping.** For anything bigger than 2×2, say where the association is.
+- **Ignoring a warning about expected counts.** It means the p-value is not trustworthy.
+- **Forgetting that χ² grows with the sample.** In a large survey almost every cross-tabulation is significant. Significance is not size.
+:::
+
+::: {.swirl}
+**In the seminar.** `swirl` lesson 7, *Analysing Categorical Data*. Cross-tabulations and percentaging, expected counts, the chi-squared test, odds ratios, and reading the residuals of a bigger table. Around 30 minutes.
+:::

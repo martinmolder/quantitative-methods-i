@@ -1,0 +1,173 @@
+- Class: meta
+  Course: Quantitative Methods I
+  Lesson: Data Visualisation
+  Author: Martin Molder
+  Type: Standard
+  Organization: University of Tartu
+  Version: 1.0.0
+
+- Class: text
+  Output: Last week was about what belongs on a plot. This week is about how to put it there. The Swedish survey is loaded as swe.
+
+- Class: text
+  Output: Every ggplot is built the same way. ggplot() says which data. aes() maps variables onto parts of the plot. A geom_ function says what to draw. Layers are joined with a plus sign - not the pipe, because ggplot2 is older than the pipe and kept its own way of stacking.
+
+- Class: cmd_question
+  Output: Start with one variable. Type ggplot(swe, aes(x = vote)) + geom_bar().
+  CorrectAnswer: ggplot(swe, aes(x = vote)) + geom_bar()
+  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = vote)) + geom_bar()')
+  Hint: Type ggplot(swe, aes(x = vote)) + geom_bar().
+
+- Class: text
+  Output: The parties come out in left-to-right order, because that is the order of the factor levels, which was set when the data was built. Left as plain text they would be alphabetical, which would mean nothing. The last bar is everyone who did not vote or did not say.
+
+- Class: cmd_question
+  Output: Now a continuous variable. A histogram cuts the range into intervals and counts. Type ggplot(swe, aes(x = age)) + geom_histogram(binwidth = 5).
+  CorrectAnswer: ggplot(swe, aes(x = age)) + geom_histogram(binwidth = 5)
+  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = age)) + geom_histogram(binwidth = 5)')
+  Hint: Type ggplot(swe, aes(x = age)) + geom_histogram(binwidth = 5). The binwidth is in the units of the variable, so five years.
+
+- Class: mult_question
+  Output: A bar chart has gaps between the bars and a histogram does not. Why?
+  CorrectAnswer: The gaps say the categories are distinct, and touching bars say the scale is continuous.
+  AnswerChoices: The gaps say the categories are distinct, and touching bars say the scale is continuous.; It is purely a matter of style.; Histograms have more bars, so there is no room for gaps.
+  AnswerTests: omnitest(correctVal='The gaps say the categories are distinct, and touching bars say the scale is continuous.')
+  Hint: Think about what the space between two bars would mean if the variable were age.
+
+- Class: cmd_question
+  Output: Try a different bin width and watch the picture change. Repeat the histogram with binwidth = 1.
+  CorrectAnswer: ggplot(swe, aes(x = age)) + geom_histogram(binwidth = 1)
+  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = age)) + geom_histogram(binwidth = 1)')
+  Hint: Type ggplot(swe, aes(x = age)) + geom_histogram(binwidth = 1).
+
+- Class: text
+  Output: Same data, different story. That is why ggplot warns you when you do not choose - the choice changes what the reader sees, so it should be yours.
+
+- Class: text
+  Output: Now two variables. A boxplot shows the distribution of a continuous variable across the categories of a categorical one.
+
+- Class: cmd_question
+  Output: Type ggplot(swe, aes(x = vote, y = lr_self)) + geom_boxplot().
+  CorrectAnswer: ggplot(swe, aes(x = vote, y = lr_self)) + geom_boxplot()
+  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = vote, y = lr_self)) + geom_boxplot()')
+  Hint: Type ggplot(swe, aes(x = vote, y = lr_self)) + geom_boxplot().
+
+- Class: mult_question
+  Output: The thick line in the middle of each box is the median. What does the box itself cover?
+  CorrectAnswer: The middle half of the cases, from the 25th to the 75th percentile.
+  AnswerChoices: The middle half of the cases, from the 25th to the 75th percentile.; One standard deviation either side of the mean.; The whole range of the data except the outliers.
+  AnswerTests: omnitest(correctVal='The middle half of the cases, from the 25th to the 75th percentile.')
+  Hint: The two edges of the box are quartiles.
+
+- Class: text
+  Output: That one plot holds a lot of Swedish politics. Left Party voters near the left end, Sweden Democrat voters well to the right - and the boxes overlapping far more than party competition would suggest.
+
+- Class: cmd_question
+  Output: Two continuous variables call for a scatterplot. Type ggplot(swe, aes(x = like_s, y = like_m)) + geom_point().
+  CorrectAnswer: ggplot(swe, aes(x = like_s, y = like_m)) + geom_point()
+  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = like_s, y = like_m)) + geom_point()')
+  Hint: Type ggplot(swe, aes(x = like_s, y = like_m)) + geom_point().
+
+- Class: mult_question
+  Output: That plot is nearly useless. What is wrong with it?
+  CorrectAnswer: Both variables take only eleven whole values, so thousands of respondents sit on top of each other.
+  AnswerChoices: Both variables take only eleven whole values, so thousands of respondents sit on top of each other.; The two variables are unrelated, so there is nothing to see.; Scatterplots cannot be used for survey data.
+  AnswerTests: omnitest(correctVal='Both variables take only eleven whole values, so thousands of respondents sit on top of each other.')
+  Hint: Count the possible positions. Eleven values on each axis is how many places in total?
+
+- Class: cmd_question
+  Output: Fix it with geom_count(), which sizes each dot by how many cases sit there. Repeat the plot with geom_count() instead of geom_point().
+  CorrectAnswer: ggplot(swe, aes(x = like_s, y = like_m)) + geom_count()
+  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = like_s, y = like_m)) + geom_count()')
+  Hint: Type ggplot(swe, aes(x = like_s, y = like_m)) + geom_count().
+
+- Class: text
+  Output: Now the important distinction. Mapping means let this variable decide, and goes inside aes(). Setting means make it this always, and goes outside aes() as an argument to the geom.
+
+- Class: cmd_question
+  Output: First a setting. Type ggplot(swe, aes(x = lr_self)) + geom_density(fill = "steelblue").
+  CorrectAnswer: ggplot(swe, aes(x = lr_self)) + geom_density(fill = "steelblue")
+  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = lr_self)) + geom_density(fill = "steelblue")')
+  Hint: Type ggplot(swe, aes(x = lr_self)) + geom_density(fill = "steelblue"). The fill argument is outside aes().
+
+- Class: cmd_question
+  Output: Now a mapping. Put fill = bloc inside aes() instead - ggplot(swe, aes(x = lr_self, fill = bloc)) + geom_density(alpha = 0.5).
+  CorrectAnswer: ggplot(swe, aes(x = lr_self, fill = bloc)) + geom_density(alpha = 0.5)
+  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = lr_self, fill = bloc)) + geom_density(alpha = 0.5)')
+  Hint: Type ggplot(swe, aes(x = lr_self, fill = bloc)) + geom_density(alpha = 0.5). Note that alpha stays outside aes() - it is a fixed value.
+
+- Class: text
+  Output: Two curves and a legend, because bloc is a variable with categories. Put a fixed colour inside aes() by mistake and ggplot treats the word as a one-category variable - you get a legend saying steelblue and a colour that is not the one you asked for.
+
+- Class: text
+  Output: Instead of crowding groups onto one plot, you can draw one small plot per group. That is faceting.
+
+- Class: cmd_question
+  Output: Type ggplot(swe, aes(x = lr_self)) + geom_histogram(binwidth = 1) + facet_wrap(~vote).
+  CorrectAnswer: ggplot(swe, aes(x = lr_self)) + geom_histogram(binwidth = 1) + facet_wrap(~vote)
+  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = lr_self)) + geom_histogram(binwidth = 1) + facet_wrap(~vote)')
+  Hint: Type ggplot(swe, aes(x = lr_self)) + geom_histogram(binwidth = 1) + facet_wrap(~vote). The squiggle is a tilde, and it marks a formula.
+
+- Class: text
+  Output: All the panels share the same axes, which is what makes them comparable. That tilde marks a formula, R's way of writing 'in terms of'. It comes back in every model from session 11 onwards.
+
+- Class: text
+  Output: Everything so far has been about getting data onto the page. The rest is about the reader - and the commonest failure in student work is axes labelled with variable names.
+
+- Class: cmd_question
+  Output: Label the boxplot properly. Take the boxplot from before and add labs(x = "Party voted for in 2022", y = "Left-right self-placement (0 = left, 10 = right)").
+  CorrectAnswer: ggplot(swe, aes(x = vote, y = lr_self)) + geom_boxplot() + labs(x = "Party voted for in 2022", y = "Left-right self-placement (0 = left, 10 = right)")
+  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = vote, y = lr_self)) + geom_boxplot() + labs(x = "Party voted for in 2022", y = "Left-right self-placement (0 = left, 10 = right)")')
+  Hint: Add + labs(x = "Party voted for in 2022", y = "Left-right self-placement (0 = left, 10 = right)") to the boxplot.
+
+- Class: text
+  Output: Note that the y label carries the direction of the scale. Without it the reader has to guess whether 10 is left or right, and half of them will guess wrong.
+
+- Class: cmd_question
+  Output: Drop the grey background, which prints better and puts less between the reader and the data. Add + theme_bw() to the end of that same command.
+  CorrectAnswer: ggplot(swe, aes(x = vote, y = lr_self)) + geom_boxplot() + labs(x = "Party voted for in 2022", y = "Left-right self-placement (0 = left, 10 = right)") + theme_bw()
+  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = vote, y = lr_self)) + geom_boxplot() + labs(x = "Party voted for in 2022", y = "Left-right self-placement (0 = left, 10 = right)") + theme_bw()')
+  Hint: Add + theme_bw() to the end.
+
+- Class: text
+  Output: Now three rules about colour, all of which cost nothing to follow. The first is not to encode the same thing twice.
+
+- Class: cmd_question
+  Output: See what that looks like. Type ggplot(swe, aes(x = vote, fill = vote)) + geom_bar().
+  CorrectAnswer: ggplot(swe, aes(x = vote, fill = vote)) + geom_bar()
+  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = vote, fill = vote)) + geom_bar()')
+  Hint: Type ggplot(swe, aes(x = vote, fill = vote)) + geom_bar().
+
+- Class: mult_question
+  Output: Eight colours and a legend have been added. What information do they carry that the plain grey version did not already have?
+  CorrectAnswer: None - the parties were already named along the horizontal axis.
+  AnswerChoices: None - the parties were already named along the horizontal axis.; The party colours, which readers recognise.; The relative sizes of the parties.
+  AnswerTests: omnitest(correctVal='None - the parties were already named along the horizontal axis.')
+  Hint: Cover the legend with your hand. Have you lost anything?
+
+- Class: text
+  Output: The second rule. If you want to draw attention to one case, highlight it and leave the rest grey. That is what a reader's eye is for.
+
+- Class: cmd_question
+  Output: The third rule is that colours must work for a colourblind reader - about one man in twelve cannot reliably tell red from green. Do not judge by eye; use a palette built for it. Add + scale_fill_viridis_d(end = 0.8) to the density plot with fill = bloc.
+  CorrectAnswer: ggplot(swe, aes(x = lr_self, fill = bloc)) + geom_density(alpha = 0.5) + scale_fill_viridis_d(end = 0.8)
+  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = lr_self, fill = bloc)) + geom_density(alpha = 0.5) + scale_fill_viridis_d(end = 0.8)')
+  Hint: Type ggplot(swe, aes(x = lr_self, fill = bloc)) + geom_density(alpha = 0.5) + scale_fill_viridis_d(end = 0.8).
+
+- Class: text
+  Output: Viridis stays distinguishable under every common form of colour deficiency, and also in black and white print. Never use a rainbow for a quantity - a rainbow has no order, so it invents boundaries that are not in the data.
+
+- Class: text
+  Output: One last thing, and it is a rule with no exceptions. Never put two different vertical scales on one plot. The alignment between them is arbitrary, so you can make two series appear to move together or apart just by choosing different limits. Any pattern the reader sees is one you drew.
+
+- Class: cmd_question
+  Output: Finally, save something. Put a labelled plot into an object called p - use the boxplot with its labs() and theme_bw() from before.
+  CorrectAnswer: p <- ggplot(swe, aes(x = vote, y = lr_self)) + geom_boxplot() + labs(x = "Party voted for in 2022", y = "Left-right self-placement (0 = left, 10 = right)") + theme_bw()
+  AnswerTests: omnitest(correctExpr='p <- ggplot(swe, aes(x = vote, y = lr_self)) + geom_boxplot() + labs(x = "Party voted for in 2022", y = "Left-right self-placement (0 = left, 10 = right)") + theme_bw()')
+  Hint: Put p <- in front of the plot command you built earlier.
+
+- Class: text
+  Output: Then ggsave("figure.pdf", plot = p, width = 6, height = 4) writes it out. The width and height are in inches and they matter - they set how large the text is relative to the plot. Save a figure at the size you will actually use it, or its labels end up half the size of the body text.
+
+- Class: text
+  Output: That is the toolkit. Next week we stop describing data and start asking whether what we see in a sample tells us anything about the world it came from.

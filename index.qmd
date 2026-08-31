@@ -1,0 +1,177 @@
+# Introduction {.unnumbered}
+
+```{r}
+#| label: setup
+#| include: false
+Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
+swe <- readRDS("data/swe.rds")
+
+# Every number quoted on this page is calculated here, so that none of them
+# can go stale if the data are rebuilt.
+n_resp <- nrow(swe)
+
+lr_party <- sapply(
+  swe[paste0("lr_", c("v", "mp", "s", "c", "l", "kd", "m", "sd"))],
+  mean,
+  na.rm = TRUE
+)
+
+vote_share <- 100 * prop.table(table(swe$vote))
+
+# The official result of the 2022 Riksdag election, from Valmyndigheten.
+result_2022 <- c(
+  V = 6.8, MP = 5.1, S = 30.3, C = 6.7,
+  L = 4.6, KD = 5.3, M = 19.1, SD = 20.5
+)
+
+fmt1 <- function(x) formatC(x, format = "f", digits = 1)
+
+sd_gap <- result_2022[["SD"]] - vote_share[["SD"]]
+
+# How much the weight improves the reported vote shares. `mae` is the mean
+# absolute error: the average distance between the survey figure and the
+# real one, ignoring the direction.
+voters <- swe[!is.na(swe$vote), ]
+
+share_unweighted <- 100 * prop.table(table(voters$vote))
+share_weighted <- 100 * prop.table(xtabs(wt ~ vote, data = voters))
+
+mae <- function(estimate) {
+  mean(abs(estimate[names(result_2022)] - result_2022))
+}
+
+mae_unweighted <- mae(share_unweighted)
+mae_weighted <- mae(share_weighted)
+
+# Reported against official turnout, for all 18 studies in the module.
+turnout <- readr::read_csv("data/turnout.csv", show_col_types = FALSE)
+
+n_studies <- nrow(turnout)
+swe_reported <- turnout$reported[turnout$study == "SWE_2022"]
+swe_official <- turnout$official[turnout$study == "SWE_2022"]
+```
+
+These materials belong to the course *Quantitative Methods* (SHRG.03.024) at the Johan Skytte Institute of Political Studies.
+
+The course has two aims. The first is to give you a working understanding of the most common statistical methods in the social sciences — what they do, when they apply, and what their results mean. The second is to show you how to actually carry them out, using R.
+
+There is also a third aim, which runs underneath both of the others and which is easy to overlook: to make you think about numbers before you compute with them. A great deal of quantitative social science consists of running a model on whatever variables are at hand and reporting whatever comes out. That is not the same thing as understanding. Some of the most useful thinking you can do about a relationship happens before you touch any data at all.
+
+The course assumes no prior knowledge. We start from an empty screen. General computer skills help, and so does whatever secondary-school mathematics is still lodged somewhere in your memory. We will not go deep into the mathematics behind the methods — the focus is on the logic of each method, the conditions under which it applies, and how to use it in R.
+
+## How the seminars work
+
+Each seminar is an hour and a half, and it has two halves.
+
+The **first 45 to 60 minutes** is a lecture. This is where the methods, functions and techniques for that week are introduced.
+
+The **remaining half hour** is hands-on. We work through a `swirl` lesson together — an interactive exercise that runs inside R itself and that covers the core of the week's topic. You type the commands, R checks them, and you get immediate feedback on whether they worked.
+
+**These written materials are the third part, and you do them on your own.** We will not read through them in class. Their job is to contain everything you need: the background to each topic, the reasoning behind each method, worked examples with real output, and the R code that produces it. The lecture introduces the ideas, the swirl lesson gives you practice, and these materials are what you go back to when you actually have to do something.
+
+> This course does not work without independent effort. The three hours a week we spend together are not enough on their own to get you to the point where you can run an analysis and defend it. That comes from working through the materials, redoing the examples with your own variables, and getting stuck on your own and unstuck again.
+
+## Simple first, then harder
+
+Each session is built as one line, not two. It starts with the simplest form of the idea and the shortest code that does the job, and then adds the complications one at a time. The same holds inside each topic within a session: the plain case first, then the awkward ones.
+
+This is deliberate, and it has a consequence worth knowing about. If you read half of a section and stop, you should have something whole — a version of the method that is simple but not wrong. What comes after is not a correction of what came before; it is the next layer on top of it.
+
+It also means that **none of the material is optional**. Later parts of a section are harder, but they are not extras. Where a formula appears, it appears after the idea has already been explained in words and pictures, because the formula is easier to read once you know what it is for — not because the words were a simplified stand-in for it.
+
+## The data
+
+Throughout the course we use data from the **Comparative Study of Electoral Systems** (CSES), Module 6, and specifically the **Swedish** study conducted after the **2022 general election**. There are `r format(n_resp, big.mark = ",")` respondents.
+
+CSES is a collaborative project that runs a common set of questions in post-election surveys across many countries, which makes the results comparable. It is free, widely used, and a perfectly reasonable choice for your own thesis.
+
+Sweden is a good case to learn on for one particular reason: it has **eight parties in parliament**, and the survey asks about all of them. Respondents rate every party and every party leader on a scale from 0 to 10, and place every party on a left-right scale. That gives us something that a two-party system cannot: a vote choice with eight real categories, and a set of variables with genuine structure in them. A surprising amount of this course — crosstabs, comparing means, correlation, factor analysis, dummy variables — becomes more interesting when there are eight parties rather than two.
+
+The parties, in left-to-right order as the respondents themselves place them:
+
+| | Party | | Placed at |
+|---|---|---|---|
+| V | Vänsterpartiet | Left Party | `r fmt1(lr_party[["lr_v"]])` |
+| MP | Miljöpartiet | Greens | `r fmt1(lr_party[["lr_mp"]])` |
+| S | Socialdemokraterna | Social Democrats | `r fmt1(lr_party[["lr_s"]])` |
+| C | Centerpartiet | Centre Party | `r fmt1(lr_party[["lr_c"]])` |
+| L | Liberalerna | Liberals | `r fmt1(lr_party[["lr_l"]])` |
+| KD | Kristdemokraterna | Christian Democrats | `r fmt1(lr_party[["lr_kd"]])` |
+| M | Moderaterna | Moderates | `r fmt1(lr_party[["lr_m"]])` |
+| SD | Sverigedemokraterna | Sweden Democrats | `r fmt1(lr_party[["lr_sd"]])` |
+
+: {tbl-colwidths="[8,32,32,28]"}
+
+In the 2022 election the Social Democrat government led by Magdalena Andersson lost its majority, and Ulf Kristersson formed a government of M, KD and L supported from outside by the Sweden Democrats. That is why the data has a `bloc` variable splitting the eight parties into the two sides that formed around government formation.
+
+We use one country rather than all eighteen for a simple reason: nearly everything in this course is about relationships between variables measured on individuals. Adding countries adds a second level to the data, and that is a topic for a later course.
+
+**Citation.** If you use these data, you must cite them:
+
+> The Comparative Study of Electoral Systems (www.cses.org). CSES MODULE 6 SECOND ADVANCE RELEASE [dataset and documentation]. December 16, 2025 version. doi:10.7804/cses.module6.2025-12-16
+
+Note the words **advance release**. The data are published before the module is complete, which means some variables have not been harmonised yet and some countries are still missing. One consequence shows up in the weights: the CSES harmonised weights have not been calculated yet, so the only weight available is the one Statistics Sweden supplied, `wt`. It rakes the sample to the known population distribution of gender, age and education. That is worth having — it cuts the average error in the reported vote shares from `r fmt1(mae_unweighted)` to `r fmt1(mae_weighted)` percentage points — but it corrects for *who answered*, not for *what they said*.
+
+> **A survey is not an election.** In our data `r fmt1(vote_share[["S"]])`% say they voted for the Social Democrats and `r fmt1(vote_share[["SD"]])`% for the Sweden Democrats. The actual result was `r fmt1(result_2022[["S"]])`% and `r fmt1(result_2022[["SD"]])`%. The Sweden Democrats are under-reported by `r fmt1(sd_gap)` percentage points, which is a well-documented pattern: people are less willing to tell an interviewer they voted for a radical right party than they are to do it in a voting booth.
+>
+> Turnout is stranger still. `r fmt1(swe_reported)`% of our respondents say they voted, when real turnout in 2022 was `r fmt1(swe_official)`%. That is not a fault in the Swedish study — **every one of the `r n_studies` election studies in CSES Module 6 over-reports turnout**, by between `r fmt1(min(turnout$gap))` and `r fmt1(max(turnout$gap))` percentage points. When every measurement is wrong in the same direction, the problem is not bad luck. Session 6 is about telling those two things apart.
+>
+> Keep this in mind every time we calculate something from these data. A sample tells you about a sample, and getting from there to a population takes work.
+
+### Where social scientists get data
+
+CSES is not the only option. These are the larger surveys whose data are **free to use**, including in a thesis. Most require you to make an account, which is also free.
+
+- [European Social Survey (ESS)](https://www.europeansocialsurvey.org/){target="_blank"} — attitudes, values and behaviour, around 30 European countries, since 2001.
+- [International Social Survey Programme (ISSP)](https://issp.org/){target="_blank"} — one theme each year (religion, family, inequality, the environment), close to 45 countries, since 1985.
+- [World Values Survey](https://www.worldvaluessurvey.org/){target="_blank"} and [European Values Study](https://europeanvaluesstudy.eu/){target="_blank"} — values and attitudes worldwide, long time series since 1981.
+- [Eurobarometer](https://europa.eu/eurobarometer/){target="_blank"} — the European Commission's regular surveys, frequent and topical, all EU countries.
+- [Comparative Study of Electoral Systems (CSES)](https://cses.org/){target="_blank"} — post-election surveys, voting behaviour and attitudes, harmonised across countries. Our data.
+
+Before settling on a data set, check three things: whether it contains the variables you need; how many cases there are in the country or group you care about; and whether the sample is a random sample. The last one matters most — without it you cannot generalise to anything.
+
+## How to use these materials
+
+These materials are meant to be **worked through, not read**. Every code example is there for you to run on your own machine. Reading R code and understanding R code feel very similar and are not the same thing; the difference shows up the moment you have to write some yourself.
+
+You will find two kinds of boxes throughout.
+
+::: {.discussion}
+**A question.** These mark places where the answer should already be available to you from what came before, and where the text deliberately stops short of giving it. They are the discussion points in the seminar.
+:::
+
+::: {.swirl}
+**The swirl practical.** At the end of each chapter, the lesson we do together in the second half of the seminar.
+:::
+
+## Readings
+
+- Rein Taagepera. 2015. *Logical Models and Basic Numeracy in Social Sciences.* **Required.** The basis for sessions 2, 4 and 5.
+- Andy Field et al. 2012. *Discovering Statistics Using R.* Sage. **Strongly recommended.**
+- Gravetter, F.J. and Wallnau, L.B. 2016. *Statistics for the Behavioral Sciences.* Cengage. If you need to build up or refresh the basics.
+- Agresti, A. and Finlay, B. 2008. *Statistical Methods for the Social Sciences.* Prentice Hall. If you want to go considerably further.
+
+All of these are available on Moodle.
+
+## Schedule
+
+| | Date | Topic |
+|---|---|---|
+| 1 | 02.09.2026 | Introduction: the course, R and RStudio, swirl |
+| 2 | 09.09.2026 | Data and data management I: base R |
+| 3 | 16.09.2026 | Data and data management II: the tidyverse |
+| 4 | 23.09.2026 | Thinking logically and visually about data |
+| 5 | 30.09.2026 | Data visualisation with ggplot |
+| 6 | 07.10.2026 | The logic of hypothesis testing |
+| 7 | 14.10.2026 | Analysing categorical data |
+| 8 | 21.10.2026 | Comparing means |
+| 9 | 28.10.2026 | Correlation |
+| 10 | 04.11.2026 | Factor analysis |
+| 11 | 11.11.2026 | Regression: the basic model |
+| 12 | 18.11.2026 | Regression: presenting results |
+| 13 | 25.11.2026 | Regression: dummy variables |
+| 14 | 02.12.2026 | Regression: interactions and non-linear associations |
+| 15 | 09.12.2026 | Logistic regression |
+| 16 | 16.12.2026 | Final test |
+
+: {tbl-colwidths="[5,20,75]"}

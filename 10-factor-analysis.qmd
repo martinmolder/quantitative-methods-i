@@ -1,0 +1,387 @@
+# Factor analysis
+
+```{r}
+#| label: setup-10
+#| include: false
+Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
+options(width = 78)
+fmt <- function(x, digits = 2) formatC(x, format = "f", digits = digits)
+
+# Parallel analysis compares the data against randomly generated data, so its
+# answer moves a little from run to run. Fixing the seed keeps this chapter
+# reproducible -- and it is worth knowing that the number is not fixed.
+set.seed(2026)
+```
+
+Last week ended with an 8×8 correlation matrix that had an obvious structure in it. This week is about what to do with a structure like that.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(psych)
+
+swe <- readRDS("data/swe.rds")
+```
+
+`psych` is the standard R package for this. Install it once with `install.packages("psych")`.
+
+## The problem
+
+The survey asked how much respondents trust seven institutions: parliament, the government, the judiciary, scientists, political parties, traditional media and social media. Each is a four-point scale, and we reversed them all so that a larger number means more trust.
+
+That gives seven variables. But do we have seven *things*?
+
+Almost certainly not. Somebody who trusts parliament probably trusts the government too. If most of what those seven questions measure is one underlying disposition — call it trust in institutions — then treating them as seven separate variables is both wasteful and misleading: put all seven into a regression and they will fight each other for the same explanatory work.
+
+**Factor analysis** asks whether a set of measured variables can be accounted for by a smaller number of unobserved ones.
+
+## Look at the correlations first
+
+The same rule as always.
+
+```{r}
+trust_items <- swe |>
+  select(tr_parl, tr_govt, tr_court, tr_sci, tr_party, tr_media, tr_socmed)
+
+names(trust_items) <- c(
+  "Parliament", "Government", "Judiciary", "Scientists",
+  "Parties", "Media", "Social media"
+)
+
+round(cor(trust_items, use = "pairwise.complete.obs"), 2)
+```
+
+Nearly everything correlates positively with nearly everything, which is what a single common dimension looks like. Parliament and government are at `r fmt(cor(swe$tr_parl, swe$tr_govt, use = "pairwise.complete.obs"))`.
+
+One column stands out. Social media correlates with the rest at around 0.1 to 0.2 — much weaker than anything else in the table. Hold that thought.
+
+## What a factor is
+
+The idea is that the correlations between the measured variables are produced by something they have in common.
+
+Imagine a disposition — a general willingness to trust institutions — that varies between people. Someone high on it answers all seven questions a bit more positively. Someone low on it answers them all a bit more negatively. That common influence is what makes the answers correlate.
+
+The unobserved disposition is the **factor**. Factor analysis works backwards from the correlations to estimate it.
+
+Two quantities describe the result.
+
+A **loading** is the correlation between a measured variable and the factor. It says how much that item reflects the underlying thing. Loadings run from −1 to +1, and by convention anything below about 0.3 is treated as not really loading at all.
+
+**Variance explained** is how much of the total variation in the items the factor accounts for.
+
+> **Factor analysis is not causal discovery.** It finds that some variables move together and summarises that. Whether the common thing is a real psychological disposition, an artefact of how the questions were worded, or a tendency to agree with anything, the arithmetic cannot tell you. That judgement is yours.
+
+## Is it worth doing?
+
+Two standard checks, both quick.
+
+**Bartlett's test**, run by `cortest.bartlett()`, asks whether the correlation matrix differs from one with no correlations at all. If it does not, there is nothing to factor.
+
+```{r}
+cortest.bartlett(
+  cor(trust_items, use = "pairwise.complete.obs"),
+  n = sum(complete.cases(trust_items))
+)
+```
+
+`n` has to be supplied because the function is given a correlation matrix rather than the raw data, and a correlation matrix does not know how many people it came from.
+
+The p-value is essentially zero, so the variables are correlated. With this much data that test almost always passes, and it is a floor rather than a recommendation.
+
+**The KMO measure** is more useful. It asks how much of the correlation between variables is shared rather than specific to pairs.
+
+```{r}
+KMO(trust_items)$MSA
+```
+
+`MSA` stands for measure of sampling adequacy. Above 0.8 is good, above 0.6 acceptable, below 0.5 means do not bother. `r fmt(KMO(trust_items)$MSA)` is fine.
+
+`KMO()` also reports a value per item, which is worth a look when one item is suspect:
+
+```{r}
+round(KMO(trust_items)$MSAi, 2)
+```
+
+Social media again, at the bottom.
+
+## How many factors?
+
+The awkward question, and the honest answer is that the standard criteria disagree with each other.
+
+An **eigenvalue** measures how much variance a potential factor accounts for, in units where each individual item contributes 1. `eigen()` computes them from a correlation matrix, and the ones we want are in the `$values` part of what it returns.
+
+```{r}
+trust_cor <- cor(trust_items, use = "pairwise.complete.obs")
+eigen_values <- eigen(trust_cor)$values
+round(eigen_values, 3)
+```
+
+The first is `r fmt(eigen_values[1])` — worth more than three items on its own. The second is `r fmt(eigen_values[2])`, and everything after that is below 1.
+
+Three ways to read that.
+
+**The Kaiser criterion**: keep factors with an eigenvalue above 1, on the logic that a factor should at least explain more than one item does. That gives `r sum(eigen_values > 1)` here. It is the crudest rule and it tends to keep too many.
+
+**The scree plot**: plot the eigenvalues in order and look for the elbow. `seq_along()` below makes the sequence 1, 2, 3, … as long as the vector it is given, which numbers the factors; `geom_hline()` marks the value 1 with `yintercept`, and `linetype = "dashed"` makes it a dashed line so that it reads as a reference rather than as data.
+
+```{r}
+#| label: fig-scree
+#| fig-height: 3.4
+scree_data <- data.frame(
+  factor = seq_along(eigen_values),
+  eigenvalue = eigen_values
+)
+
+ggplot(scree_data, aes(x = factor, y = eigenvalue)) +
+  geom_line() +
+  geom_point(size = 2) +
+  geom_hline(yintercept = 1, linetype = "dashed") +
+  scale_x_continuous(breaks = 1:7) +
+  labs(
+    x = "Factor",
+    y = "Eigenvalue"
+  ) +
+  theme_bw()
+```
+
+The drop from the first to the second is large, and after the second the line is nearly flat. The elbow is at two, which suggests keeping one — the factors *before* the elbow.
+
+**Parallel analysis**, run by `fa.parallel()`, is the best of the three. It generates random data of the same size and shape, factors that, and keeps only the factors that do better than random noise would.
+
+```{r}
+#| results: hide
+#| fig-show: hide
+parallel <- fa.parallel(trust_items, fa = "fa", plot = FALSE)
+```
+
+```{r}
+parallel$nfact
+```
+
+`r parallel$nfact` factors by that criterion.
+
+So: Kaiser says `r sum(eigen_values > 1)`, the scree plot suggests one, parallel analysis says `r parallel$nfact`. This is normal.
+
+> **The criteria are advice, not answers.** The real test is whether a solution is *interpretable* — whether the groups of items that hang together correspond to something you can name and defend. A statistically defensible solution you cannot explain is worse than a simpler one you can.
+
+## One factor
+
+Start simple, with one.
+
+```{r}
+one_factor <- fa(trust_items, nfactors = 1, fm = "ml")
+
+one_factor$loadings
+```
+
+`fa()` is the workhorse. `nfactors` is how many to extract, and `fm = "ml"` is the estimation method — maximum likelihood, which is a reasonable default and gives you a significance test if you want one.
+
+Read the loadings. Parliament (`r fmt(one_factor$loadings[1,1])`) and government (`r fmt(one_factor$loadings[2,1])`) load strongly: they are the clearest expressions of the underlying disposition. Judiciary and parties are solid. Scientists and media are weaker but real.
+
+And social media, at `r fmt(one_factor$loadings[7,1])`, does not load at all.
+
+`Proportion Var` says the factor accounts for `r fmt(100 * one_factor$Vaccounted[2,1], 1)`% of the total variance in the seven items.
+
+### The item that does not belong
+
+A loading of `r fmt(one_factor$loadings[7,1])` is a finding, not a nuisance. **Trust in social media is not part of the same disposition as trust in institutions.** On reflection that is obvious: social media is not an institution people are asked to have confidence in, and the question is probably measuring something closer to media habits.
+
+Drop it and refit.
+
+```{r}
+trust_six <- trust_items |>
+  select(-`Social media`)
+
+six_factor <- fa(trust_six, nfactors = 1, fm = "ml")
+
+six_factor$loadings
+```
+
+Backticks around `` `Social media` `` are needed because the name contains a space. This is why short names without spaces are worth the trouble.
+
+Every item now loads above 0.4, and the variance explained rises to `r fmt(100 * six_factor$Vaccounted[2,1], 1)`%.
+
+## Reliability
+
+A related question: if these six items are meant to measure one thing, how consistently do they do it?
+
+**Cronbach's alpha** is the standard measure. Roughly, it is how much the items agree with each other, on a scale where 1 is perfect.
+
+```{r}
+#| results: hide
+alpha_result <- psych::alpha(trust_six)
+```
+
+```{r}
+alpha_result$total$raw_alpha
+```
+
+`psych::alpha()` is written out with its package name because several packages define a function called `alpha`, and whichever you loaded last wins.
+
+`r fmt(alpha_result$total$raw_alpha, 3)`. The rough conventions are 0.7 acceptable, 0.8 good, 0.9 excellent — though above about 0.95 the items are probably redundant rather than reliable.
+
+With all seven items, including social media, alpha was `r fmt(psych::alpha(trust_items)$total$raw_alpha, 3)`. Dropping the item that did not fit made the scale more reliable, not less.
+
+> Alpha rises automatically as you add items, so a long scale can post a respectable alpha while measuring several different things. It is a check on a *one-dimensional* scale, which is why it comes after the factor analysis rather than instead of it.
+
+## Making a variable
+
+The practical payoff. Instead of six trust variables, we want one.
+
+```{r}
+swe$trust <- six_factor$scores[, 1]
+
+summary(swe$trust)
+```
+
+`scores` holds one **factor score** per respondent — an estimate of where each person sits on the underlying dimension. It comes out standardised, so a mean of about 0 and a standard deviation of about 1. Negative means less trusting than average.
+
+> **Check the alignment.** `fa()` returns as many rows as you gave it, with `NA` where a respondent was missing on any item. That means `swe$trust <- six_factor$scores[, 1]` is correct. What is *not* correct is trying to be clever and assigning only into the complete rows — the lengths then do not match, R recycles, and everybody gets somebody else's score.
+>
+> The reason to be careful is that the broken version does not look broken. Writing this chapter, a misaligned version of exactly this variable produced differences between parties of a few hundredths of a point, which reads as a perfectly plausible finding of "no real differences". Always check a new variable against something you already know.
+
+So check it.
+
+```{r}
+swe |>
+  filter(!is.na(vote)) |>
+  group_by(vote) |>
+  summarise(
+    n = n(),
+    mean_trust = round(mean(trust, na.rm = TRUE), 2)
+  )
+```
+
+Sweden Democrat voters are by some distance the least trusting, at `r fmt(mean(swe$trust[swe$vote == "SD"], na.rm = TRUE))`. Green, Centre and Social Democrat voters are the most trusting. That is a recognisable pattern, and it did not go into the factor analysis — vote choice was never in the model.
+
+A second check, against variables that should be related:
+
+```{r}
+cor(swe$trust, swe$satdem, use = "complete.obs")
+cor(swe$trust, swe$demlevel, use = "complete.obs")
+```
+
+Strongly correlated with satisfaction with democracy and with how democratic people think Sweden is, as it should be — but nowhere near 1, so it is not simply the same variable again. (Satisfaction with democracy has only four categories, so a Pearson correlation is being stretched here; as a rough check on whether a new variable behaves sensibly, that is a reasonable use of it.)
+
+From here `trust` is an ordinary continuous variable. It goes into a regression in session 11 like any other.
+
+## When there is more than one dimension
+
+So far we have asked the six items to be one thing, and they were willing. But "willing" is not the same as "best described that way".
+
+The criteria are split again. Look at the eigenvalues of the six-item set, and at what parallel analysis makes of them.
+
+```{r}
+#| results: hide
+#| fig-show: hide
+parallel_six <- fa.parallel(trust_six, fa = "fa", plot = FALSE)
+```
+
+```{r}
+six_cor <- cor(trust_six, use = "pairwise.complete.obs")
+six_eigen <- eigen(six_cor)$values
+
+round(six_eigen, 2)
+parallel_six$nfact
+```
+
+The Kaiser rule says one, since the second eigenvalue is `r fmt(six_eigen[2])` and so below the threshold. Parallel analysis says `r parallel_six$nfact`.
+
+There is also a reason to look beyond the criteria. Research on political trust distinguishes trust in the institutions of *party politics* — parliament, government, parties — from trust in institutions that hold authority without standing for election. If that distinction is present in these answers, one factor would be hiding it.
+
+So try two, and see whether the split falls where theory says it should.
+
+```{r}
+two_factors <- fa(
+  trust_six,
+  nfactors = 2,
+  rotate = "oblimin",
+  fm = "ml"
+)
+
+print(two_factors$loadings, cutoff = 0.3)
+```
+
+`cutoff = 0.3` hides the small loadings so that the pattern is visible. `rotate = "oblimin"` needs explaining, and does so below.
+
+The split is not arbitrary. The first factor is **parliament, government and parties** — the institutions of party politics, the ones you vote for and against. The second is **scientists and the media** — institutions with authority but no electoral role.
+
+That distinction is a real one in the research on political trust, and it did not have to appear here. It is the sort of result that makes a two-factor solution worth taking seriously.
+
+The judiciary is the interesting case: `r fmt(two_factors$loadings["Judiciary", 1])` on one factor and `r fmt(two_factors$loadings["Judiciary", 2])` on the other. An item that loads about equally on two factors is called a **cross-loading**, and it is telling you something — the courts are political and non-political at once, which is more or less what a constitutional court is for.
+
+### Rotation
+
+When you extract more than one factor, the solution is not unique. Several different sets of axes describe the same data equally well, in the way that a set of points can be described from more than one angle. **Rotation** picks the angle that is easiest to interpret, by trying to make each item load strongly on one factor and weakly on the rest.
+
+The choice that matters is whether the factors are allowed to correlate.
+
+- **Orthogonal** rotations, of which `varimax` is the common one, force the factors to be uncorrelated.
+- **Oblique** rotations, such as `oblimin`, allow them to correlate.
+
+Look at what our factors actually do.
+
+```{r}
+round(two_factors$Phi, 3)
+```
+
+`Phi` holds the correlations between the factors: `r fmt(two_factors$Phi[1,2])`. People who trust parliament also tend to trust scientists. That is not a nuisance, it is the finding — there is a general trusting disposition, and two more specific ones on top of it.
+
+Now force them apart and see what it costs.
+
+```{r}
+orthogonal <- fa(
+  trust_six,
+  nfactors = 2,
+  rotate = "varimax",
+  fm = "ml"
+)
+
+round(unclass(orthogonal$loadings), 3)
+```
+
+`unclass()` strips the special printing that `psych` attaches to a loadings table, so that every number shows rather than only the large ones. And the clean structure has gone. Under `varimax` the judiciary loads `r fmt(orthogonal$loadings["Judiciary", 1])` and `r fmt(orthogonal$loadings["Judiciary", 2])`, parliament picks up a loading of `r fmt(orthogonal$loadings["Parliament", 2])` on the second factor, and almost everything loads moderately on both. Because the rotation is not allowed to put the correlation between the factors, it has to put it into the loadings instead — and the result describes the data less well while looking more complicated.
+
+> **For social science, oblique is nearly always the right default.** Real underlying dimensions are seldom independent of each other, and `varimax` produces a tidy-looking solution by asserting something about the world that is usually false. If the factors genuinely are uncorrelated, an oblique rotation will report a correlation near zero and you have lost nothing.
+
+### One factor or two?
+
+Both solutions are defensible fits to the same six items.
+
+The one-factor solution says there is a general disposition to trust institutions, and it explains `r fmt(100 * six_factor$Vaccounted[2,1], 1)`% of the variance. The two-factor solution says that disposition has two related parts, political and non-political, correlated at `r fmt(two_factors$Phi[1,2])`.
+
+Which you take depends on what you are going to do with it. If you want one variable for a regression, take one factor — the two are correlated at `r fmt(two_factors$Phi[1,2])` anyway, and separating them buys little. If your argument is specifically about the difference between trust in politicians and trust in expertise, take two, and say why.
+
+::: {.discussion}
+**A question.** The criteria gave three different answers about the number of factors, and both solutions are interpretable.
+
+Suppose you fitted one factor, and a reviewer says you should have fitted two. What evidence could you offer in reply — and is "parallel analysis suggested three" a point in your favour or against you?
+:::
+
+## What it assumes
+
+**Continuous items, or close enough.** Our trust items are four-point scales, which is below the five-category rule from session 2. This is extremely common practice and it is a real compromise; `psych` offers `cor = "poly"` to treat items as ordinal, which is the more defensible route for short scales.
+
+**Enough cases.** The usual advice is at least 10 per item, and more for weak loadings. With `r sum(complete.cases(trust_six))` complete cases on six items, we are not short.
+
+**Linear relationships**, since the whole thing is built on a correlation matrix — with everything that implies about what correlations miss.
+
+::: {.reporting}
+**How to write it up.**
+
+> The six institutional trust items were subjected to maximum likelihood factor analysis. Sampling adequacy was good (KMO = `r fmt(KMO(trust_six)$MSA)`) and Bartlett's test was significant (*p* < .001). A single factor was retained, accounting for `r fmt(100 * six_factor$Vaccounted[2,1], 1)`% of the variance, with loadings from `r fmt(min(six_factor$loadings[,1]))` (scientists) to `r fmt(max(six_factor$loadings[,1]))` (parliament). Internal consistency was good (α = `r fmt(alpha_result$total$raw_alpha, 2)`). A seventh item, trust in social media, loaded at `r fmt(one_factor$loadings[7,1])` and was excluded. Factor scores were saved for use in the models below.
+
+Say which items, which method, how many factors and why, the loadings, the variance explained, and what you did with the result. Mistakes to avoid:
+
+- **Not saying which rotation you used**, or using an orthogonal one without justifying it.
+- **Reporting the number of factors without the reasoning.** The criteria disagree; say which you followed.
+- **Hiding a dropped item.** Report it and say why it went.
+- **Reporting alpha instead of a factor analysis.** Alpha assumes one dimension; it does not test for it.
+- **Naming a factor after what you hoped to find** rather than after the items that actually load on it.
+- **Treating factor scores as if they were measured without error.** They are estimates, and the uncertainty does not carry into the next model.
+- **Running the analysis on items with different scale directions.** Reverse them first, or the factor will split into "agree" and "disagree" and mean nothing.
+:::
+
+::: {.swirl}
+**In the seminar.** `swirl` lesson 10, *Factor Analysis*. Checking whether a set of items hangs together, deciding how many factors, reading loadings, reliability, and saving factor scores. Around 30 minutes.
+:::

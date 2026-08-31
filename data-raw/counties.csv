@@ -1,0 +1,22 @@
+code,county,abbr,land,land_order
+1,Stockholm,AB,Svealand,2
+3,Uppsala,C,Svealand,2
+4,Södermanland,D,Svealand,2
+5,Östergötland,E,Götaland,1
+6,Jönköping,F,Götaland,1
+7,Kronoberg,G,Götaland,1
+8,Kalmar,H,Götaland,1
+9,Gotland,I,Götaland,1
+10,Blekinge,K,Götaland,1
+12,Skåne,M,Götaland,1
+13,Halland,N,Götaland,1
+14,Västra Götaland,O,Götaland,1
+17,Värmland,S,Svealand,2
+18,Örebro,T,Svealand,2
+19,Västmanland,U,Svealand,2
+20,Dalarna,W,Svealand,2
+21,Gävleborg,X,Norrland,3
+22,Västernorrland,Y,Norrland,3
+23,Jämtland,Z,Norrland,3
+24,Västerbotten,AC,Norrland,3
+25,Norrbotten,BD,Norrland,3

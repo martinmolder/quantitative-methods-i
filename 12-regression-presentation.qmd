@@ -1,0 +1,227 @@
+# Regression: presenting results
+
+```{r}
+#| label: setup-12
+#| include: false
+Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
+options(width = 78)
+fmt <- function(x, digits = 2) formatC(x, format = "f", digits = digits)
+```
+
+You have a model. Now somebody else has to read it.
+
+The raw output of `summary()` is for you, while you are working. It is not for a reader: it prints things nobody needs, uses variable names instead of words, and gives eight significant digits for a quantity known to one. This session is about the difference.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(psych)
+library(modelsummary)
+library(ggeffects)
+
+swe <- readRDS("data/swe.rds")
+
+trust_items <- c(
+  "tr_parl", "tr_govt", "tr_court",
+  "tr_sci", "tr_party", "tr_media"
+)
+swe$trust <- fa(swe[, trust_items], nfactors = 1, fm = "ml")$scores[, 1]
+```
+
+Three models, of increasing size — which is itself the standard way to present regression results.
+
+```{r}
+model1 <- lm(demlevel ~ trust, data = swe)
+model2 <- lm(demlevel ~ trust + bloc, data = swe)
+model3 <- lm(demlevel ~ trust + bloc + age + educ, data = swe)
+```
+
+## Regression tables
+
+`modelsummary()` takes a list of models and puts them side by side.
+
+```{r}
+modelsummary(list(model1, model2, model3))
+```
+
+Better than three blocks of `summary()` output, but not yet publishable. Three things are wrong: the variable names are code, there is more in the bottom panel than a reader needs, and the columns are unlabelled.
+
+```{r}
+labels <- c(
+  "(Intercept)" = "Intercept",
+  "trust" = "Trust in institutions",
+  "blocRight" = "Voted for the right bloc",
+  "age" = "Age (years)",
+  "educ" = "Education (ISCED level)"
+)
+
+modelsummary(
+  list("Trust only" = model1,
+       "Plus bloc" = model2,
+       "Full model" = model3),
+  coef_map = labels,
+  gof_map = c("nobs", "r.squared", "adj.r.squared"),
+  stars = TRUE,
+  title = "Evaluations of Swedish democracy (0-10)"
+)
+```
+
+`coef_map` renames the coefficients and, importantly, also **sets their order** — anything left out of the map is dropped from the table. Naming the list of models gives the columns headings. `gof_map` picks which goodness-of-fit rows to keep. `stars = TRUE` adds significance stars and a footnote explaining them.
+
+The number in brackets under each coefficient is its standard error. Some journals want confidence intervals instead:
+
+```{r}
+modelsummary(
+  list("Full model" = model3),
+  coef_map = labels,
+  gof_map = c("nobs", "r.squared"),
+  estimate = "{estimate}",
+  statistic = "conf.int"
+)
+```
+
+`statistic` controls what goes underneath. `"conf.int"` gives the 95% interval, which is more informative than a standard error because the reader does not have to do the arithmetic.
+
+> **Stars or intervals?** Stars are conventional and compact, and they encourage exactly the habit session 6 warned against — reading a table for which rows have asterisks. A confidence interval shows the size of the effect and its uncertainty at once. Give intervals where the journal permits it.
+
+To save a table to a file, give `output` a filename. The format follows the extension.
+
+```{r}
+#| eval: false
+modelsummary(
+  list("Full model" = model3),
+  coef_map = labels,
+  output = "tables/democracy_model.docx"
+)
+```
+
+`.docx`, `.html`, `.tex` and `.md` all work. Writing straight into the document you are drafting means the numbers cannot be mistyped on the way — the same argument as inline code in these materials.
+
+> You will also meet **stargazer**, which was the standard for years and appears in a great deal of published code. It still works for `lm()`, but it has not kept up with newer model types. Use `modelsummary` for new work; recognise `stargazer` when you read someone else's.
+
+## Coefficient plots
+
+A table is precise. A plot is quicker to read, and for a model with many predictors it is much quicker.
+
+```{r}
+#| label: fig-coef
+#| fig-height: 3.2
+modelplot(
+  model3,
+  coef_map = rev(labels[-1]),
+  conf_level = 0.95
+) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  labs(
+    x = "Coefficient (points on the 0-10 scale)",
+    y = NULL
+  ) +
+  theme_bw()
+```
+
+`modelplot()` comes from the same package and returns an ordinary ggplot, so everything from session 5 applies. `labels[-1]` drops the intercept, which is not a comparable quantity and would compress everything else; `rev()` reverses the order, because a plot builds upwards from the bottom while a table reads downwards.
+
+The dashed line at zero is doing real work. **Any interval crossing it is a coefficient we cannot distinguish from no relationship.**
+
+::: {.discussion}
+**A question.** On that plot, trust has a long bar far from zero and age has a very short bar sitting on it.
+
+A reader might conclude that trust matters and age does not. What else would you need to know before agreeing — and what does the fact that the two variables are on completely different scales do to the comparison?
+:::
+
+That question points at a real limitation. The coefficients are in different units — one standard deviation of trust, one year of age, one ISCED level — so their lengths on this plot are not comparable. One fix is to standardise the predictors so that every coefficient is "per standard deviation":
+
+```{r}
+model_std <- lm(
+  scale(demlevel) ~ scale(trust) + bloc + scale(age) + scale(educ),
+  data = swe
+)
+
+round(coef(model_std), 3)
+```
+
+`scale()` subtracts the mean and divides by the standard deviation. Now every continuous coefficient is in the same units and the sizes can be compared directly — trust does about twenty times the work of education. The cost is that the coefficients no longer mean anything in the units of the data, which is why this is a supplement rather than a replacement.
+
+## Predicted values
+
+The most useful thing you can show a reader is what the model expects to happen.
+
+```{r}
+predictions <- predict_response(model3, terms = "trust [-2:2 by=0.5]")
+
+predictions
+```
+
+`predict_response()` from `ggeffects` computes predicted outcomes across the range of one variable, holding the others at representative values — it tells you which, underneath the table. `terms` names the variable to vary, and the bracket notation `[-2:2 by=0.5]` specifies the values to predict at.
+
+```{r}
+#| label: fig-pred
+#| fig-height: 3.4
+plot(predictions) +
+  labs(
+    x = "Trust in institutions (standard deviations from the mean)",
+    y = "Predicted rating of Swedish democracy",
+    title = NULL
+  ) +
+  theme_bw()
+```
+
+The shaded band is the 95% confidence interval around the prediction.
+
+This says the same thing as the coefficient `r fmt(coef(model3)[2])`, but in a form a reader can use: someone two standard deviations below average on trust is predicted to rate Swedish democracy around `r fmt(predictions$predicted[predictions$x == -2])`, and someone two above at around `r fmt(predictions$predicted[predictions$x == 2])`.
+
+### A warning the model will not give you
+
+Look at the top of that prediction table.
+
+```{r}
+predictions |>
+  as.data.frame() |>
+  filter(x >= 1.5) |>
+  select(x, predicted, conf.low, conf.high) |>
+  round(2)
+```
+
+The predicted value at the top of the range is `r fmt(predictions$predicted[predictions$x == 2])`, and the upper end of its confidence interval is `r fmt(predictions$conf.high[predictions$x == 2])`.
+
+**The scale stops at 10.** The model has produced a prediction that cannot happen, and it did so without complaint.
+
+This is session 4 arriving in the middle of a regression. OLS fits a straight line, and a straight line does not know that the outcome is bounded. Extend it far enough in either direction and it will predict impossible values — a rating of 12, a negative income, a probability of 1.4.
+
+Three things follow.
+
+- **Do not predict outside the range of your data.** The model has no information there.
+- **Check predictions against the limits of the scale**, as a matter of routine.
+- **When a bounded outcome is the whole problem**, a straight line is the wrong model. That is what session 15 is about.
+
+## Formatting a table or figure
+
+The rules from session 5 apply, plus a few specific to model output.
+
+- **Name variables in words.** "Trust in institutions", not `trust`.
+- **Say what one unit is**, in the caption or a note. A coefficient without its units cannot be read.
+- **Round sensibly.** Two decimal places is almost always enough. `1.0381823` claims a precision that the standard error of 0.04 flatly denies.
+- **Report *n* for every model**, because listwise deletion makes it differ between columns. Ours run from `r nobs(model1)` down to `r nobs(model3)`.
+- **Keep the models in a sensible order** — usually simplest first — and keep the coefficient order the same across columns.
+- **Do not report everything.** A table with forty control variables hides the three that matter. Put controls in an appendix and say so.
+- **Text on a figure should be about the size of the text around it.**
+
+::: {.reporting}
+**How to write it up.**
+
+> Table 1 reports OLS models of how democratic respondents consider Sweden to be, on a 0-10 scale. Trust in institutions is the dominant predictor: a one standard deviation increase corresponds to a `r fmt(coef(model3)[2])`-point higher rating (95% CI [`r fmt(confint(model3)[2, 1])`, `r fmt(confint(model3)[2, 2])`]). Having voted for the right-wing bloc is associated with a `r fmt(abs(coef(model3)[3]))`-point lower rating, an estimate that is only marginally distinguishable from zero once trust is accounted for (*p* = `r fmt(coef(summary(model3))[3, 4], 3)`). Education has a small positive association and age none. The full model accounts for `r fmt(100 * summary(model3)$r.squared, 1)`% of the variance (*n* = `r nobs(model3)`).
+
+Walk the reader through the table rather than repeating it. Mistakes to avoid:
+
+- **Reproducing the table in prose.** Say what it shows; do not read it aloud.
+- **Reporting a coefficient without its units or its uncertainty.**
+- **Describing a coefficient whose interval crosses zero as an effect.**
+- **Comparing raw coefficients on different scales** as though the sizes were comparable.
+- **Predicting outside the range of the data**, or reporting a prediction the scale cannot hold.
+- **Giving four decimal places** to a quantity with a standard error in the second.
+- **Reporting a different *n* in the text than in the table**, which is what happens when the table is regenerated and the prose is not.
+:::
+
+::: {.swirl}
+**In the seminar.** `swirl` lesson 12, *Presenting regression results*. Building a table with several models, renaming and ordering coefficients, coefficient plots, and predicted values. Around 30 minutes.
+:::

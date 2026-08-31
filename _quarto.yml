@@ -1,0 +1,57 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "Quantitative Methods I"
+  subtitle: "Seminar materials, autumn 2026"
+  author: "Martin Mölder"
+  date: today
+  date-format: "DD.MM.YYYY"
+  search: true
+  page-navigation: true
+  sidebar:
+    style: docked
+    collapse-level: 1
+  chapters:
+    - index.qmd
+    - 01-r-and-rstudio.qmd
+    - 02-data-management-1.qmd
+    - 03-data-management-2.qmd
+    - 04-logical-models.qmd
+    - 05-visualisation.qmd
+    - 06-hypothesis-testing.qmd
+    - 07-categorical-data.qmd
+    - 08-comparing-means.qmd
+    - 09-correlation.qmd
+    - 10-factor-analysis.qmd
+    - 11-regression-basics.qmd
+    - 12-regression-presentation.qmd
+    - 13-regression-dummies.qmd
+    - 14-regression-interactions.qmd
+    - 15-logistic-regression.qmd
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-copy: true
+    code-overflow: scroll
+    df-print: default
+    fig-width: 7
+    fig-height: 4.5
+    fig-dpi: 150
+
+execute:
+  echo: true
+  warning: false
+  message: false
+  freeze: auto
+
+knitr:
+  opts_chunk:
+    comment: "##"
+    collapse: false

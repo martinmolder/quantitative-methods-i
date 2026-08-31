@@ -1,0 +1,201 @@
+- Class: meta
+  Course: Quantitative Methods I
+  Lesson: Data Management I
+  Author: Martin Molder
+  Type: Standard
+  Organization: University of Tartu
+  Version: 1.0.0
+
+- Class: text
+  Output: This lesson works on the real thing - the Swedish CSES survey, exactly as it comes from the archive. It is already loaded, in an object called raw. Your job is to make three of its variables usable.
+
+- Class: cmd_question
+  Output: Start by finding out how big it is. The function dim() gives the size, rows first and columns second.
+  CorrectAnswer: dim(raw)
+  AnswerTests: omnitest(correctExpr='dim(raw)')
+  Hint: Type dim(raw).
+
+- Class: text
+  Output: 2845 respondents and 84 variables. The variable names are CSES codes rather than words, so you need the codebook to know what any of them mean.
+
+- Class: cmd_question
+  Output: F3007_5 is trust in political parties. The codebook says it runs from 1, trust a lot, to 4, do not trust at all. Use table() to count how many respondents gave each answer.
+  CorrectAnswer: table(raw$F3007_5)
+  AnswerTests: omnitest(correctExpr='table(raw$F3007_5)')
+  Hint: Type table(raw$F3007_5). Use the dollar sign to get at the column.
+
+- Class: mult_question
+  Output: The scale runs from 1 to 4, but the table has a fifth value - 9, with 189 respondents in it. What is it?
+  CorrectAnswer: The code for a missing answer, which has not been marked as missing yet.
+  AnswerChoices: The code for a missing answer, which has not been marked as missing yet.; A fifth level of trust, above 4.; An error in the data file that needs reporting.
+  AnswerTests: omnitest(correctVal='The code for a missing answer, which has not been marked as missing yet.')
+  Hint: The scale has four points. What could a value of 9 possibly mean on a four-point scale?
+
+- Class: text
+  Output: CSES marks refusals and non-answers with high numbers - 7, 8 and 9 on a four-point scale. Left in place they count as real answers, and every mean you calculate is wrong. Nothing warns you about this.
+
+- Class: cmd_question
+  Output: See what that costs. Take the mean of raw$F3007_5 as it stands.
+  CorrectAnswer: mean(raw$F3007_5)
+  AnswerTests: omnitest(correctExpr='mean(raw$F3007_5)')
+  Hint: Type mean(raw$F3007_5).
+
+- Class: text
+  Output: About 3.06, on a scale that runs from 1 to 4. That looks entirely reasonable, which is exactly the problem. A wrong number that looks wrong is a nuisance. A wrong number that looks fine is dangerous, because nothing will tell you.
+
+- Class: cmd_question
+  Output: Let us fix it. First make a copy to work on, so the original stays untouched. Put raw$F3007_5 into an object called trust.
+  CorrectAnswer: trust <- raw$F3007_5
+  AnswerTests: omnitest(correctExpr='trust <- raw$F3007_5')
+  Hint: Type trust <- raw$F3007_5.
+
+- Class: cmd_question
+  Output: Now set the missing codes to NA. Select the elements of trust that are in c(7, 8, 9) using the %in% operator inside square brackets, and assign NA to them.
+  CorrectAnswer: trust[trust %in% c(7, 8, 9)] <- NA
+  AnswerTests: omnitest(correctExpr='trust[trust %in% c(7, 8, 9)] <- NA')
+  Hint: Type trust[trust %in% c(7, 8, 9)] <- NA. The %in% operator asks whether each element appears anywhere in the vector on its right.
+
+- Class: cmd_question
+  Output: Check it worked. Run table() on trust, with the argument useNA set to "ifany" so that missing values get their own column.
+  CorrectAnswer: table(trust, useNA = "ifany")
+  AnswerTests: any_of_exprs('table(trust, useNA = "ifany")', 'table(trust, useNA="ifany")')
+  Hint: Type table(trust, useNA = "ifany"). The quotation marks around ifany are needed.
+
+- Class: cmd_question
+  Output: Now take the mean again, telling it to drop the missing values.
+  CorrectAnswer: mean(trust, na.rm = TRUE)
+  AnswerTests: any_of_exprs('mean(trust, na.rm = TRUE)', 'mean(trust, na.rm=TRUE)', 'mean(trust, na.rm = T)', 'mean(trust, na.rm=T)')
+  Hint: Type mean(trust, na.rm = TRUE).
+
+- Class: text
+  Output: 2.64 rather than 3.06. Remember that on this scale 1 is the most trust, so the 189 nines were dragging the average towards the distrusting end - a gap of four tenths of a point, entirely invented, which would have propagated into every result built on that variable.
+
+- Class: cmd_question
+  Output: How many answers were missing? Use is.na() to test each element and sum() to add up the TRUEs.
+  CorrectAnswer: sum(is.na(trust))
+  AnswerTests: omnitest(correctExpr='sum(is.na(trust))')
+  Hint: Type sum(is.na(trust)).
+
+- Class: text
+  Output: There is a second problem with this variable. It is coded so that 1 means the most trust and 4 the least. That is backwards for reading results - in a model, a positive coefficient would mean less trust.
+
+- Class: cmd_question
+  Output: Reverse it. For a scale running from lo to hi, the reversed value is (hi + lo) minus the original. Here that is 5 minus trust. Put the result into an object called trust_rev.
+  CorrectAnswer: trust_rev <- 5 - trust
+  AnswerTests: omnitest(correctExpr='trust_rev <- 5 - trust')
+  Hint: Type trust_rev <- 5 - trust.
+
+- Class: cmd_question
+  Output: A recode is a claim, and a claim can be checked. Make a table of trust_rev against trust to confirm that the values swapped the way you meant them to.
+  CorrectAnswer: table(trust_rev, trust)
+  AnswerTests: any_of_exprs('table(trust_rev, trust)', 'table(trust, trust_rev)')
+  Hint: Type table(trust_rev, trust). Two arguments gives you a cross-table.
+
+- Class: text
+  Output: A neat diagonal running the other way, and the counts unchanged. That is what a correct reversal looks like, and it took five seconds to confirm.
+
+- Class: text
+  Output: Checking by eye works until you have sixty variables. Better to make the check fail loudly. The function stopifnot() takes conditions and does nothing at all if they are all TRUE - but stops with an error if any is FALSE.
+
+- Class: cmd_question
+  Output: Guard the range. Run stopifnot() with two conditions - that the minimum of trust_rev, with na.rm set to TRUE, is at least 1, and that the maximum is at most 4.
+  CorrectAnswer: stopifnot(min(trust_rev, na.rm = TRUE) >= 1, max(trust_rev, na.rm = TRUE) <= 4)
+  AnswerTests: omnitest(correctExpr='stopifnot(min(trust_rev, na.rm = TRUE) >= 1, max(trust_rev, na.rm = TRUE) <= 4)')
+  Hint: Type stopifnot(min(trust_rev, na.rm = TRUE) >= 1, max(trust_rev, na.rm = TRUE) <= 4). Two conditions separated by a comma.
+
+- Class: text
+  Output: Nothing printed, which means it passed. Had the recode been wrong, your script would have stopped there rather than carrying the mistake into a result that looks perfectly plausible.
+
+- Class: text
+  Output: Now a variable on a different scale. F3006 asks how democratic the country is, from 0 to 10. Because the scale is wider, the missing codes are different - 97, 98 and 99.
+
+- Class: cmd_question
+  Output: Copy raw$F3006 into an object called dem.
+  CorrectAnswer: dem <- raw$F3006
+  AnswerTests: omnitest(correctExpr='dem <- raw$F3006')
+  Hint: Type dem <- raw$F3006.
+
+- Class: cmd_question
+  Output: Set its missing codes - 97, 98 and 99 - to NA.
+  CorrectAnswer: dem[dem %in% c(97, 98, 99)] <- NA
+  AnswerTests: omnitest(correctExpr='dem[dem %in% c(97, 98, 99)] <- NA')
+  Hint: Type dem[dem %in% c(97, 98, 99)] <- NA.
+
+- Class: cmd_question
+  Output: Confirm the range is now what the codebook promises. Use range() with na.rm set to TRUE.
+  CorrectAnswer: range(dem, na.rm = TRUE)
+  AnswerTests: any_of_exprs('range(dem, na.rm = TRUE)', 'range(dem, na.rm=TRUE)', 'range(dem, na.rm = T)', 'range(dem, na.rm=T)')
+  Hint: Type range(dem, na.rm = TRUE).
+
+- Class: mult_question
+  Output: This variable does not need reversing. Why not?
+  CorrectAnswer: It already runs from least to most, so a larger number already means more democratic.
+  AnswerChoices: It already runs from least to most, so a larger number already means more democratic.; Scales from 0 to 10 can never be reversed.; It has too many categories to reverse.
+  AnswerTests: omnitest(correctVal='It already runs from least to most, so a larger number already means more democratic.')
+  Hint: Look at what 0 means and what 10 means on this scale.
+
+- Class: text
+  Output: Now grouping. Sometimes you want a continuous variable in categories - for a table, or because the categories mean something.
+
+- Class: cmd_question
+  Output: Start with a variable that is entirely missing, and fill it in afterwards. Use rep() to repeat NA as many times as dem is long. Put it in an object called demgroup.
+  CorrectAnswer: demgroup <- rep(NA, length(dem))
+  AnswerTests: omnitest(correctExpr='demgroup <- rep(NA, length(dem))')
+  Hint: Type demgroup <- rep(NA, length(dem)). length() gives the number of elements.
+
+- Class: text
+  Output: Starting from all-missing is deliberate. Anything your conditions fail to cover stays NA rather than quietly taking a wrong value, so a gap in your logic shows up instead of hiding.
+
+- Class: cmd_question
+  Output: Fill in the low group. Select the positions where dem is below 5, using which() around the condition, and assign the text "Low" to them.
+  CorrectAnswer: demgroup[which(dem < 5)] <- "Low"
+  AnswerTests: omnitest(correctExpr='demgroup[which(dem < 5)] <- "Low"')
+  Hint: Type demgroup[which(dem < 5)] <- "Low". which() turns TRUE and FALSE into positions, and drops the NAs.
+
+- Class: text
+  Output: which() matters here. Without it, every respondent whose answer is NA would be selected too and filled with NA - because R cannot say whether an unknown value is below 5, so it refuses to say either way.
+
+- Class: cmd_question
+  Output: Now the high group - the positions where dem is 5 or more get the text "High".
+  CorrectAnswer: demgroup[which(dem >= 5)] <- "High"
+  AnswerTests: omnitest(correctExpr='demgroup[which(dem >= 5)] <- "High"')
+  Hint: Type demgroup[which(dem >= 5)] <- "High".
+
+- Class: cmd_question
+  Output: Count the result, showing missing values. Use table() with useNA set to "ifany".
+  CorrectAnswer: table(demgroup, useNA = "ifany")
+  AnswerTests: any_of_exprs('table(demgroup, useNA = "ifany")', 'table(demgroup, useNA="ifany")')
+  Hint: Type table(demgroup, useNA = "ifany").
+
+- Class: text
+  Output: Two things to notice. High comes before Low, which is alphabetical order rather than the order of the variable. And the split is very lopsided - 2593 against 142. That second one is real - Swedes overwhelmingly think Sweden is democratic. It is also a warning, because a category holding 142 cases will not support much analysis.
+
+- Class: cmd_question
+  Output: Turn demgroup into a factor, with the levels argument set to c("Low", "High").
+  CorrectAnswer: demgroup <- factor(demgroup, levels = c("Low", "High"))
+  AnswerTests: any_of_exprs('demgroup <- factor(demgroup, levels = c("Low", "High"))', 'demgroup <- factor(demgroup, levels=c("Low", "High"))')
+  Hint: Type demgroup <- factor(demgroup, levels = c("Low", "High")).
+
+- Class: cmd_question
+  Output: Look at the table one more time to see the new order.
+  CorrectAnswer: table(demgroup, useNA = "ifany")
+  AnswerTests: any_of_exprs('table(demgroup, useNA = "ifany")', 'table(demgroup, useNA="ifany")')
+  Hint: Type table(demgroup, useNA = "ifany").
+
+- Class: text
+  Output: From here on every table and every plot will use that order. The same setting also decides which category a regression treats as the reference - but that is session 13.
+
+- Class: cmd_question
+  Output: One last thing. Every variable you use drops the respondents who are missing on it, and the losses add up. Put trust_rev and dem into a data frame called both, then count the complete rows using sum() and complete.cases().
+  CorrectAnswer: both <- data.frame(trust_rev, dem)
+  AnswerTests: omnitest(correctExpr='both <- data.frame(trust_rev, dem)')
+  Hint: Type both <- data.frame(trust_rev, dem).
+
+- Class: cmd_question
+  Output: Now count the rows with no missing values in them.
+  CorrectAnswer: sum(complete.cases(both))
+  AnswerTests: omnitest(correctExpr='sum(complete.cases(both))')
+  Hint: Type sum(complete.cases(both)).
+
+- Class: text
+  Output: 2628 of 2845 - two variables and 217 respondents already gone. Watch that number as models get bigger. Next week we do all of this again with the tidyverse, in about a third of the typing.

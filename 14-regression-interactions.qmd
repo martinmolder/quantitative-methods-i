@@ -1,0 +1,281 @@
+# Regression: interactions and non-linear associations
+
+```{r}
+#| label: setup-14
+#| include: false
+Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
+options(width = 78)
+fmt <- function(x, digits = 2) formatC(x, format = "f", digits = digits)
+```
+
+Everything so far has assumed two things about a regression, and both are often wrong.
+
+The first is that each predictor has **the same effect for everybody**. The second is that the relationship is a **straight line**. This session relaxes them one at a time.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(psych)
+library(ggeffects)
+
+swe <- readRDS("data/swe.rds")
+
+trust_items <- c(
+  "tr_parl", "tr_govt", "tr_court",
+  "tr_sci", "tr_party", "tr_media"
+)
+swe$trust <- fa(swe[, trust_items], nfactors = 1, fm = "ml")$scores[, 1]
+
+swe$sex <- factor(
+  swe$female,
+  levels = c(0, 1),
+  labels = c("Men", "Women")
+)
+```
+
+## Interactions
+
+In session 11 we found that trust in institutions predicts how democratic people think Sweden is, and that it does so about equally on both sides of the political divide once you control for it.
+
+But "controlling for" and "the same for everybody" are different claims. A model with `trust + bloc` says the trust slope is identical for left and right voters, and forces it to be. An **interaction** lets it differ.
+
+```{r}
+model_int <- lm(demlevel ~ trust * bloc, data = swe)
+
+round(coef(summary(model_int)), 3)
+```
+
+`trust * bloc` is shorthand. It puts in `trust`, `bloc`, and the product of the two — the interaction term, printed as `trust:blocRight`. You could write `trust + bloc + trust:bloc` and get the same model.
+
+### Reading it
+
+Four numbers, and the trap is in the middle two.
+
+**`(Intercept)` = `r fmt(coef(model_int)[1])`** — predicted rating for a left-bloc voter with average trust.
+
+**`trust` = `r fmt(coef(model_int)[2])`** — the trust slope **for left-bloc voters only**. Not for everyone. Not on average.
+
+**`blocRight` = `r fmt(coef(model_int)[3])`** — the bloc difference **at trust = 0**. Not overall.
+
+**`trust:blocRight` = `r fmt(coef(model_int)[4])`** — how much the trust slope *changes* for right-bloc voters. So their slope is `r fmt(coef(model_int)[2])` + `r fmt(coef(model_int)[4])` = `r fmt(coef(model_int)[2] + coef(model_int)[4])`.
+
+> **Once you add an interaction, the other two coefficients change meaning.** They are no longer average effects. They are the effect of one variable *when the other is zero*, which is why it matters enormously whether zero is a meaningful value.
+>
+> Here it happens to be fine, because `trust` is standardised so zero is the average. Had we used raw age, `blocRight` would have been the bloc difference among newborns.
+
+The interaction is significant (*p* = `r fmt(coef(summary(model_int))[4, 4], 3)`), so trust does more work for right-bloc voters than for left-bloc voters: `r fmt(coef(model_int)[2] + coef(model_int)[4])` points per standard deviation against `r fmt(coef(model_int)[2])`.
+
+### Plot it, always
+
+Interaction coefficients are close to unreadable in a table. Nobody should have to do that arithmetic in their head, and the sign of an interaction term tells you almost nothing on its own.
+
+```{r}
+#| label: fig-int
+#| fig-height: 3.6
+predictions <- predict_response(
+  model_int,
+  terms = c("trust [-2:2 by=0.5]", "bloc")
+)
+
+plot(predictions) +
+  scale_colour_viridis_d(end = 0.7) +
+  scale_fill_viridis_d(end = 0.7) +
+  labs(
+    x = "Trust in institutions (standard deviations)",
+    y = "Predicted rating of Swedish democracy",
+    colour = "Bloc",
+    fill = "Bloc",
+    title = NULL
+  ) +
+  theme_bw()
+```
+
+Giving `terms` two variables produces one line per group of the second, and `scale_colour_viridis_d()` and `scale_fill_viridis_d()` put the two lines on the colourblind-safe palette from session 5. Now the interaction is obvious: two lines that are not parallel, and that **cross**.
+
+Read what it says. Among people who distrust institutions, left-bloc voters rate Swedish democracy *higher* than right-bloc voters. Among people who trust institutions, it is the other way round. The lines meet at about `r fmt(-coef(model_int)[3] / coef(model_int)[4])` standard deviations of trust.
+
+So the answer to "is there a winner–loser gap?" is: it depends who you ask. That is what an interaction means, and no single coefficient could have said it.
+
+**Non-parallel lines are what an interaction is.** If you cannot see it on this plot, it is not there in any meaningful sense, whatever the p-value says.
+
+Note also the top right corner: the model predicts `r fmt(max(as.data.frame(predictions)$predicted))` for the most trusting right-bloc voters, on a scale that stops at 10. Session 12 again, and one more reason not to read predictions at the edges too literally.
+
+### When the main effect misleads
+
+A second example, because this catches people.
+
+```{r}
+model_age <- lm(lr_self ~ age * sex, data = swe)
+
+round(coef(summary(model_age)), 4)
+```
+
+The coefficient on `age` is `r fmt(coef(model_age)[2], 4)` with *p* = `r fmt(coef(summary(model_age))[2, 4], 3)` — nothing. Read carelessly, that says age does not matter.
+
+It says no such thing. It says age does not matter **for men**, since men are the reference category. For women the slope is `r fmt(coef(model_age)[2], 4)` + `r fmt(coef(model_age)[4], 4)` = `r fmt(coef(model_age)[2] + coef(model_age)[4], 4)` — positive, and the interaction is significant at *p* = `r fmt(coef(summary(model_age))[4, 4], 3)`.
+
+```{r}
+#| label: fig-int2
+#| fig-height: 3.4
+age_predictions <- predict_response(model_age, terms = c("age", "sex"))
+
+plot(age_predictions) +
+  scale_colour_viridis_d(end = 0.7) +
+  scale_fill_viridis_d(end = 0.7) +
+  labs(
+    x = "Age (years)",
+    y = "Predicted left-right self-placement",
+    colour = "Sex",
+    fill = "Sex",
+    title = NULL
+  ) +
+  theme_bw()
+```
+
+Older women place themselves further right than younger women; among men, age makes little difference. Two groups, two different stories, and a model without the interaction would have averaged them into one weak effect.
+
+::: {.discussion}
+**A question.** In `model_age`, swapping the reference category from men to women would change the coefficient on `age` from `r fmt(coef(model_age)[2], 4)` to `r fmt(coef(model_age)[2] + coef(model_age)[4], 4)`, and its p-value from non-significant to significant.
+
+Nothing about the data has changed. What does that tell you about reporting "the effect of age" from a model containing an interaction?
+:::
+
+> **Do not go hunting.** With ten predictors there are forty-five possible two-way interactions, and at the conventional threshold you would expect a couple to come out significant by chance alone. Test interactions you have a reason to expect. An interaction found by searching needs replicating before it means anything.
+
+## Non-linear relationships
+
+The second assumption. Sometimes the relationship is not a straight line at all — and session 4 gave us a case where it *cannot* be.
+
+```{r}
+world <- readr::read_csv("data/world.csv", show_col_types = FALSE)
+world <- world |> filter(!is.na(gdp), !is.na(life))
+```
+
+Income has a floor at zero and no ceiling. Life expectancy has both. We argued in session 4 that this rules out a straight line, because a line rising forever eventually promises impossible lifespans.
+
+Fit one anyway and see.
+
+```{r}
+linear <- lm(life ~ gdp, data = world)
+
+round(coef(summary(linear)), 6)
+```
+
+Significant, and R² = `r fmt(summary(linear)$r.squared, 3)`. Nothing in that output says anything is wrong.
+
+Now ask it to predict.
+
+```{r}
+extremes <- data.frame(gdp = c(1000, 50000, 150000, 300000))
+extremes$predicted <- predict(linear, newdata = extremes)
+
+round(extremes, 1)
+```
+
+A life expectancy of `r fmt(predict(linear, newdata = data.frame(gdp = 300000)), 0)` years. The model is not confused — it is doing exactly what a straight line does. The mistake was ours, in fitting one.
+
+### Logarithms
+
+The fix for a relationship that flattens is usually to take the logarithm of the predictor.
+
+A logarithm turns multiplication into addition: `log(2)`, `log(4)` and `log(8)` are equally spaced, because each is a doubling. Applying it to income means the model works in *proportional* change — the same relative increase matters equally whether you are poor or rich — rather than in absolute dollars.
+
+```{r}
+logged <- lm(life ~ log(gdp), data = world)
+
+round(coef(summary(logged)), 3)
+```
+
+R² rises from `r fmt(summary(linear)$r.squared, 3)` to `r fmt(summary(logged)$r.squared, 3)`.
+
+```{r}
+extremes$logged <- predict(logged, newdata = extremes)
+round(extremes, 1)
+```
+
+`r fmt(predict(logged, newdata = data.frame(gdp = 300000)), 1)` years at the top instead of `r fmt(predict(linear, newdata = data.frame(gdp = 300000)), 0)`. Still an extrapolation well beyond the data, but no longer impossible.
+
+**Interpreting a logged predictor.** The coefficient is the change in the outcome for a one-unit change in the *log*, which nobody can picture. Multiply it by `log(2)` and you get the change for a **doubling**, which everybody can.
+
+```{r}
+coef(logged)[2] * log(2)
+```
+
+Doubling a country's income per head is associated with about `r fmt(coef(logged)[2] * log(2))` more years of life expectancy — and the same is true whether you double from 2,000 to 4,000 or from 60,000 to 120,000. That is what the log model claims, and it is a claim worth making explicitly, because it might be wrong.
+
+### Squared terms
+
+The other common approach is to add the square of the predictor, which lets the line bend once — up then down, or down then up.
+
+```{r}
+quadratic <- lm(life ~ gdp + I(gdp^2), data = world)
+
+round(summary(quadratic)$r.squared, 3)
+```
+
+`I()` is needed around `gdp^2`. Inside a formula `^` means something else — interactions to a given order — and `I()` says "treat this as ordinary arithmetic".
+
+R² of `r fmt(summary(quadratic)$r.squared, 3)`, worse than the log model's `r fmt(summary(logged)$r.squared, 3)`. And a quadratic always turns back on itself eventually, so extended far enough it will predict life expectancy *falling* as countries get richer.
+
+**Choose the shape from what the variables are, not from the fit.** A quadratic is right when the relationship genuinely rises and then falls — the effect of age on income, say. A logarithm is right when the effect diminishes but never reverses, which is what a bounded outcome and an unbounded predictor imply.
+
+```{r}
+#| label: fig-nonlin
+#| fig-height: 3.8
+ggplot(world, aes(x = gdp, y = life)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    colour = "grey50",
+    linetype = "dashed"
+  ) +
+  geom_smooth(
+    method = "lm",
+    formula = y ~ log(x),
+    se = FALSE,
+    colour = "black"
+  ) +
+  scale_x_continuous(labels = scales::label_comma()) +
+  coord_cartesian(ylim = c(40, 95)) +
+  labs(
+    x = "GDP per capita (PPP, constant international dollars)",
+    y = "Life expectancy at birth (years)"
+  ) +
+  theme_bw()
+```
+
+The dashed line is the straight fit and the solid one the logged fit. The straight line is above the data in the middle and below it at both ends — the signature of fitting a line to a curve, and exactly what the residual plot in session 11 was looking for.
+
+::: {.discussion}
+**A question.** The logged model fits better by every measure, and it is the shape session 4 said the limits of the scales required.
+
+It still predicts a life expectancy of `r fmt(predict(logged, newdata = data.frame(gdp = 1000000)), 1)` years for a country with an income per head of a million dollars. Is that a problem with the model, and if so what would fix it?
+:::
+
+::: {.reporting}
+**How to write it up.**
+
+An interaction:
+
+> The association between trust and evaluations of democracy differed by bloc (b = `r fmt(coef(model_int)[4])`, SE = `r fmt(coef(summary(model_int))[4, 2])`, *p* = `r fmt(coef(summary(model_int))[4, 4], 3)`). Among left-bloc voters a one standard deviation increase in trust corresponded to a `r fmt(coef(model_int)[2])`-point higher rating; among right-bloc voters, `r fmt(coef(model_int)[2] + coef(model_int)[4])` points (Figure 1).
+
+A transformation:
+
+> Life expectancy was modelled as a function of logged GDP per capita, since the two scales are bounded differently and a linear specification predicts impossible values at high incomes. A doubling of income per head was associated with `r fmt(coef(logged)[2] * log(2))` additional years of life expectancy (95% CI [`r fmt(confint(logged)[2,1] * log(2))`, `r fmt(confint(logged)[2,2] * log(2))`], R² = `r fmt(summary(logged)$r.squared, 2)`, *n* = `r nobs(logged)`).
+
+Mistakes to avoid:
+
+- **Reporting an interaction without a plot.** The coefficients are not readable on their own.
+- **Interpreting a main effect as an average effect** when an interaction is in the model. It is the effect when the other variable is zero.
+- **Reporting a main effect's p-value** from a model with an interaction, as though it meant something general. It depends on the reference category.
+- **Fishing for interactions.** Test the ones you predicted.
+- **Choosing a transformation by R².** The shape should follow from what the variables are.
+- **Reading a logged coefficient as a per-unit change.** Convert it to a doubling, or a 10% increase, and say which.
+- **Extrapolating a quadratic**, which always turns round in the end.
+:::
+
+::: {.swirl}
+**In the seminar.** `swirl` lesson 14, *Interactions and non-linear associations*. Fitting and reading an interaction, plotting it, and fixing a relationship that a straight line gets wrong. Around 30 minutes.
+:::

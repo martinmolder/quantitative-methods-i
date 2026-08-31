@@ -1,0 +1,258 @@
+# Logistic regression
+
+```{r}
+#| label: setup-15
+#| include: false
+Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
+options(width = 78)
+fmt <- function(x, digits = 2) formatC(x, format = "f", digits = digits)
+```
+
+The last session, and it closes a thread that has run through the whole course.
+
+Sessions 4, 12 and 14 all ran into the same thing: a straight line does not know that a scale has ends, so it will happily predict values that cannot exist. Every time, the answer was "be careful near the edges". This week the outcome is nothing *but* edges, and being careful is no longer enough.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(psych)
+library(ggeffects)
+
+swe <- readRDS("data/swe.rds")
+
+trust_items <- c(
+  "tr_parl", "tr_govt", "tr_court",
+  "tr_sci", "tr_party", "tr_media"
+)
+swe$trust <- fa(swe[, trust_items], nfactors = 1, fm = "ml")$scores[, 1]
+
+swe$sex <- factor(
+  swe$female,
+  levels = c(0, 1),
+  labels = c("Men", "Women")
+)
+```
+
+## A binary outcome
+
+Who voted for the Sweden Democrats? The outcome `vote_sd` is 1 for SD voters and 0 for everyone else who voted.
+
+```{r}
+table(swe$vote_sd, useNA = "ifany")
+```
+
+`r sum(swe$vote_sd == 1, na.rm = TRUE)` of `r sum(!is.na(swe$vote_sd))` voters, about `r fmt(100 * mean(swe$vote_sd, na.rm = TRUE), 1)`%.
+
+There is nothing stopping you putting that straight into `lm()`. The result even has a name — a **linear probability model** — and it is occasionally used on purpose.
+
+```{r}
+linear_model <- lm(vote_sd ~ trust + lr_self + sex + educ, data = swe)
+
+round(coef(summary(linear_model)), 4)
+```
+
+Perfectly reasonable-looking output. Now ask it what it believes.
+
+```{r}
+predicted_p <- predict(linear_model)
+
+range(predicted_p)
+sum(predicted_p < 0 | predicted_p > 1)
+```
+
+The model predicts a **negative probability** for some respondents, and `r sum(predict(lm(vote_sd ~ trust + lr_self + sex + educ, data = swe)) < 0 | predict(lm(vote_sd ~ trust + lr_self + sex + educ, data = swe)) > 1)` cases fall outside 0 and 1 altogether.
+
+This is the session 4 point in its sharpest form. A probability is bounded at 0 and 1, hard limits, no exceptions. A straight line is unbounded. Fit one to the other and impossible predictions are not a risk at the edges — they are guaranteed.
+
+## The fix, in words
+
+The problem is a mismatch: the outcome lives on a scale with two ends, and a linear model needs a scale with none. So change the scale.
+
+**Step one: from probability to odds.** Odds are the probability of something happening divided by the probability of it not happening, as in session 7. A probability of 0.5 is odds of 1; a probability of 0.9 is odds of 9. Odds have a floor at zero but **no ceiling** — they run from 0 to infinity. One end of the problem is gone.
+
+**Step two: from odds to log odds.** Take the logarithm. Odds of 1 become 0, odds above 1 become positive, odds below 1 become negative. Now the scale runs from minus infinity to plus infinity, with **no ends at all**.
+
+That is a scale a straight line can live on. So the model fits a straight line to the log odds:
+
+$$\log\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots$$
+
+and then converts back. The conversion is what gives logistic regression its S-shape: a straight line in log odds becomes a curve in probability that flattens as it approaches 0 and 1, and never reaches either.
+
+That curve is doing exactly what session 4 said a relationship with a bounded outcome has to do. Logistic regression is a limit built into a model rather than apologised for afterwards.
+
+The price is that the coefficients are now in log odds, and nobody thinks in log odds. Most of this chapter is about getting back to something readable.
+
+## Fitting it
+
+```{r}
+model <- glm(
+  vote_sd ~ trust + lr_self + sex + educ,
+  data = swe,
+  family = "binomial"
+)
+
+summary(model)
+```
+
+`glm()` is the generalised linear model — the same formula notation as `lm()`, plus a `family` argument saying what kind of outcome it is. `"binomial"` means binary.
+
+The output is nearly the same shape as `lm()`. The differences:
+
+- The test statistic is `z value` rather than `t value`, and the logic is unchanged: estimate over standard error.
+- There is no R-squared, and no F-test. Instead there are **deviances**, which we come to below.
+- **`Estimate` is in log odds**, which is why none of the numbers look like anything.
+
+The signs are readable even if the sizes are not. Trust is negative, so more trusting people are less likely to vote SD. Left-right placement is positive: further right, more likely. Women are less likely than men. More education, less likely.
+
+## Odds ratios
+
+The first step towards readability. Exponentiating a log-odds coefficient turns it into an **odds ratio** — the same quantity as in session 7.
+
+```{r}
+odds_ratios <- exp(cbind(
+  OR = coef(model),
+  confint.default(model)
+))
+
+round(odds_ratios, 3)
+```
+
+`exp()` undoes `log()`. `confint.default()` builds the interval from the standard errors, and `cbind()` glues the estimate and the interval into one table before the whole thing is exponentiated — the interval has to be transformed on the log scale and then converted, not the other way round.
+
+Reading them:
+
+- **`lr_self` = `r fmt(exp(coef(model)[3]), 2)`.** Each one-point move to the right on the 0-10 scale multiplies the odds of voting SD by about `r fmt(exp(coef(model)[3]), 2)` — a `r fmt(100 * (exp(coef(model)[3]) - 1), 0)`% increase in the odds.
+- **`trust` = `r fmt(exp(coef(model)[2]), 2)`.** One standard deviation more trust multiplies the odds by `r fmt(exp(coef(model)[2]), 2)`, roughly halving them.
+- **`sexWomen` = `r fmt(exp(coef(model)[4]), 2)`.** Women's odds are about `r fmt(exp(coef(model)[4]), 2)` times men's.
+
+**An odds ratio of 1 means no effect**, so an interval containing 1 is the equivalent of a coefficient whose interval contains zero.
+
+> **Odds ratios are multiplicative.** They do not add up and they are not symmetric: an odds ratio of 2 and one of 0.5 are the same size of effect in opposite directions. This is also why the confidence intervals are lopsided.
+>
+> And the warning from session 7 still stands. An odds ratio is **not** a ratio of probabilities. `r fmt(exp(coef(model)[3]), 2)` times the odds is not `r fmt(exp(coef(model)[3]), 2)` times as likely.
+
+## Predicted probabilities
+
+The version to show a reader. Odds ratios are precise and hard to picture; probabilities are what people actually understand.
+
+```{r}
+probs <- predict_response(model, terms = "lr_self [0:10 by=1]")
+
+probs
+```
+
+```{r}
+#| label: fig-logit
+#| fig-height: 3.6
+plot(probs) +
+  labs(
+    x = "Left-right self-placement (0 = left, 10 = right)",
+    y = "Predicted probability of voting SD",
+    title = NULL
+  ) +
+  theme_bw()
+```
+
+There is the S-curve. And there is the thing that makes it worth the trouble: **the effect of a one-point move is not constant**.
+
+```{r}
+probs |>
+  as.data.frame() |>
+  select(lr_self = x, probability = predicted) |>
+  mutate(change = c(NA, round(diff(probability), 3))) |>
+  round(3)
+```
+
+Moving from 2 to 3 on the left-right scale barely changes anything. Moving from 7 to 8 changes a great deal. A single odds ratio contains that information, but only implicitly; the plot shows it.
+
+This is the payoff for the whole apparatus. A linear model would have insisted the change was the same everywhere and predicted negative probabilities at one end. The logistic model bends, and stays inside the limits by construction.
+
+::: {.discussion}
+**A question.** The steepest part of the curve is in the middle, around a predicted probability of 0.5, and it flattens towards both ends.
+
+Why must that be true of *any* model whose outcome is a probability? Relate your answer to the anchor points and approaches to limits from session 4.
+:::
+
+## How good is the model?
+
+There is no R-squared. Several substitutes exist, all called **pseudo R-squared**, and none of them means what R-squared means.
+
+```{r}
+pscl::pR2(model)["McFadden"]
+```
+
+McFadden's is the most commonly reported. It is built from the deviances in the model output: `Null deviance` is how badly a model with no predictors does, `Residual deviance` how badly ours does, and the measure is how much of that gap we closed.
+
+`r fmt(pscl::pR2(model)["McFadden"], 3)` is respectable — for McFadden, values above about 0.2 are usually considered a good fit, which is a different scale from ordinary R-squared and should never be reported as though it were the same thing.
+
+### Classification, and its trap
+
+The other way to judge a binary model is to ask how often it gets the answer right. Predict SD if the probability is above 0.5, and compare.
+
+```{r}
+predicted_class <- ifelse(fitted(model) > 0.5, 1, 0)
+actual <- model$model$vote_sd
+
+confusion <- table(Predicted = predicted_class, Actual = actual)
+confusion
+```
+
+```{r}
+accuracy <- sum(diag(confusion)) / sum(confusion)
+accuracy
+```
+
+`fitted()` gives the predicted probability for every case the model was fitted on, and `diag()` takes the diagonal of the table — the cases the model got right. `r fmt(100 * accuracy, 1)`% correct sounds excellent.
+
+Now compare it with the laziest possible model: predict that **nobody** voted SD.
+
+```{r}
+max(table(actual)) / length(actual)
+```
+
+`r fmt(100 * max(table(glm(vote_sd ~ trust + lr_self + sex + educ, data = swe, family = "binomial")$model$vote_sd)) / length(glm(vote_sd ~ trust + lr_self + sex + educ, data = swe, family = "binomial")$model$vote_sd), 1)`% correct, from a model with no variables in it at all.
+
+Our model, with four highly significant predictors and a respectable pseudo R-squared, beats guessing by about **one and a half percentage points**.
+
+The reason is in the table:
+
+```{r}
+sensitivity <- confusion[2, 2] / sum(confusion[, 2])
+specificity <- confusion[1, 1] / sum(confusion[, 1])
+
+round(c(sensitivity = sensitivity, specificity = specificity), 3)
+```
+
+**Sensitivity** is the share of actual SD voters the model catches: `r fmt(100 * sensitivity, 1)`%. **Specificity** is the share of non-SD voters it correctly leaves alone: `r fmt(100 * specificity, 1)`%.
+
+The model is excellent at saying no and poor at saying yes. That is what happens when an outcome is rare — a threshold of 0.5 is rarely crossed, so almost everyone gets predicted into the larger category, and accuracy is high because the larger category is large.
+
+> **Never report accuracy without the baseline.** With an outcome that occurs 15% of the time, any model that reports less than 85% accuracy is doing worse than saying nothing. Report sensitivity and specificity too, and say what threshold you used — 0.5 is a convention, not a law, and lowering it trades specificity for sensitivity.
+
+## And that is the course
+
+Look back at what the last session did.
+
+The outcome was bounded, so a straight line was the wrong shape — session 4. The fix was to change the scale until it was unbounded, fit the line there, and convert back. Reading the result meant getting from log odds to odds ratios to probabilities, because each step is more interpretable than the last — session 12. Judging it meant knowing what the number would be if the model were useless — session 6.
+
+None of that is specific to logistic regression. It is what you do with any model: know what your scales can and cannot do before you fit anything, get the results into units a reader can hold, and compare every number against what it would be if nothing were going on.
+
+::: {.reporting}
+**How to write it up.**
+
+> A logistic regression predicting Sweden Democrat voting (*n* = `r nobs(model)`) found that right-wing self-placement was the strongest predictor: each additional point on the 0-10 left-right scale multiplied the odds of voting SD by `r fmt(exp(coef(model)[3]))` (95% CI [`r fmt(exp(confint.default(model)[3,1]))`, `r fmt(exp(confint.default(model)[3,2]))`], *p* < .001). Trust in institutions had the opposite association (OR = `r fmt(exp(coef(model)[2]))`, 95% CI [`r fmt(exp(confint.default(model)[2,1]))`, `r fmt(exp(confint.default(model)[2,2]))`]), as did education (OR = `r fmt(exp(coef(model)[5]))`). Women were less likely to vote SD than men (OR = `r fmt(exp(coef(model)[4]))`). McFadden's pseudo R² was `r fmt(pscl::pR2(model)["McFadden"], 2)`. Predicted probabilities ranged from below `r fmt(min(as.data.frame(probs)$predicted), 2)` at the left of the scale to `r fmt(max(as.data.frame(probs)$predicted), 2)` at the right (Figure 1).
+
+Report odds ratios with intervals, and give predicted probabilities for the variable your argument is about. Mistakes to avoid:
+
+- **Reporting raw coefficients** without saying they are log odds, or leaving them uninterpreted.
+- **Calling an odds ratio a probability ratio.** Still the commonest error in this whole area.
+- **Reporting pseudo R² as though it were R².** Say which one it is; the conventions are different.
+- **Reporting classification accuracy without the baseline.**
+- **Ignoring sensitivity when the outcome is rare.** A model that never predicts the event can still be 85% accurate.
+- **Forgetting that the effect of a predictor depends on where you are on the curve.** There is no single "effect on probability".
+- **Using a linear probability model without saying why**, or without checking how many predictions fall outside 0 and 1.
+:::
+
+::: {.swirl}
+**In the seminar.** `swirl` lesson 15, *Logistic regression*. Why a straight line fails, fitting a `glm()`, odds ratios, predicted probabilities, and judging the fit. Around 30 minutes.
+:::

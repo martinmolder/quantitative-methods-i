@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Martin Mölder">
+
+<title>Quantitative Methods I</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./01-r-and-rstudio.html" rel="next">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-7202036dd3638cbfcbeb4151d116aa42.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Introduction</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Quantitative Methods I</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-r-and-rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Getting started with R and RStudio</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-data-management-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data and data management I</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-data-management-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data and data management II</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-logical-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-visualisation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data visualisation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-hypothesis-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">The logic of hypothesis testing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07-categorical-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Analysing categorical data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08-comparing-means.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Comparing means</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09-correlation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Correlation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-factor-analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Factor analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-regression-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Regression: the basic model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-regression-presentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Regression: presenting results</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-regression-dummies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Regression: dummy variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-regression-interactions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Regression: interactions and non-linear associations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-logistic-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Logistic regression</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#how-the-seminars-work" id="toc-how-the-seminars-work" class="nav-link" data-scroll-target="#how-the-seminars-work">How the seminars work</a></li>
+  <li><a href="#simple-first-then-harder" id="toc-simple-first-then-harder" class="nav-link" data-scroll-target="#simple-first-then-harder">Simple first, then harder</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">The data</a>
+  <ul class="collapse">
+  <li><a href="#where-social-scientists-get-data" id="toc-where-social-scientists-get-data" class="nav-link" data-scroll-target="#where-social-scientists-get-data">Where social scientists get data</a></li>
+  </ul></li>
+  <li><a href="#how-to-use-these-materials" id="toc-how-to-use-these-materials" class="nav-link" data-scroll-target="#how-to-use-these-materials">How to use these materials</a></li>
+  <li><a href="#readings" id="toc-readings" class="nav-link" data-scroll-target="#readings">Readings</a></li>
+  <li><a href="#schedule" id="toc-schedule" class="nav-link" data-scroll-target="#schedule">Schedule</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Quantitative Methods I</h1>
+<p class="subtitle lead">Seminar materials, autumn 2026</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Martin Mölder </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">26.08.2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1 unnumbered">
+<h1 class="unnumbered">Introduction</h1>
+<p>These materials belong to the course <em>Quantitative Methods</em> (SHRG.03.024) at the Johan Skytte Institute of Political Studies.</p>
+<p>The course has two aims. The first is to give you a working understanding of the most common statistical methods in the social sciences — what they do, when they apply, and what their results mean. The second is to show you how to actually carry them out, using R.</p>
+<p>There is also a third aim, which runs underneath both of the others and which is easy to overlook: to make you think about numbers before you compute with them. A great deal of quantitative social science consists of running a model on whatever variables are at hand and reporting whatever comes out. That is not the same thing as understanding. Some of the most useful thinking you can do about a relationship happens before you touch any data at all.</p>
+<p>The course assumes no prior knowledge. We start from an empty screen. General computer skills help, and so does whatever secondary-school mathematics is still lodged somewhere in your memory. We will not go deep into the mathematics behind the methods — the focus is on the logic of each method, the conditions under which it applies, and how to use it in R.</p>
+<section id="how-the-seminars-work" class="level2">
+<h2 class="anchored" data-anchor-id="how-the-seminars-work">How the seminars work</h2>
+<p>Each seminar is an hour and a half, and it has two halves.</p>
+<p>The <strong>first 45 to 60 minutes</strong> is a lecture. This is where the methods, functions and techniques for that week are introduced.</p>
+<p>The <strong>remaining half hour</strong> is hands-on. We work through a <code>swirl</code> lesson together — an interactive exercise that runs inside R itself and that covers the core of the week’s topic. You type the commands, R checks them, and you get immediate feedback on whether they worked.</p>
+<p><strong>These written materials are the third part, and you do them on your own.</strong> We will not read through them in class. Their job is to contain everything you need: the background to each topic, the reasoning behind each method, worked examples with real output, and the R code that produces it. The lecture introduces the ideas, the swirl lesson gives you practice, and these materials are what you go back to when you actually have to do something.</p>
+<blockquote class="blockquote">
+<p>This course does not work without independent effort. The three hours a week we spend together are not enough on their own to get you to the point where you can run an analysis and defend it. That comes from working through the materials, redoing the examples with your own variables, and getting stuck on your own and unstuck again.</p>
+</blockquote>
+</section>
+<section id="simple-first-then-harder" class="level2">
+<h2 class="anchored" data-anchor-id="simple-first-then-harder">Simple first, then harder</h2>
+<p>Each session is built as one line, not two. It starts with the simplest form of the idea and the shortest code that does the job, and then adds the complications one at a time. The same holds inside each topic within a session: the plain case first, then the awkward ones.</p>
+<p>This is deliberate, and it has a consequence worth knowing about. If you read half of a section and stop, you should have something whole — a version of the method that is simple but not wrong. What comes after is not a correction of what came before; it is the next layer on top of it.</p>
+<p>It also means that <strong>none of the material is optional</strong>. Later parts of a section are harder, but they are not extras. Where a formula appears, it appears after the idea has already been explained in words and pictures, because the formula is easier to read once you know what it is for — not because the words were a simplified stand-in for it.</p>
+</section>
+<section id="the-data" class="level2">
+<h2 class="anchored" data-anchor-id="the-data">The data</h2>
+<p>Throughout the course we use data from the <strong>Comparative Study of Electoral Systems</strong> (CSES), Module 6, and specifically the <strong>Swedish</strong> study conducted after the <strong>2022 general election</strong>. There are 2,845 respondents.</p>
+<p>CSES is a collaborative project that runs a common set of questions in post-election surveys across many countries, which makes the results comparable. It is free, widely used, and a perfectly reasonable choice for your own thesis.</p>
+<p>Sweden is a good case to learn on for one particular reason: it has <strong>eight parties in parliament</strong>, and the survey asks about all of them. Respondents rate every party and every party leader on a scale from 0 to 10, and place every party on a left-right scale. That gives us something that a two-party system cannot: a vote choice with eight real categories, and a set of variables with genuine structure in them. A surprising amount of this course — crosstabs, comparing means, correlation, factor analysis, dummy variables — becomes more interesting when there are eight parties rather than two.</p>
+<p>The parties, in left-to-right order as the respondents themselves place them:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 32%">
+<col style="width: 32%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Party</th>
+<th></th>
+<th>Placed at</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>V</td>
+<td>Vänsterpartiet</td>
+<td>Left Party</td>
+<td>0.8</td>
+</tr>
+<tr class="even">
+<td>MP</td>
+<td>Miljöpartiet</td>
+<td>Greens</td>
+<td>2.5</td>
+</tr>
+<tr class="odd">
+<td>S</td>
+<td>Socialdemokraterna</td>
+<td>Social Democrats</td>
+<td>3.1</td>
+</tr>
+<tr class="even">
+<td>C</td>
+<td>Centerpartiet</td>
+<td>Centre Party</td>
+<td>4.7</td>
+</tr>
+<tr class="odd">
+<td>L</td>
+<td>Liberalerna</td>
+<td>Liberals</td>
+<td>6.4</td>
+</tr>
+<tr class="even">
+<td>KD</td>
+<td>Kristdemokraterna</td>
+<td>Christian Democrats</td>
+<td>8.0</td>
+</tr>
+<tr class="odd">
+<td>M</td>
+<td>Moderaterna</td>
+<td>Moderates</td>
+<td>8.5</td>
+</tr>
+<tr class="even">
+<td>SD</td>
+<td>Sverigedemokraterna</td>
+<td>Sweden Democrats</td>
+<td>8.5</td>
+</tr>
+</tbody>
+</table>
+<p>In the 2022 election the Social Democrat government led by Magdalena Andersson lost its majority, and Ulf Kristersson formed a government of M, KD and L supported from outside by the Sweden Democrats. That is why the data has a <code>bloc</code> variable splitting the eight parties into the two sides that formed around government formation.</p>
+<p>We use one country rather than all eighteen for a simple reason: nearly everything in this course is about relationships between variables measured on individuals. Adding countries adds a second level to the data, and that is a topic for a later course.</p>
+<p><strong>Citation.</strong> If you use these data, you must cite them:</p>
+<blockquote class="blockquote">
+<p>The Comparative Study of Electoral Systems (www.cses.org). CSES MODULE 6 SECOND ADVANCE RELEASE [dataset and documentation]. December 16, 2025 version. doi:10.7804/cses.module6.2025-12-16</p>
+</blockquote>
+<p>Note the words <strong>advance release</strong>. The data are published before the module is complete, which means some variables have not been harmonised yet and some countries are still missing. One consequence shows up in the weights: the CSES harmonised weights have not been calculated yet, so the only weight available is the one Statistics Sweden supplied, <code>wt</code>. It rakes the sample to the known population distribution of gender, age and education. That is worth having — it cuts the average error in the reported vote shares from 2.0 to 1.4 percentage points — but it corrects for <em>who answered</em>, not for <em>what they said</em>.</p>
+<blockquote class="blockquote">
+<p><strong>A survey is not an election.</strong> In our data 35.1% say they voted for the Social Democrats and 14.4% for the Sweden Democrats. The actual result was 30.3% and 20.5%. The Sweden Democrats are under-reported by 6.1 percentage points, which is a well-documented pattern: people are less willing to tell an interviewer they voted for a radical right party than they are to do it in a voting booth.</p>
+<p>Turnout is stranger still. 97.3% of our respondents say they voted, when real turnout in 2022 was 84.2%. That is not a fault in the Swedish study — <strong>every one of the 18 election studies in CSES Module 6 over-reports turnout</strong>, by between 5.2 and 30.5 percentage points. When every measurement is wrong in the same direction, the problem is not bad luck. Session 6 is about telling those two things apart.</p>
+<p>Keep this in mind every time we calculate something from these data. A sample tells you about a sample, and getting from there to a population takes work.</p>
+</blockquote>
+<section id="where-social-scientists-get-data" class="level3">
+<h3 class="anchored" data-anchor-id="where-social-scientists-get-data">Where social scientists get data</h3>
+<p>CSES is not the only option. These are the larger surveys whose data are <strong>free to use</strong>, including in a thesis. Most require you to make an account, which is also free.</p>
+<ul>
+<li><a href="https://www.europeansocialsurvey.org/" target="_blank">European Social Survey (ESS)</a> — attitudes, values and behaviour, around 30 European countries, since 2001.</li>
+<li><a href="https://issp.org/" target="_blank">International Social Survey Programme (ISSP)</a> — one theme each year (religion, family, inequality, the environment), close to 45 countries, since 1985.</li>
+<li><a href="https://www.worldvaluessurvey.org/" target="_blank">World Values Survey</a> and <a href="https://europeanvaluesstudy.eu/" target="_blank">European Values Study</a> — values and attitudes worldwide, long time series since 1981.</li>
+<li><a href="https://europa.eu/eurobarometer/" target="_blank">Eurobarometer</a> — the European Commission’s regular surveys, frequent and topical, all EU countries.</li>
+<li><a href="https://cses.org/" target="_blank">Comparative Study of Electoral Systems (CSES)</a> — post-election surveys, voting behaviour and attitudes, harmonised across countries. Our data.</li>
+</ul>
+<p>Before settling on a data set, check three things: whether it contains the variables you need; how many cases there are in the country or group you care about; and whether the sample is a random sample. The last one matters most — without it you cannot generalise to anything.</p>
+</section>
+</section>
+<section id="how-to-use-these-materials" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-use-these-materials">How to use these materials</h2>
+<p>These materials are meant to be <strong>worked through, not read</strong>. Every code example is there for you to run on your own machine. Reading R code and understanding R code feel very similar and are not the same thing; the difference shows up the moment you have to write some yourself.</p>
+<p>You will find two kinds of boxes throughout.</p>
+<div class="discussion">
+<p><strong>A question.</strong> These mark places where the answer should already be available to you from what came before, and where the text deliberately stops short of giving it. They are the discussion points in the seminar.</p>
+</div>
+<div class="swirl">
+<p><strong>The swirl practical.</strong> At the end of each chapter, the lesson we do together in the second half of the seminar.</p>
+</div>
+</section>
+<section id="readings" class="level2">
+<h2 class="anchored" data-anchor-id="readings">Readings</h2>
+<ul>
+<li>Rein Taagepera. 2015. <em>Logical Models and Basic Numeracy in Social Sciences.</em> <strong>Required.</strong> The basis for sessions 2, 4 and 5.</li>
+<li>Andy Field et al.&nbsp;2012. <em>Discovering Statistics Using R.</em> Sage. <strong>Strongly recommended.</strong></li>
+<li>Gravetter, F.J. and Wallnau, L.B. 2016. <em>Statistics for the Behavioral Sciences.</em> Cengage. If you need to build up or refresh the basics.</li>
+<li>Agresti, A. and Finlay, B. 2008. <em>Statistical Methods for the Social Sciences.</em> Prentice Hall. If you want to go considerably further.</li>
+</ul>
+<p>All of these are available on Moodle.</p>
+</section>
+<section id="schedule" class="level2">
+<h2 class="anchored" data-anchor-id="schedule">Schedule</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 5%">
+<col style="width: 20%">
+<col style="width: 75%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Date</th>
+<th>Topic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>02.09.2026</td>
+<td>Introduction: the course, R and RStudio, swirl</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>09.09.2026</td>
+<td>Data and data management I: base R</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>16.09.2026</td>
+<td>Data and data management II: the tidyverse</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>23.09.2026</td>
+<td>Thinking logically and visually about data</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>30.09.2026</td>
+<td>Data visualisation with ggplot</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>07.10.2026</td>
+<td>The logic of hypothesis testing</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>14.10.2026</td>
+<td>Analysing categorical data</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>21.10.2026</td>
+<td>Comparing means</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>28.10.2026</td>
+<td>Correlation</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>04.11.2026</td>
+<td>Factor analysis</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>11.11.2026</td>
+<td>Regression: the basic model</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>18.11.2026</td>
+<td>Regression: presenting results</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td>25.11.2026</td>
+<td>Regression: dummy variables</td>
+</tr>
+<tr class="even">
+<td>14</td>
+<td>02.12.2026</td>
+<td>Regression: interactions and non-linear associations</td>
+</tr>
+<tr class="odd">
+<td>15</td>
+<td>09.12.2026</td>
+<td>Logistic regression</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>16.12.2026</td>
+<td>Final test</td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./01-r-and-rstudio.html" class="pagination-link" aria-label="Getting started with R and RStudio">
+        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Getting started with R and RStudio</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

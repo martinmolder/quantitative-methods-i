@@ -1,0 +1,13 @@
+# Quarto working files
+/.quarto/
+_freeze/
+
+# R
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+Rplots.pdf
+
+# macOS
+.DS_Store

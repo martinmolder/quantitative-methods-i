@@ -1,0 +1,86 @@
+variable,source,label,coding
+id,F1003_2,Respondent identifier,Text
+age,F2001_A,Age in years,Years
+female,F2002,Gender,"0 = male, 1 = female"
+educ,F2003,Education,"1-9 on the ISCED scale, 9 = doctoral"
+educ3,F2003,Education in three groups,No degree / Bachelor / Postgraduate
+marital,F2004,Marital status,Married / Widowed / Divorced / Single
+union,F2005,Union membership,"0 = no, 1 = yes"
+ses,F2008,Socio-economic status,White collar / Worker / Farmer / Self-employed
+income,F2010_1,Household income,1 = lowest quintile to 5 = highest
+relig,F2012,Attendance at religious services,1 = never to 6 = weekly or more
+bornswe,F2015,Born in Sweden,"0 = no, 1 = yes"
+foreignpar,F2016,Was either parent born abroad,"0 = no, 1 = yes"
+urban,F2020,Rural or urban residence,1 = rural to 4 = large town or city
+county,F2018,County of residence,One of the 21 Swedish counties
+land,F2018,Historical land,"Götaland / Svealand / Norrland, south to north"
+polint,F3001,Political interest,1 = not at all to 4 = very interested (reversed)
+inteff,F3003,Internal efficacy,1 = strongly disagree to 5 = strongly agree (reversed)
+dem_pref,F3004_1,Democracy is always preferable,"1-5, agreement (reversed)"
+dem_courts,F3004_2,Courts should stop the government,"1-5, agreement (reversed)"
+dem_strong,F3004_3,Strong leader who bends the rules is good,"1-5, agreement (reversed)"
+dem_women,F3004_4,Representation of women has gone too far,"1-5, agreement (reversed)"
+run_business,F3005_1,Country better run by business leaders,"1-5, agreement (reversed)"
+run_experts,F3005_2,Country better run by independent experts,"1-5, agreement (reversed)"
+run_referenda,F3005_3,Country better run by citizens in referendums,"1-5, agreement (reversed)"
+demlevel,F3006,How democratic is the country,0 = not at all to 10 = completely
+tr_parl,F3007_1,Trust in parliament,1 = not at all to 4 = a lot (reversed)
+tr_govt,F3007_2,Trust in the government,1 = not at all to 4 = a lot (reversed)
+tr_court,F3007_3,Trust in the judiciary,1 = not at all to 4 = a lot (reversed)
+tr_sci,F3007_4,Trust in scientists,1 = not at all to 4 = a lot (reversed)
+tr_party,F3007_5,Trust in political parties,1 = not at all to 4 = a lot (reversed)
+tr_media,F3007_6,Trust in traditional media,1 = not at all to 4 = a lot (reversed)
+tr_socmed,F3007_7,Trust in social media,1 = not at all to 4 = a lot (reversed)
+govperf,F3008_1,Performance of the government,1 = very bad to 4 = very good (reversed)
+govcovid,F3008_2,Performance of the government in the pandemic,1 = very bad to 4 = very good (reversed)
+econ,F3009,State of the economy over the past year,1 = much worse to 5 = much better (reversed)
+satvote,F3012_1,Satisfaction with own vote,"1 = not at all to 4 = very satisfied (reversed, gap closed)"
+satchoice,F3013,Satisfaction with the choice on offer,"1 = not at all to 4 = very satisfied (reversed, gap closed)"
+satdem,F3022,Satisfaction with democracy,"1 = not at all to 4 = very satisfied (reversed, gap closed)"
+fair,F3014,Was the election conducted fairly,1 = unfairly to 5 = fairly (reversed)
+exteff,F3017,External efficacy,1 = voting makes no difference to 5 = a big difference
+fairgroups,F3026,Are all groups in society treated fairly,1 = not at all to 4 = very fairly (reversed)
+health,F3027,Does the system guarantee adequate healthcare,1 = not at all to 4 = very well (reversed)
+pand_unity,F3028_1,Effect of the pandemic on a united society,1 = very negative to 5 = very positive (reversed)
+pand_dem,F3028_2,Effect of the pandemic on democracy,1 = very negative to 5 = very positive (reversed)
+pand_fin,F3028_3,Effect of the pandemic on personal finances,1 = very negative to 5 = very positive (reversed)
+covid,F3028_4,Anyone in the household had covid-19,"0 = no, 1 = yes"
+news_tv,F3002_1,News on public television,Days per week 0-7
+news_web,F3002_5,Online news sites,Days per week 0-7
+news_soc,F3002_6_1,News on social media,Days per week 0-7
+like_s,F3018_A,Rating of the Social Democrats (S),0 = strongly dislike to 10 = strongly like
+like_sd,F3018_B,Rating of the Sweden Democrats (SD),0 = strongly dislike to 10 = strongly like
+like_m,F3018_C,Rating of the Moderates (M),0 = strongly dislike to 10 = strongly like
+like_v,F3018_D,Rating of the Left Party (V),0 = strongly dislike to 10 = strongly like
+like_c,F3018_E,Rating of the Centre Party (C),0 = strongly dislike to 10 = strongly like
+like_kd,F3018_F,Rating of the Christian Democrats (KD),0 = strongly dislike to 10 = strongly like
+like_mp,F3018_G,Rating of the Greens (MP),0 = strongly dislike to 10 = strongly like
+like_l,F3018_H,Rating of the Liberals (L),0 = strongly dislike to 10 = strongly like
+lead_andersson,F3019_A,Rating of Magdalena Andersson (S),0 = strongly dislike to 10 = strongly like
+lead_akesson,F3019_B,Rating of Jimmie Åkesson (SD),0 = strongly dislike to 10 = strongly like
+lead_kristersson,F3019_C,Rating of Ulf Kristersson (M),0 = strongly dislike to 10 = strongly like
+lead_dadgostar,F3019_D,Rating of Nooshi Dadgostar (V),0 = strongly dislike to 10 = strongly like
+lead_loof,F3019_E,Rating of Annie Lööf (C),0 = strongly dislike to 10 = strongly like
+lead_busch,F3019_F,Rating of Ebba Busch (KD),0 = strongly dislike to 10 = strongly like
+lead_stenevi,F3019_G,Rating of Märta Stenevi (MP),0 = strongly dislike to 10 = strongly like
+lead_pehrson,F3019_H,Rating of Johan Pehrson (L),0 = strongly dislike to 10 = strongly like
+lr_s,F3020_A,Social Democrats on the left-right scale,0 = left to 10 = right
+lr_sd,F3020_B,Sweden Democrats on the left-right scale,0 = left to 10 = right
+lr_m,F3020_C,Moderates on the left-right scale,0 = left to 10 = right
+lr_v,F3020_D,Left Party on the left-right scale,0 = left to 10 = right
+lr_c,F3020_E,Centre Party on the left-right scale,0 = left to 10 = right
+lr_kd,F3020_F,Christian Democrats on the left-right scale,0 = left to 10 = right
+lr_mp,F3020_G,Greens on the left-right scale,0 = left to 10 = right
+lr_l,F3020_H,Liberals on the left-right scale,0 = left to 10 = right
+lr_self,F3020_R,Own place on the left-right scale,0 = left to 10 = right
+turnout,F3010,Cast a ballot,"0 = no, 1 = yes. Almost no variation"
+vote,F3011_LH_PL,Vote choice,"The eight parties, in left-to-right order"
+prevvote,F3016_LH_PL,Vote choice in 2018,"The eight parties, in left-to-right order"
+switched,derived,Voted for a different party than in 2018,"0 = no, 1 = yes"
+bloc,derived,Government-formation bloc in 2022,"Left (S, V, MP, C) / Right (M, SD, KD, L)"
+vote_sd,derived,Voted for the Sweden Democrats,"0 = no, 1 = yes"
+vote_right,derived,Voted for the right bloc,"0 = no, 1 = yes"
+vote_inc,F3011_OUTGOV,Voted for the incumbent government,"0 = no, 1 = yes"
+pid,F3023_1,Feels close to a party,"0 = no, 1 = yes"
+pid_close,F3023_4,How close to that party,1 = not very to 3 = very close (reversed). Only asked of those who feel close
+wt,F1101_2,Survey weight,"Demographic raking weight (gender, age, education). Mean 1"

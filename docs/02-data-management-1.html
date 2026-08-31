@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Data and data management I – Quantitative Methods I</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./03-data-management-2.html" rel="next">
+<link href="./01-r-and-rstudio.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-7202036dd3638cbfcbeb4151d116aa42.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02-data-management-1.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data and data management I</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Quantitative Methods I</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-r-and-rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Getting started with R and RStudio</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-data-management-1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data and data management I</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-data-management-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data and data management II</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-logical-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-visualisation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data visualisation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-hypothesis-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">The logic of hypothesis testing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07-categorical-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Analysing categorical data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08-comparing-means.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Comparing means</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09-correlation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Correlation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-factor-analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Factor analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-regression-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Regression: the basic model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-regression-presentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Regression: presenting results</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-regression-dummies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Regression: dummy variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-regression-interactions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Regression: interactions and non-linear associations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15-logistic-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Logistic regression</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link active" data-scroll-target="#the-data"><span class="header-section-number">2.1</span> The data</a></li>
+  <li><a href="#getting-the-data-in" id="toc-getting-the-data-in" class="nav-link" data-scroll-target="#getting-the-data-in"><span class="header-section-number">2.2</span> Getting the data in</a>
+  <ul class="collapse">
+  <li><a href="#rs-own-format" id="toc-rs-own-format" class="nav-link" data-scroll-target="#rs-own-format"><span class="header-section-number">2.2.1</span> R’s own format</a></li>
+  <li><a href="#csv-files" id="toc-csv-files" class="nav-link" data-scroll-target="#csv-files"><span class="header-section-number">2.2.2</span> CSV files</a></li>
+  <li><a href="#spss-files" id="toc-spss-files" class="nav-link" data-scroll-target="#spss-files"><span class="header-section-number">2.2.3</span> SPSS files</a></li>
+  </ul></li>
+  <li><a href="#a-first-look" id="toc-a-first-look" class="nav-link" data-scroll-target="#a-first-look"><span class="header-section-number">2.3</span> A first look</a></li>
+  <li><a href="#what-a-number-stands-for" id="toc-what-a-number-stands-for" class="nav-link" data-scroll-target="#what-a-number-stands-for"><span class="header-section-number">2.4</span> What a number stands for</a>
+  <ul class="collapse">
+  <li><a href="#scales-of-measurement" id="toc-scales-of-measurement" class="nav-link" data-scroll-target="#scales-of-measurement"><span class="header-section-number">2.4.1</span> Scales of measurement</a></li>
+  <li><a href="#limits" id="toc-limits" class="nav-link" data-scroll-target="#limits"><span class="header-section-number">2.4.2</span> Limits</a></li>
+  </ul></li>
+  <li><a href="#looking-at-one-variable" id="toc-looking-at-one-variable" class="nav-link" data-scroll-target="#looking-at-one-variable"><span class="header-section-number">2.5</span> Looking at one variable</a></li>
+  <li><a href="#missing-values" id="toc-missing-values" class="nav-link" data-scroll-target="#missing-values"><span class="header-section-number">2.6</span> Missing values</a>
+  <ul class="collapse">
+  <li><a href="#setting-them-to-na" id="toc-setting-them-to-na" class="nav-link" data-scroll-target="#setting-them-to-na"><span class="header-section-number">2.6.1</span> Setting them to NA</a></li>
+  <li><a href="#how-much-is-missing" id="toc-how-much-is-missing" class="nav-link" data-scroll-target="#how-much-is-missing"><span class="header-section-number">2.6.2</span> How much is missing</a></li>
+  </ul></li>
+  <li><a href="#selecting-rows-and-columns" id="toc-selecting-rows-and-columns" class="nav-link" data-scroll-target="#selecting-rows-and-columns"><span class="header-section-number">2.7</span> Selecting rows and columns</a></li>
+  <li><a href="#recoding" id="toc-recoding" class="nav-link" data-scroll-target="#recoding"><span class="header-section-number">2.8</span> Recoding</a>
+  <ul class="collapse">
+  <li><a href="#reversing-a-scale" id="toc-reversing-a-scale" class="nav-link" data-scroll-target="#reversing-a-scale"><span class="header-section-number">2.8.1</span> Reversing a scale</a></li>
+  <li><a href="#grouping-a-continuous-variable" id="toc-grouping-a-continuous-variable" class="nav-link" data-scroll-target="#grouping-a-continuous-variable"><span class="header-section-number">2.8.2</span> Grouping a continuous variable</a></li>
+  <li><a href="#putting-categories-in-order" id="toc-putting-categories-in-order" class="nav-link" data-scroll-target="#putting-categories-in-order"><span class="header-section-number">2.8.3</span> Putting categories in order</a></li>
+  <li><a href="#collapsing-categories" id="toc-collapsing-categories" class="nav-link" data-scroll-target="#collapsing-categories"><span class="header-section-number">2.8.4</span> Collapsing categories</a></li>
+  </ul></li>
+  <li><a href="#checking-your-work" id="toc-checking-your-work" class="nav-link" data-scroll-target="#checking-your-work"><span class="header-section-number">2.9</span> Checking your work</a></li>
+  <li><a href="#a-trap-worth-meeting-once" id="toc-a-trap-worth-meeting-once" class="nav-link" data-scroll-target="#a-trap-worth-meeting-once"><span class="header-section-number">2.10</span> A trap worth meeting once</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data and data management I</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This session and the next are about turning a survey file into something you can analyse. That sounds like a chore, and it is the part of the work that textbooks skip. It is also where most of the time goes and where most of the mistakes are made. The analysis itself is usually one or two lines. Everything else is preparation.</p>
+<p>This week we do it with <strong>base R</strong> — the functions that come with R itself. Next week we do the same job with the tidyverse, which is shorter to write. Learning base R first is not a detour: it is what everything else is built on, it is what you will find in older code and in help pages, and it makes clear what the tidyverse is doing for you.</p>
+<section id="the-data" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="the-data"><span class="header-section-number">2.1</span> The data</h2>
+<p>We use the Swedish study from <strong>CSES Module 6</strong>, the survey run after the September 2022 general election. The front page of these materials describes it and tells you how to cite it.</p>
+<p>There are two files, and the difference matters.</p>
+<ul>
+<li><code>cses6_swe_raw.csv</code> — the survey as it comes. Variable names are CSES codes like <code>F3020_R</code>, and refusals and non-answers are coded as numbers, not as missing.</li>
+<li><code>swe.rds</code> — the cleaned version we use from session 4 onwards.</li>
+</ul>
+<p>This week and next we work on the first one and build the second. Download <code>cses6_swe_raw.csv</code> from Moodle and put it in the <code>data</code> folder of your course project.</p>
+</section>
+<section id="getting-the-data-in" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="getting-the-data-in"><span class="header-section-number">2.2</span> Getting the data in</h2>
+<section id="rs-own-format" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="rs-own-format"><span class="header-section-number">2.2.1</span> R’s own format</h3>
+<p>R has its own file format, with the extension <code>.rds</code>. It is the most convenient option when you are moving data between your own R sessions, because it stores the object exactly as it was — factors stay factors, and nothing has to be guessed on the way back in.</p>
+<p><code>saveRDS()</code> writes one, and <code>readRDS()</code> reads it. The first argument is the object, and <code>file</code> is where to put it.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(swe, <span class="at">file =</span> <span class="st">"data/swe.rds"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>swe <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/swe.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Note the pattern on the way back in: <code>readRDS()</code> gives you the object and you have to assign it to a name yourself.</p>
+</section>
+<section id="csv-files" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="csv-files"><span class="header-section-number">2.2.2</span> CSV files</h3>
+<p>The format that works between all software is <strong>comma separated values</strong>, <code>.csv</code>. It is a plain text file: one line per row, and values within a row separated by commas. You can open one in a text editor and read it, which is exactly why it survives.</p>
+<p><code>read.csv()</code> reads one.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/cses6_swe_raw.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Three arguments are worth knowing about even though the defaults are usually right.</p>
+<ul>
+<li><code>sep</code> is the character that separates values. The default is a comma. Some countries use a comma as the decimal separator and then a semicolon for the fields, in which case you need <code>sep = ";"</code>.</li>
+<li><code>header</code> says whether the first row holds variable names. The default is <code>TRUE</code>.</li>
+<li><code>stringsAsFactors</code> says whether text columns should be turned into factors. Since R 4.0 the default is <code>FALSE</code>, which is what you want. Older code often sets it explicitly, because the default used to be the other way round and it caused a great deal of trouble.</li>
+</ul>
+<p>Writing one back out is <code>write.csv()</code>. The <code>row.names</code> argument controls whether the row numbers become a first column; you almost always want <code>FALSE</code>, otherwise every save adds another column of numbers.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(raw, <span class="at">file =</span> <span class="st">"data/my_data.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="spss-files" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="spss-files"><span class="header-section-number">2.2.3</span> SPSS files</h3>
+<p>A lot of survey data arrives as SPSS <code>.sav</code>. The <code>haven</code> package reads it.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>raw_spss <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">"data/cses6_swe_raw.sav"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>SPSS files carry <strong>labels</strong>: text descriptions attached to the variables and to individual values. <code>haven</code> keeps them, which means the columns come back with a type you have not seen before.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(raw_spss<span class="sc">$</span>F3020_R)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] "numeric"</code></pre>
+</div>
+</div>
+<p>A <code>haven_labelled</code> vector is a set of numbers with a dictionary attached. That is useful for reading and awkward for computing: some functions will refuse to work with it, and others will quietly do something odd.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(raw_spss<span class="sc">$</span>F3020_R, <span class="st">"label"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] "Left-right: self"</code></pre>
+</div>
+</div>
+<p><code>attr()</code> retrieves an attribute — a piece of information attached to an object without being part of its values. The second argument is which attribute you want.</p>
+<p>When you want the numbers and nothing else, <code>zap_labels()</code> strips the labels off.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>lr <span class="ot">&lt;-</span> <span class="fu">zap_labels</span>(raw_spss<span class="sc">$</span>F3020_R)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(lr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] "numeric"</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>Two functions with similar names do different things, and it is worth keeping them straight. <code>read_sav()</code> from <code>haven</code> keeps the labels. <code>read.spss()</code> from the older <code>foreign</code> package does not, and is fussier. Use <code>haven</code>.</p>
+</blockquote>
+<p>For the rest of this chapter we work with the CSV version, <code>raw</code>, which is plain numbers throughout.</p>
+</section>
+</section>
+<section id="a-first-look" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="a-first-look"><span class="header-section-number">2.3</span> A first look</h2>
+<p>Never start analysing a data set you have not looked at. Four functions, in the order you should use them.</p>
+<p><code>dim()</code> gives the size, rows first and columns second.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(raw)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 2845   84</code></pre>
+</div>
+</div>
+<p>So 2845 respondents and 84 variables.</p>
+<p><code>names()</code> lists the column names.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(raw)[<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##  [1] "F1003_2"   "F1004"     "F1006_NAM" "F1101_2"   "F2001_A"   "F2002"    
+##  [7] "F2003"     "F2004"     "F2005"     "F2006"     "F2008"     "F2009"</code></pre>
+</div>
+</div>
+<p>The <code>[1:12]</code> at the end shows only the first twelve, because all 84 at once is a wall of text. <code>1:12</code> builds the sequence of whole numbers from 1 to 12, and the square brackets take those positions.</p>
+<p><code>head()</code> shows the first few rows. Its second argument, <code>n</code>, says how many; the default is 6.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(raw[, <span class="fu">c</span>(<span class="st">"F2001_A"</span>, <span class="st">"F2002"</span>, <span class="st">"F3020_R"</span>)], <span class="at">n =</span> <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   F2001_A F2002 F3020_R
+## 1      50     0       3
+## 2      31     0       7
+## 3      40     0       6
+## 4      51     0       6</code></pre>
+</div>
+</div>
+<p>Here the square brackets do two things at once. The row position before the comma is empty, so all rows. The column position after the comma is a vector of three names built with <code>c()</code>, so those three columns. The result is a small data frame with everything else left out — which is how you look at a wide data set without drowning.</p>
+<p><code>summary()</code> gives a numerical summary of every column.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(raw[, <span class="fu">c</span>(<span class="st">"F2001_A"</span>, <span class="st">"F3020_R"</span>, <span class="st">"F3007_1"</span>)])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##     F2001_A          F3020_R         F3007_1     
+##  Min.   : 18.00   Min.   : 0.00   Min.   :1.000  
+##  1st Qu.: 42.00   1st Qu.: 3.00   1st Qu.:2.000  
+##  Median : 58.00   Median : 6.00   Median :2.000  
+##  Mean   : 56.13   Mean   :18.32   Mean   :2.321  
+##  3rd Qu.: 71.00   3rd Qu.: 8.00   3rd Qu.:3.000  
+##  Max.   :102.00   Max.   :99.00   Max.   :9.000</code></pre>
+</div>
+</div>
+<p>Now look at that output properly, because two of those three columns are lying to you.</p>
+<p><code>F2001_A</code> is age in years, <code>F3020_R</code> is a left–right self-placement running from 0 to 10, and <code>F3007_1</code> is trust in parliament running from 1 to 4.</p>
+<div class="discussion">
+<p><strong>A question.</strong> Three things in that output deserve a second look.</p>
+<ul>
+<li>The oldest respondent is 102.</li>
+<li>Trust in parliament, on a four-point scale, has a maximum of 9.</li>
+<li>Left–right self-placement, on a scale from 0 to 10, has a <strong>mean</strong> of 18.32.</li>
+</ul>
+<p>One of these is fine. Two of them are impossible. Which is which, and how do you know without looking anything up?</p>
+<p>The third one is the sharpest: a mean can never fall outside the range of the values it is a mean of. What must therefore be true about the values?</p>
+</div>
+<p>That last point is worth holding on to. We did not need the codebook, or the data, to know that something was wrong — only the limits of the scale. Which brings us to the next section.</p>
+</section>
+<section id="what-a-number-stands-for" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="what-a-number-stands-for"><span class="header-section-number">2.4</span> What a number stands for</h2>
+<p>Before going further it is worth being explicit about something that gets skipped. A variable in a data set is a column of numbers. But the numbers are not the point — they stand for something, and what they stand for decides what you are allowed to do with them.</p>
+<section id="scales-of-measurement" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="scales-of-measurement"><span class="header-section-number">2.4.1</span> Scales of measurement</h3>
+<p>The standard division:</p>
+<ul>
+<li><strong>Categorical</strong>
+<ul>
+<li><strong>Binary</strong> — two categories. Voted or did not.</li>
+<li><strong>Nominal</strong> — unordered categories. Which party you voted for.</li>
+<li><strong>Ordinal</strong> — ordered categories, but the gaps between them are not necessarily equal. “Trust a lot / somewhat / not very much / not at all.”</li>
+</ul></li>
+<li><strong>Continuous</strong>
+<ul>
+<li><strong>Interval</strong> — equal gaps all along the scale, but the zero point is arbitrary. Temperature in Celsius.</li>
+<li><strong>Ratio</strong> — equal gaps <em>and</em> a real zero, so ratios mean something. Age, income, number of seats.</li>
+</ul></li>
+</ul>
+<p>The practical importance is that the scale decides the method. A mean of a nominal variable is nonsense — the average of “Green party” and “Moderates” does not exist, no matter that both are stored as numbers.</p>
+<blockquote class="blockquote">
+<p><strong>The rule we use in this course.</strong> An ordinal variable with <strong>five or more categories</strong>, numbered at equal intervals, may be treated as continuous. With four or fewer, it may not.</p>
+<p>This is a convention rather than a law, and it is not universally agreed. But it is applied consistently throughout these materials, and where an exception is made it is stated and argued for.</p>
+</blockquote>
+</section>
+<section id="limits" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="limits"><span class="header-section-number">2.4.2</span> Limits</h3>
+<p>Here is the part that is usually left out, and it is the part that will matter most later.</p>
+<p>Every scale has <strong>limits</strong>, and knowing them is not a technicality — it is most of what you know about a variable before you have looked at any data.</p>
+<p>Some limits are <strong>hard</strong>. They cannot be crossed, because of what the thing <em>is</em>:</p>
+<ul>
+<li>A share cannot be below 0% or above 100%.</li>
+<li>A count cannot be negative.</li>
+<li>A left–right self-placement on a 0-to-10 scale cannot be 11.</li>
+<li>A probability lies between 0 and 1.</li>
+</ul>
+<p>Some limits are <strong>soft</strong>. They can in principle be crossed, but effectively are not:</p>
+<ul>
+<li>Human age has a hard floor at 0 and a soft ceiling somewhere above 110.</li>
+<li>The number of parties winning seats in a district has a hard floor of 1 and a soft ceiling at the number of seats available.</li>
+</ul>
+<p>Two things follow, and we use both.</p>
+<p><strong>First, limits let you check your work.</strong> If a calculation gives a share of 140%, or a probability of −0.2, you do not need to check the data to know something is wrong. The result left the region where answers can exist. We come back to this at the end of the chapter, and every time we compute anything from here on.</p>
+<p><strong>Second, limits are the beginning of a model.</strong> If you know that a relationship must pass through the point where both variables are zero, and that neither can exceed 100, you already know a great deal about what shape it can have — before collecting a single observation. That is the subject of session 4, and it is worth knowing now that the groundwork is being laid here.</p>
+<div class="discussion">
+<p><strong>A question.</strong> For each of these, what are the limits, and are they hard or soft? &gt; &gt; - The percentage of women in a parliament. &gt; - The difference between how much you like one party and how much you like another, when both are rated 0 to 10. &gt; - The number of days per week someone reads the news. &gt; - Turnout in an election.</p>
+</div>
+</section>
+</section>
+<section id="looking-at-one-variable" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="looking-at-one-variable"><span class="header-section-number">2.5</span> Looking at one variable</h2>
+<p>For a categorical variable, <code>table()</code> counts how many cases fall in each category.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(raw<span class="sc">$</span>F3001)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## 
+##    1    2    3    4    9 
+##  445 1421  823   90   66</code></pre>
+</div>
+</div>
+<p><code>F3001</code> is political interest, and the CSES codebook says it runs 1 = very interested to 4 = not at all interested, with 9 for missing. You can see all five values here, and the <code>9</code>s are not a fifth level of interest.</p>
+<p><code>table()</code> ignores <code>NA</code> by default. To make it show them, use the <code>useNA</code> argument:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(raw<span class="sc">$</span>F3001, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## 
+##    1    2    3    4    9 
+##  445 1421  823   90   66</code></pre>
+</div>
+</div>
+<p><code>"ifany"</code> shows a missing-value column only when there are some. There are none here, and that is exactly the problem: the missing values are still coded as 9.</p>
+<p>For a continuous variable, the individual functions are named as you would expect.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(raw<span class="sc">$</span>F3020_R)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 18.32056</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(raw<span class="sc">$</span>F3020_R)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 6</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(raw<span class="sc">$</span>F3020_R)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 32.59899</code></pre>
+</div>
+</div>
+<p><code>sd()</code> is the standard deviation. All three of these numbers are wrong, for the same reason as before.</p>
+<p><code>hist()</code> draws a quick histogram. It is not pretty — session 5 is about making plots properly — but it is one word and it shows you the shape.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(raw<span class="sc">$</span>F3020_R)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-data-management-1_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="1050"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The bar at the far right is not a group of extremely right-wing respondents. It is everybody who did not answer.</p>
+</section>
+<section id="missing-values" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="missing-values"><span class="header-section-number">2.6</span> Missing values</h2>
+<p>In R a missing value is <code>NA</code>. In a survey file downloaded from an archive, missing values are usually <strong>numbers</strong> — and that is the single most dangerous thing about survey data, because nothing warns you.</p>
+<p>CSES uses a consistent scheme. On a scale that runs 1 to 4, the codes are 7 for refused, 8 for don’t know, 9 for missing. On a scale that runs 0 to 10, they are 97, 98 and 99. On a variable holding a country code, 997, 998 and 999.</p>
+<p>Left in place, they are treated as real answers. A mean of political interest that includes a handful of 9s on a 1-to-4 scale is not slightly wrong; it is wrong in a way that no amount of later care will fix.</p>
+<section id="setting-them-to-na" class="level3" data-number="2.6.1">
+<h3 data-number="2.6.1" class="anchored" data-anchor-id="setting-them-to-na"><span class="header-section-number">2.6.1</span> Setting them to NA</h3>
+<p>The tool is the same square-bracket selection you already know, used on the left of an assignment.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>polint <span class="ot">&lt;-</span> raw<span class="sc">$</span>F3001</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>polint[polint <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Read that middle line from the inside out. <code>polint %in% c(7, 8, 9)</code> asks, for every element of <code>polint</code>, whether it appears in the vector <code>c(7, 8, 9)</code>, and gives back <code>TRUE</code> or <code>FALSE</code> for each. Putting that inside square brackets selects the elements where the answer was <code>TRUE</code>. Assigning <code>NA</code> to that selection replaces exactly those.</p>
+<p><code>%in%</code> is worth knowing well. Without it you would write <code>polint == 7 | polint == 8 | polint == 9</code>, which does the same thing at three times the length.</p>
+<p>Now the table looks sensible:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(polint, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## polint
+##    1    2    3    4 &lt;NA&gt; 
+##  445 1421  823   90   66</code></pre>
+</div>
+</div>
+<p>And so does the mean:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(polint, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 2.200792</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>Strictly, political interest has four categories, and the rule two sections above says four is not enough to treat as continuous — so this mean is a breach of it. It is used here only to show what the missing codes were doing to the arithmetic, not as a finding about Swedish political interest. Where the materials break a rule they have stated, they will say so; where they do it silently, tell me.</p>
+</blockquote>
+<div class="discussion">
+<p><strong>A question.</strong> Before we set the missing codes, <code>mean(raw$F3001)</code> was 2.36. After, it is 2.2.</p>
+<p>The scale runs from 1 to 4. Was the first number obviously wrong just by looking at it? What does that tell you about relying on a number looking reasonable?</p>
+</div>
+</section>
+<section id="how-much-is-missing" class="level3" data-number="2.6.2">
+<h3 data-number="2.6.2" class="anchored" data-anchor-id="how-much-is-missing"><span class="header-section-number">2.6.2</span> How much is missing</h3>
+<p>Count missing values by testing with <code>is.na()</code> and adding up the <code>TRUE</code>s.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(polint))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 66</code></pre>
+</div>
+</div>
+<p>As a proportion, <code>mean()</code> of a <code>TRUE</code>/<code>FALSE</code> vector gives the share that are <code>TRUE</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">is.na</span>(polint))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.02319859</code></pre>
+</div>
+</div>
+<p>So about 2.3% missing, which is fine.</p>
+<p><code>complete.cases()</code> tests whole rows, giving <code>TRUE</code> for a row with no missing values anywhere in it. Try it on three of the original columns:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>some_vars <span class="ot">&lt;-</span> raw[, <span class="fu">c</span>(<span class="st">"F3001"</span>, <span class="st">"F3020_R"</span>, <span class="st">"F2001_A"</span>)]</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">complete.cases</span>(some_vars))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 2845</code></pre>
+</div>
+</div>
+<p>Every single row is complete — all 2 845 of them. That is not good news. It is <code>complete.cases()</code> telling the truth about a data frame in which the missing values have not yet been marked as missing. There is nothing for it to find, because the gaps are still disguised as the numbers 9 and 99.</p>
+<p>Clean the three variables first and ask again:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>clean_vars <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">polint =</span> polint,</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">lr =</span> raw<span class="sc">$</span>F3020_R,</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">age =</span> raw<span class="sc">$</span>F2001_A</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>clean_vars<span class="sc">$</span>lr[clean_vars<span class="sc">$</span>lr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">95</span>, <span class="dv">97</span>, <span class="dv">98</span>, <span class="dv">99</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">complete.cases</span>(clean_vars))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 2401</code></pre>
+</div>
+</div>
+<p>444 respondents have a gap on at least one of these three variables. That is the number that was there all along.</p>
+<blockquote class="blockquote">
+<p>Watch this number as you add variables to a model. Every variable you add drops every respondent who is missing on it, and the losses compound. A model with ten variables can quietly be fitted on half your sample — and it will not tell you unless you ask.</p>
+</blockquote>
+</section>
+</section>
+<section id="selecting-rows-and-columns" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="selecting-rows-and-columns"><span class="header-section-number">2.7</span> Selecting rows and columns</h2>
+<p>You already know the basic form: <code>[rows, columns]</code>.</p>
+<p>By position:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>raw[<span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   F1003_2    F1004 F1006_NAM
+## 3    2341 SWE_2022    Sweden</code></pre>
+</div>
+</div>
+<p>By name, which is safer, because inserting a column shifts every number:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(raw[, <span class="fu">c</span>(<span class="st">"F2002"</span>, <span class="st">"F2003"</span>)], <span class="at">n =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   F2002 F2003
+## 1     0     8
+## 2     0     7
+## 3     0     6</code></pre>
+</div>
+</div>
+<p>The useful case is selecting rows <strong>by condition</strong>. A comparison on a column gives a <code>TRUE</code>/<code>FALSE</code> vector as long as the data frame, and putting that in the row position keeps the <code>TRUE</code> rows.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>young <span class="ot">&lt;-</span> raw[raw<span class="sc">$</span>F2001_A <span class="sc">&lt;</span> <span class="dv">30</span>, ]</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(young)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 274  84</code></pre>
+</div>
+</div>
+<p>Conditions combine with <code>&amp;</code> for “and” and <code>|</code> for “or”.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>young_women <span class="ot">&lt;-</span> raw[raw<span class="sc">$</span>F2001_A <span class="sc">&lt;</span> <span class="dv">30</span> <span class="sc">&amp;</span> raw<span class="sc">$</span>F2002 <span class="sc">==</span> <span class="dv">1</span>, ]</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(young_women)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 157  84</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>A trap.</strong> Selecting rows this way keeps rows where the condition is <code>NA</code>, and fills them with <code>NA</code>. If <code>F2001_A</code> had missing values coded as <code>NA</code>, <code>raw[raw$F2001_A &lt; 30, ]</code> would give you the young respondents <em>plus</em> a row of <code>NA</code>s for every respondent whose age is unknown — because R does not know whether an unknown age is under 30, so it will not say either way.</p>
+<p>The fix is <code>which()</code>, which converts a <code>TRUE</code>/<code>FALSE</code> vector into the positions of the <code>TRUE</code>s, dropping the <code>NA</code>s:</p>
+<p><code>raw[which(raw$F2001_A &lt; 30), ]</code></p>
+<p>Use <code>which()</code> whenever the variable you are testing might have missing values. Next week’s <code>filter()</code> handles this for you, which is one of several reasons to prefer it.</p>
+</blockquote>
+</section>
+<section id="recoding" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="recoding"><span class="header-section-number">2.8</span> Recoding</h2>
+<p>Recoding means making a new variable out of an existing one. Three cases cover almost everything.</p>
+<blockquote class="blockquote">
+<p><strong>Never overwrite the original.</strong> Make a new variable. When the recode turns out to be wrong — and it will, at least once — you need the original to go back to. This is also why all of this belongs in a script rather than being done by hand.</p>
+</blockquote>
+<section id="reversing-a-scale" class="level3" data-number="2.8.1">
+<h3 data-number="2.8.1" class="anchored" data-anchor-id="reversing-a-scale"><span class="header-section-number">2.8.1</span> Reversing a scale</h3>
+<p>CSES codes political interest with 1 as <em>most</em> interested. That is backwards for reading results: in a regression, a positive coefficient would mean <em>less</em> interest. Reversing it costs one line.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>polint_rev <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="sc">-</span> polint</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(polint_rev, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## polint_rev
+##    1    2    3    4 &lt;NA&gt; 
+##   90  823 1421  445   66</code></pre>
+</div>
+</div>
+<p>Why 5? For a scale running from <code>lo</code> to <code>hi</code>, the reversed value is <code>(hi + lo) - x</code>. Here that is <code>4 + 1 = 5</code>. Check it against the table: the 1s and the 4s have swapped, and so have the 2s and 3s, and the total count is unchanged.</p>
+<p>That last sentence is the important habit. <strong>A recode is a claim, and a claim can be checked.</strong> Comparing the before and after tables takes five seconds and catches the error that would otherwise survive into your results.</p>
+</section>
+<section id="grouping-a-continuous-variable" class="level3" data-number="2.8.2">
+<h3 data-number="2.8.2" class="anchored" data-anchor-id="grouping-a-continuous-variable"><span class="header-section-number">2.8.2</span> Grouping a continuous variable</h3>
+<p>Suppose we want age in three groups. Start by creating a variable that is entirely missing, then fill it in.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> raw<span class="sc">$</span>F2001_A</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>age[age <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">9997</span>, <span class="dv">9998</span>, <span class="dv">9999</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1]  18 102</code></pre>
+</div>
+</div>
+<p>As it happens the Swedish study has no missing ages at all, so that second line changed nothing — the range runs from 18 to 102. Write it anyway. You do not know a variable has no missing codes until you have checked, and a line that does nothing costs nothing.</p>
+<p>The oldest respondent being 102 is the answer to part of the earlier question: age has a hard floor and only a soft ceiling, and 102 is on the right side of it. Unusual is not the same as impossible.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>agegroup <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(age))</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>agegroup[<span class="fu">which</span>(age <span class="sc">&lt;</span> <span class="dv">35</span>)] <span class="ot">&lt;-</span> <span class="st">"Under 35"</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>agegroup[<span class="fu">which</span>(age <span class="sc">&gt;=</span> <span class="dv">35</span> <span class="sc">&amp;</span> age <span class="sc">&lt;</span> <span class="dv">65</span>)] <span class="ot">&lt;-</span> <span class="st">"35 to 64"</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>agegroup[<span class="fu">which</span>(age <span class="sc">&gt;=</span> <span class="dv">65</span>)] <span class="ot">&lt;-</span> <span class="st">"65 and over"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>rep()</code> repeats a value; here it makes a vector of <code>NA</code> the same length as <code>age</code>. <code>length()</code> gives the number of elements.</p>
+<p>Starting from all-missing is deliberate. Anything the conditions fail to cover stays <code>NA</code> rather than silently taking a wrong value — so if the conditions have a gap, you find out.</p>
+<p>Note <code>which()</code> again, for the reason given above: <code>age</code> has missing values.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(agegroup, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## agegroup
+##    35 to 64 65 and over    Under 35 
+##        1332        1066         447</code></pre>
+</div>
+</div>
+<p>The counts add up to 2 845, which is every respondent, and no category is empty. Had a respondent fallen through the conditions — an age of exactly 35 slipping between two of them, say — they would be sitting in an <code>NA</code> column here, and the total would still add up. That is the check, and it is why we started from all-missing rather than from a default value.</p>
+</section>
+<section id="putting-categories-in-order" class="level3" data-number="2.8.3">
+<h3 data-number="2.8.3" class="anchored" data-anchor-id="putting-categories-in-order"><span class="header-section-number">2.8.3</span> Putting categories in order</h3>
+<p>There is a problem with that table: the categories are in alphabetical order, so “65 and over” comes before “Under 35”. Alphabetical order is not the order of the variable.</p>
+<p>Text becomes an ordered categorical variable when you make it a <strong>factor</strong> and say what the order is.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>agegroup <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  agegroup,</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Under 35"</span>, <span class="st">"35 to 64"</span>, <span class="st">"65 and over"</span>)</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(agegroup, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## agegroup
+##    Under 35    35 to 64 65 and over 
+##         447        1332        1066</code></pre>
+</div>
+</div>
+<p><code>levels</code> gives the categories in the order you want them. From here on, every table and every plot will use that order.</p>
+<blockquote class="blockquote">
+<p><code>levels</code> also decides which category is the <strong>reference</strong> when a factor goes into a regression — the one the others get compared to. That is session 13, but the choice is made here.</p>
+</blockquote>
+</section>
+<section id="collapsing-categories" class="level3" data-number="2.8.4">
+<h3 data-number="2.8.4" class="anchored" data-anchor-id="collapsing-categories"><span class="header-section-number">2.8.4</span> Collapsing categories</h3>
+<p>Merging categories works the same way, with <code>==</code> instead of a range.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>interest2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(polint_rev))</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>interest2[<span class="fu">which</span>(polint_rev <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))] <span class="ot">&lt;-</span> <span class="st">"Not interested"</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>interest2[<span class="fu">which</span>(polint_rev <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>))] <span class="ot">&lt;-</span> <span class="st">"Interested"</span></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>interest2 <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a>  interest2,</span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Not interested"</span>, <span class="st">"Interested"</span>)</span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>And the check, which for a collapse is a cross-table of old against new:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(interest2, polint_rev, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##                 polint_rev
+## interest2           1    2    3    4 &lt;NA&gt;
+##   Not interested   90  823    0    0    0
+##   Interested        0    0 1421  445    0
+##   &lt;NA&gt;              0    0    0    0   66</code></pre>
+</div>
+</div>
+<p>Every column has its count in exactly one row, and the row it is in is the one intended. That is what a correct collapse looks like, and it takes one line to confirm.</p>
+</section>
+</section>
+<section id="checking-your-work" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="checking-your-work"><span class="header-section-number">2.9</span> Checking your work</h2>
+<p>This section is short and it is the most important one in the chapter.</p>
+<p>Every variable has limits. After a recode, the values must still be inside them. Checking this by eye works until you have sixty variables, at which point it stops working and you do not notice.</p>
+<p>So check by machine. <code>range()</code> gives the smallest and largest value; <code>na.rm = TRUE</code> is needed or a single <code>NA</code> makes both of them <code>NA</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(polint_rev, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 1 4</code></pre>
+</div>
+</div>
+<p>Better still, make the check fail loudly. <code>stopifnot()</code> takes one or more conditions and does nothing at all if they are all <code>TRUE</code> — but stops with an error if any is <code>FALSE</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">min</span>(polint_rev, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">&gt;=</span> <span class="dv">1</span>,</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">max</span>(polint_rev, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">&lt;=</span> <span class="dv">4</span></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Nothing printed, which means it passed. Had the recode been wrong, the script would have stopped there rather than carrying the mistake into a model output that looks perfectly plausible.</p>
+<blockquote class="blockquote">
+<p>This is worth the small effort it costs. A wrong number that is obviously wrong is a nuisance. A wrong number that looks reasonable is a problem, because nothing will tell you. The limits of the scale are what let you tell the difference, and they are known before you start.</p>
+</blockquote>
+</section>
+<section id="a-trap-worth-meeting-once" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="a-trap-worth-meeting-once"><span class="header-section-number">2.10</span> A trap worth meeting once</h2>
+<p>One more thing, because it costs hours when it happens and it gives no error message.</p>
+<p>The Swedish county names contain å, ä and ö. Suppose the county names are read from one file, and somewhere in a script you write out <code>"Götaland"</code> to compare against them. Sometimes the comparison fails — even though the two strings look identical and contain <strong>exactly the same bytes</strong>.</p>
+<p>The reason is that R records, alongside the text, which encoding it thinks the text is in. If one string is tagged as UTF-8 and the other is not, R can treat them as different. There is no error and no warning. The comparison simply returns <code>FALSE</code>, and every row that should have matched becomes <code>NA</code>.</p>
+<p>This happened while preparing the data for this course, and it silently lost 1,357 of the 2,845 rows. The only visible symptom was a category with a count of zero.</p>
+<p>Two habits prevent it:</p>
+<ul>
+<li>Where a set of category names exists in a file, take them <strong>from the file</strong> rather than typing them again in your script.</li>
+<li>Pin the encoding at the top of the script, so it does not depend on the machine:</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setlocale</span>(<span class="st">"LC_CTYPE"</span>, <span class="st">"en_US.UTF-8"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The general lesson is worth more than the specific fix. Errors that produce a message are cheap: you find them immediately. Errors that produce a <em>wrong answer</em> are expensive, and text comparison is one of the places they live.</p>
+<div class="swirl">
+<p><strong>In the seminar.</strong> <code>swirl</code> lesson 2, <em>Data and Data Management I</em>. Reading the survey file, looking at it, dealing with the missing-value codes, subsetting and recoding. Around 30 minutes.</p>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./01-r-and-rstudio.html" class="pagination-link" aria-label="Getting started with R and RStudio">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Getting started with R and RStudio</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./03-data-management-2.html" class="pagination-link" aria-label="Data and data management II">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data and data management II</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

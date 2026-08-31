@@ -1,0 +1,439 @@
+# Data and data management II
+
+```{r}
+#| label: setup-03
+#| include: false
+Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
+options(width = 78)
+```
+
+Last week we did data management with base R. This week we do the same work with the **tidyverse**, a collection of packages built around a common idea: a small number of verbs, each doing one thing, joined together into a sequence.
+
+By the end of this chapter you will have built the analysis data set that the rest of the course uses.
+
+```{r}
+library(dplyr)
+raw <- read.csv("data/cses6_swe_raw.csv")
+```
+
+`dplyr` is the part of the tidyverse that handles data frames. You can load the whole collection with `library(tidyverse)` instead, which also brings in `ggplot2` for session 5 and a few others.
+
+> When you load `dplyr` you will see a message about objects being **masked**. `dplyr` has functions called `filter()` and `lag()`, and so does base R. The message tells you which version wins. This is normal and not a problem — but it is the reason a function can behave differently depending on what you have loaded.
+
+## The pipe
+
+The one piece of syntax to learn first. Consider a small nested calculation:
+
+```{r}
+round(mean(c(4, 8, 15, 16), na.rm = TRUE), digits = 1)
+```
+
+To read that you have to start in the middle, at `c()`, work outwards to `mean()`, then outwards again to `round()`. The order you read is the reverse of the order things happen.
+
+The **pipe**, written `|>`, takes what is on its left and passes it as the first argument to what is on its right.
+
+```{r}
+c(4, 8, 15, 16) |>
+  mean(na.rm = TRUE) |>
+  round(digits = 1)
+```
+
+Same answer, but now the reading order and the doing order are the same: take these numbers, take their mean, round it. Read `|>` as "and then".
+
+The keyboard shortcut in RStudio is **Ctrl+Shift+M** (**Cmd+Shift+M** on a Mac).
+
+> You will also see `%>%`, an older pipe from the `magrittr` package that the tidyverse used before R had one of its own. They do the same thing here. `|>` is built into R and needs no package, so it is the one to use.
+
+This matters because of principle 2.1 of how these materials are written: operations should not be nested inside one another. The pipe is how you avoid nesting without inventing a name for every intermediate step.
+
+## The verbs
+
+Almost all data management is five operations. Each has a verb, each takes a data frame as its first argument, and each gives a data frame back — which is what makes them combine.
+
+| Verb | Does |
+|---|---|
+| `select()` | choose columns |
+| `filter()` | choose rows |
+| `mutate()` | make new columns |
+| `rename()` | change column names |
+| `arrange()` | reorder rows |
+
+: {tbl-colwidths="[22,78]"}
+
+### select()
+
+`select()` keeps the columns you name, in the order you name them. Note that the names go **without** quotation marks.
+
+```{r}
+raw |>
+  select(F2001_A, F2002, F3020_R) |>
+  head(n = 3)
+```
+
+You can also drop columns with a minus sign, and select ranges with a colon. `starts_with()` is one of several helpers that pick columns by pattern:
+
+```{r}
+raw |>
+  select(starts_with("F3018_")) |>
+  names()
+```
+
+Those are the eight party ratings. `starts_with()` will earn its keep repeatedly in this data set, because CSES names its batteries systematically.
+
+### rename()
+
+`rename()` changes names, in the form `new = old`.
+
+```{r}
+raw |>
+  select(F2001_A, F3020_R) |>
+  rename(age = F2001_A, lr_self = F3020_R) |>
+  head(n = 3)
+```
+
+Note which side is which. It is `new = old`, the same direction as `<-`: the thing being created is on the left.
+
+### filter()
+
+`filter()` keeps rows where a condition is `TRUE`.
+
+```{r}
+raw |>
+  filter(F2001_A < 30) |>
+  nrow()
+```
+
+`nrow()` counts rows. Several conditions can be given, separated by commas, and all of them must hold:
+
+```{r}
+raw |>
+  filter(F2001_A < 30, F2002 == 1) |>
+  nrow()
+```
+
+Here is a real advantage over base R. Last week we needed `which()` to stop missing values from producing phantom rows. `filter()` does that for you: a row whose condition is `NA` is dropped, not kept as a row of `NA`s.
+
+> That convenience has a cost worth knowing about. `filter()` **silently** removes rows where the condition cannot be evaluated. If you filter on a variable with a lot of missing data, you lose those respondents without being told. Check with `nrow()` before and after when it matters.
+
+### mutate()
+
+`mutate()` adds columns. Everything else so far has been about choosing what you already have; this is where new things get made.
+
+```{r}
+raw |>
+  select(F3018_A, F3018_B) |>
+  mutate(gap = F3018_A - F3018_B) |>
+  head(n = 3)
+```
+
+`F3018_A` is the rating of the Social Democrats and `F3018_B` the rating of the Sweden Democrats, each 0 to 10. Their difference is a new quantity: how much more one respondent likes one than the other.
+
+The first three rows look sensible. Now ask what the whole column looks like:
+
+```{r}
+raw |>
+  mutate(gap = F3018_A - F3018_B) |>
+  pull(gap) |>
+  range()
+```
+
+`pull()` takes a single column out of a data frame as a plain vector, which is what `range()` wants.
+
+::: {.discussion}
+**A question.** Both ratings run from 0 to 10, so the difference between them has hard limits of −10 and +10. The range above is −99 to 99.
+
+Where do those values come from, and how many rows are affected? Note that the first three rows gave no hint of the problem, and that `mutate()` reported no error.
+
+What does that suggest about the order in which cleaning and calculating should be done?
+:::
+
+There are `r sum(abs(raw$F3018_A - raw$F3018_B) > 10)` such rows. This is the same lesson as last week from the other direction: derive a quantity from uncleaned variables and the contamination spreads into the new variable, where it is harder to spot because the new variable has no codebook.
+
+Columns made inside one `mutate()` can be used by later ones in the same call, which lets a calculation be written in readable steps rather than in one nested expression.
+
+### arrange()
+
+`arrange()` sorts. `desc()` reverses the direction.
+
+```{r}
+raw |>
+  select(F2001_A, F3020_R) |>
+  arrange(desc(F2001_A)) |>
+  head(n = 3)
+```
+
+Missing values always go to the end, whichever direction you sort in.
+
+## Recoding with case_when()
+
+Last week we recoded by creating an all-missing variable and filling it in with square brackets. `case_when()` does the same job in one expression.
+
+It takes a series of `condition ~ value` pairs, checks them **in order**, and gives each row the value from the first condition that is `TRUE`. The `~` separates the test from the result.
+
+```{r}
+recoded <- raw |>
+  mutate(
+    agegroup = case_when(
+      F2001_A < 35 ~ "Under 35",
+      F2001_A < 65 ~ "35 to 64",
+      F2001_A >= 65 ~ "65 and over"
+    )
+  )
+
+table(recoded$agegroup, useNA = "ifany")
+```
+
+Because the conditions are checked in order, the second one does not need to say `F2001_A >= 35` — anything under 35 has already been dealt with. That is convenient, and it is also a trap: reorder the lines and the answer changes.
+
+Anything matching no condition becomes `NA`. That is the same safe default we built by hand last week, and here it comes for free.
+
+To count something rather than label it, `if_else()` handles the two-way case: condition, value if true, value if false.
+
+```{r}
+recoded <- raw |>
+  mutate(retired = if_else(F2006 == 7, 1, 0))
+```
+
+## Doing the same thing to many columns
+
+This is where the tidyverse stops being a convenience and starts being necessary.
+
+Our data has a seven-item trust battery, an eight-party rating battery, an eight-party left–right battery and an eight-leader battery. That is thirty-one columns needing the same treatment: set the missing codes to `NA`, and for some of them reverse the scale. Writing that out one column at a time is thirty-one chances to make a typo, and typos of this kind do not produce errors.
+
+`across()` applies a function to a set of columns. It goes inside `mutate()` and takes two arguments: which columns, and what to do to them.
+
+```{r}
+trust <- raw |>
+  select(starts_with("F3007_")) |>
+  mutate(
+    across(
+      everything(),
+      \(x) if_else(x %in% c(7, 8, 9), NA, x)
+    )
+  )
+
+summary(trust$F3007_1)
+```
+
+Three things in there are new.
+
+`everything()` means all the columns currently selected — here, the seven trust items.
+
+`\(x)` creates a small unnamed function on the spot. Read it as "given a column, which I will call `x`, do the following to it". The backslash is shorthand; you may also see it written `function(x)`, which means exactly the same. `across()` calls it once per column, and the value of `x` is that column.
+
+`if_else(x %in% c(7, 8, 9), NA, x)` says: where the value is one of the missing codes, put `NA`; otherwise leave it alone.
+
+Reversing all seven at once is the same shape:
+
+```{r}
+trust <- trust |>
+  mutate(across(everything(), \(x) 5 - x))
+
+summary(trust$F3007_1)
+```
+
+The scale now runs 1 to 4 with 4 meaning most trust, for all seven items, from one line.
+
+> `across()` is powerful in the way a chainsaw is powerful. It applies your function to every column you select, whether or not that makes sense for each of them. Reversing with `5 - x` is right for a four-point scale and wrong for a 0-to-10 scale, and nothing will stop you doing it to both. Select deliberately, and check the ranges afterwards.
+
+## Grouping and summarising
+
+The second thing the tidyverse does much better than base R: calculating something separately for each group.
+
+`summarise()` collapses a data frame to a single row.
+
+```{r}
+raw |>
+  filter(F3020_R <= 10) |>
+  summarise(
+    n = n(),
+    mean_lr = mean(F3020_R),
+    sd_lr = sd(F3020_R)
+  )
+```
+
+`n()` counts the rows in the current group. The `filter()` at the top removes the missing codes, which on this 0-to-10 variable are 95 and above.
+
+`group_by()` splits the data first, so that `summarise()` runs once per group.
+
+```{r}
+raw |>
+  filter(F3020_R <= 10, F2002 %in% c(0, 1)) |>
+  group_by(F2002) |>
+  summarise(
+    n = n(),
+    mean_lr = mean(F3020_R)
+  )
+```
+
+`F2002` is gender, coded 0 for men and 1 for women. Two groups, so two rows.
+
+The reason this matters is that the number of groups does not change the code. Here is the same calculation across all eight parties:
+
+```{r}
+raw |>
+  filter(F3020_R <= 10, F3011_LH_PL < 999000) |>
+  group_by(F3011_LH_PL) |>
+  summarise(
+    n = n(),
+    mean_lr = round(mean(F3020_R), 2)
+  ) |>
+  arrange(mean_lr)
+```
+
+Eight rows, sorted from left to right. The party codes are still raw numbers — we fix that below — but the ordering is already recognisable if you know Swedish politics: the Left Party at one end, the Sweden Democrats and Moderates at the other.
+
+> `group_by()` stays switched on. After a `summarise()`, the result may still be grouped, and the next thing you do will happen within groups rather than overall. When you are finished with the grouping, end with `ungroup()`.
+
+## Joining
+
+Often the information you need is spread over two files. `F2018` holds a county code; the county's name and which of the three historical lands it belongs to live in a separate lookup table.
+
+```{r}
+counties <- readr::read_csv("data/counties.csv", show_col_types = FALSE)
+head(counties, n = 3)
+```
+
+`readr::read_csv()` rather than `read.csv()`. The two colons mean "the `read_csv` function from the `readr` package", which lets you use one function from a package without loading the whole thing. `show_col_types = FALSE` suppresses the message it otherwise prints about what type it decided each column is. The reason for preferring `read_csv()` here appears in a moment.
+
+`left_join()` adds columns from the second table to the first, matching rows on a shared column. The `by` argument says which columns to match on, in the form `"name in the first" = "name in the second"`.
+
+```{r}
+joined <- raw |>
+  select(F2018, F3020_R) |>
+  left_join(counties[, c("code", "county", "land")], by = c("F2018" = "code"))
+
+head(joined, n = 3)
+```
+
+Only three columns of `counties` are taken, because a join brings across everything you do not exclude, and unused columns accumulate quickly.
+
+Every row of `raw` is kept — that is what makes it a *left* join. Rows with no match get `NA` in the new columns.
+
+Which makes the check obvious and necessary:
+
+```{r}
+sum(is.na(joined$county))
+```
+
+`r sum(is.na(joined$county))` rows failed to match, out of `r format(nrow(joined), big.mark = " ")`. Those are respondents with no county recorded. That is a small enough number to ignore — but you only know that because you counted.
+
+### When a join goes wrong
+
+Here is why that check is not a formality, and why the `readr::read_csv()` above was not fussiness.
+
+The county names contain å, ä and ö. Read the same file two ways and look at what R records about the text:
+
+```{r}
+counties_base <- read.csv("data/counties.csv")
+
+unique(Encoding(counties_base$county))
+unique(Encoding(counties$county))
+```
+
+`Encoding()` reports what R believes each string to be. `read.csv()` says `unknown` for all of them, meaning "whatever this machine's native encoding is". `readr::read_csv()` gives two answers: `UTF-8` for the names containing å, ä or ö, and `unknown` for the plain ones — which is right, because text made only of ordinary English letters is identical in every encoding and needs no mark.
+
+On this machine the native encoding *is* UTF-8, so the two agree and everything works. On a machine where it is not — and Windows has historically used something else — `unknown` and `UTF-8` are different, and R will not treat the two strings as equal.
+
+**Identical bytes. Different answer, depending on the computer.**
+
+This is not hypothetical. While these materials were being prepared, exactly this join was run with the county table read by `read.csv()` in a session whose locale was not UTF-8. It matched `r 2845 - 1695` rows of `r format(2845, big.mark = " ")` and silently turned the other 1,695 into `NA`. There was no error and no warning. Every county whose name is plain English matched — Stockholm, Uppsala, Kalmar, Gotland — and every county with a diacritic did not. The only visible symptom was a category with a count of zero.
+
+Had the next step been a table of results, there would have been a table of results: perfectly plausible, and computed on the counties that happen not to have diacritics in their names.
+
+Three habits, in order of how much they buy you:
+
+- **Count the rows after every join.** One line. It catches this and every other reason a join can fail.
+- **Read text data with `readr::read_csv()`**, which records the encoding rather than guessing.
+- **Pin the locale** at the top of any script that touches non-English text, so the behaviour does not depend on whose computer it runs on:
+
+```{r}
+#| eval: false
+Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
+```
+
+> The general point outlives this particular bug. An error that stops your script is cheap — you find it immediately and you fix it. An error that returns a *wrong answer* costs you whatever you build on top of it. Text comparison is one of the places the second kind lives, and a join is where it does the most damage.
+
+Now the county information is attached, grouping by it works like any other variable:
+
+```{r}
+joined |>
+  filter(F3020_R <= 10, !is.na(land)) |>
+  group_by(land) |>
+  summarise(
+    n = n(),
+    mean_lr = round(mean(F3020_R), 2)
+  )
+```
+
+`!is.na(land)` keeps the rows where `land` is *not* missing — `!` means "not".
+
+## Building the analysis data set
+
+Everything so far has been on fragments. The real job is to do it to all `r ncol(readRDS("data/swe.rds"))` variables, and that is what the script `build_swe.R` does. It ships with the course data, and you should read it — it is the worked example for this whole session.
+
+It is too long to print here, but it is built from four moves, all of which you have now seen.
+
+**One.** Two small helper functions, `set_na()` and `reverse()`, so that the same operation is written once rather than eighty times.
+
+```{r}
+set_na <- function(x, codes) {
+  x[x %in% codes] <- NA
+  x
+}
+
+reverse <- function(x, lo, hi) {
+  (hi + lo) - x
+}
+```
+
+A function you write yourself is defined with `function(arguments)` followed by the body in curly brackets. The last expression in the body is what comes back out.
+
+**Two.** Each variable is cleaned and given a short, readable name.
+
+```{r}
+#| eval: false
+swe$polint <- set_na(raw$F3001, c(7, 8, 9))
+swe$polint <- reverse(swe$polint, 1, 4)
+```
+
+**Three.** Batteries are handled as a group, so that all seven trust items — or all eight party ratings — are treated identically by construction rather than by care.
+
+**Four.** Every recoded variable is checked against the range it is not allowed to leave, and the script stops if any of them does. This is the same `stopifnot()` idea as last week, applied to `r nrow(read.csv("data/codebook.csv"))` variables at once instead of one.
+
+The result is `swe.rds`, which everything from session 4 onwards uses:
+
+```{r}
+swe <- readRDS("data/swe.rds")
+dim(swe)
+```
+
+`r nrow(swe)` respondents and `r ncol(swe)` variables, with short names, missing values marked as missing, scales pointing the same way, and factors in a sensible order. A codebook describing every variable is in `codebook.csv`.
+
+```{r}
+swe |>
+  select(vote, lr_self, satdem, tr_parl) |>
+  head(n = 4)
+```
+
+::: {.discussion}
+**A question.** The script does all of this from the raw file every time it runs, rather than someone fixing the data once by hand and saving the result.
+
+Given how much longer it takes to write a script than to edit a few values, why is it done this way?
+:::
+
+## Saving
+
+`saveRDS()` writes an R object, and `write.csv()` writes plain text. The `.rds` version is smaller and keeps factors as factors; the CSV can be opened by anything.
+
+```{r}
+#| eval: false
+saveRDS(swe, "data/swe.rds")
+write.csv(swe, "data/swe.csv", row.names = FALSE)
+```
+
+> If your data contains å, ä, ö or any other letter outside plain English, say so explicitly when you save. `readr::write_excel_csv()` writes UTF-8 and marks it, which avoids the silent comparison failure described at the end of last week's chapter.
+
+::: {.swirl}
+**In the seminar.** `swirl` lesson 3, *Data and Data Management II*. The pipe, the five verbs, `group_by()` and `summarise()`, `across()`, and a join. Around 30 minutes.
+:::
