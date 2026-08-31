@@ -463,7 +463,7 @@ Then load it, as you would any package:
 library(swirl)
 ```
 
-The course lessons are not on the internet — you get them from Moodle as a single `.zip` file. Download it, put it in your project folder, and install it with `install_course_zip()`, giving it the path to the file in quotation marks:
+The course lessons come as a single `.zip` file, from Moodle or from the front page of these materials. Download it, put it in your project folder, and install it with `install_course_zip()`, giving it the path to the file in quotation marks:
 
 ```{r}
 #| eval: false
@@ -477,7 +477,7 @@ You do this once, and again whenever a new version is posted. To start:
 swirl()
 ```
 
-`swirl` then asks your name, offers you the course, and offers the lessons in it. Pick the one for that week's session.
+`swirl` then asks your name, offers you the course, and lists the lessons in it. **They are numbered by seminar** — lesson `05 Visualisation` goes with session 5 and chapter 5 — so pick the number of the week you are in.
 
 Some things worth knowing before you start:
 
@@ -487,7 +487,7 @@ Some things worth knowing before you start:
 - If `swirl` seems stuck, press Esc, then type `swirl()` again.
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 1, *Getting Started*. Working with the console, objects, vectors, and missing values. Around 30 minutes.
+**In the seminar.** `swirl` lesson **01 Getting Started**. Working with the console, objects, vectors, and missing values. Around 30 minutes.
 
 We install `swirl` and the course lessons together and go through this one as a demonstration. **Bring a laptop with R and RStudio already installed** — that part is not what the half hour is for.
 :::

@@ -254,5 +254,5 @@ Report odds ratios with intervals, and give predicted probabilities for the vari
 :::
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 15, *Logistic regression*. Why a straight line fails, fitting a `glm()`, odds ratios, predicted probabilities, and judging the fit. Around 30 minutes.
+**In the seminar.** `swirl` lesson **15 Logistic Regression**. Why a straight line fails, fitting a `glm()`, odds ratios, predicted probabilities, and judging the fit. Around 30 minutes.
 :::

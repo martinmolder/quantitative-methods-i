@@ -244,5 +244,5 @@ Give the coefficient, its standard error, the p-value, and — most importantly 
 :::
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 11, *Regression: the basic model*. Fitting a model, reading the output, predicted values and residuals, adding a second predictor, and what changes when you do. Around 30 minutes.
+**In the seminar.** `swirl` lesson **11 Regression Basics**. Fitting a model, reading the output, predicted values and residuals, adding a second predictor, and what changes when you do. Around 30 minutes.
 :::

@@ -1,0 +1,170 @@
+- Class: meta
+  Course: Quantitative Methods I
+  Lesson: 04 - Thinking Logically and Visually
+  Author: Martin Molder
+  Type: Standard
+  Organization: University of Tartu
+  Version: 1.0.0
+
+- Class: text
+  Output: This lesson is about what you can put on a plot besides the data. An object called world is loaded - 119 countries, with a few indicators from the World Bank.
+
+- Class: cmd_question
+  Output: Have a look at what is in it. Use names() on world.
+  CorrectAnswer: names(world)
+  AnswerTests: omnitest(correctExpr='names(world)')
+  Hint: Type names(world).
+
+- Class: text
+  Output: We are going to work with lit_f and lit_m - the share of adult women and adult men who are literate, in per cent. The question is how the two are related.
+
+- Class: text
+  Output: Before touching the data, think about the scales. A literacy rate is a share of a population.
+
+- Class: mult_question
+  Output: What are the limits of a literacy rate, and what kind of limits are they?
+  CorrectAnswer: 0 and 100, and both are hard - no value outside them is possible.
+  AnswerChoices: 0 and 100, and both are hard - no value outside them is possible.; 0 and 100, but both are soft - values outside them are just unusual.; There are no limits, because a rate can be anything.
+  AnswerTests: omnitest(correctVal='0 and 100, and both are hard - no value outside them is possible.')
+  Hint: Could a country have a literacy rate of 120 per cent? What would that even mean?
+
+- Class: cmd_question
+  Output: Check that the data respects those limits. Use range() on world$lit_f.
+  CorrectAnswer: range(world$lit_f)
+  AnswerTests: omnitest(correctExpr='range(world$lit_f)')
+  Hint: Type range(world$lit_f).
+
+- Class: text
+  Output: Inside 0 and 100, as it must be. If it had not been, the download or the recoding would have gone wrong - and that is the whole point of knowing the limits.
+
+- Class: text
+  Output: Two more things follow from the scales. The corner at 0,0 is a real point - a country where nobody at all is literate. So is 100,100. Any curve describing this relationship has to pass through both of them. These are called anchor points.
+
+- Class: mult_question
+  Output: Both variables are measured on the same scale, from 0 to 100. What does that make the diagonal line, where y equals x?
+  CorrectAnswer: The line where women and men are equally literate.
+  AnswerChoices: The line where women and men are equally literate.; The line of best fit through the data.; The boundary of the region where cases can exist.
+  AnswerTests: omnitest(correctVal='The line where women and men are equally literate.')
+  Hint: If a country sits exactly on that line, what is true about its two literacy rates?
+
+- Class: text
+  Output: So before any data we know four things - the box is 0 to 100 on both axes, the curve passes through 0,0 and 100,100, the diagonal means equality, and the association must be positive. Now let us draw it.
+
+- Class: cmd_question
+  Output: Start with the points. Type ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point().
+  CorrectAnswer: ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point()
+  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point()')
+  Hint: Type ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point(). The aes() part says which variable goes on which axis.
+
+- Class: text
+  Output: A plot, but not an honest one. The axes have shrunk to fit the data, so the bottom left corner is around 40 rather than 0, and the anchor point at 0,0 is not even on the picture.
+
+- Class: cmd_question
+  Output: Force the full square. Add + coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) to the end of the same command.
+  CorrectAnswer: ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point() + coord_cartesian(xlim = c(0, 100), ylim = c(0, 100))
+  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point() + coord_cartesian(xlim = c(0, 100), ylim = c(0, 100))')
+  Hint: Add + coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) to what you typed before.
+
+- Class: text
+  Output: That is the same data, and it looks much less impressive. It is also the truthful version. Cropping axes to the range of the data is the commonest way to make a weak relationship look strong.
+
+- Class: cmd_question
+  Output: Now the equality line. geom_abline() draws a straight line from an intercept and a slope. Add + geom_abline(intercept = 0, slope = 1, linetype = "dashed") to the end.
+  CorrectAnswer: ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point() + coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) + geom_abline(intercept = 0, slope = 1, linetype = "dashed")
+  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point() + coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) + geom_abline(intercept = 0, slope = 1, linetype = "dashed")')
+  Hint: Add + geom_abline(intercept = 0, slope = 1, linetype = "dashed") to the end.
+
+- Class: text
+  Output: Now the plot says something. The points hug the line at the top right and fan out below it further down. Almost everything is on one side.
+
+- Class: cmd_question
+  Output: Count it rather than eyeballing it. How many countries have a higher male than female literacy rate? Use sum() on the comparison world$lit_m > world$lit_f.
+  CorrectAnswer: sum(world$lit_m > world$lit_f)
+  AnswerTests: omnitest(correctExpr='sum(world$lit_m > world$lit_f)')
+  Hint: Type sum(world$lit_m > world$lit_f).
+
+- Class: cmd_question
+  Output: And how many the other way round?
+  CorrectAnswer: sum(world$lit_f > world$lit_m)
+  AnswerTests: omnitest(correctExpr='sum(world$lit_f > world$lit_m)')
+  Hint: Type sum(world$lit_f > world$lit_m).
+
+- Class: text
+  Output: 90 against 20, with 9 exactly level. That is not scatter around equality. It is systematic, and the diagonal is what made it visible.
+
+- Class: text
+  Output: Now a different shape. GDP per capita has a floor at zero and no ceiling at all - a country can always be richer. Life expectancy has a floor at zero and, in practice, a ceiling somewhere in the eighties.
+
+- Class: mult_question
+  Output: One variable is bounded above and the other is not. What does that rule out?
+  CorrectAnswer: A straight line, because it would eventually predict impossible life expectancies.
+  AnswerChoices: A straight line, because it would eventually predict impossible life expectancies.; Any positive association, because the scales do not match.; Nothing - the shape is entirely an empirical question.
+  AnswerTests: omnitest(correctVal='A straight line, because it would eventually predict impossible life expectancies.')
+  Hint: Follow a rising straight line far enough to the right. What life expectancy does it promise for a very rich country?
+
+- Class: cmd_question
+  Output: Plot it and see. Type ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)).
+  CorrectAnswer: ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100))
+  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100))')
+  Hint: Type ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)).
+
+- Class: text
+  Output: Steep on the left, flat on the right. Going from two thousand dollars to four thousand buys a lot of life expectancy. Going from sixty thousand to a hundred and twenty thousand buys almost none. The curve is bending towards a ceiling, which is what the limits of the scales said it had to do.
+
+- Class: cmd_question
+  Output: Mark the ceiling. Find the highest life expectancy in the data with max(), using na.rm = TRUE, and put it in an object called ceiling_now.
+  CorrectAnswer: ceiling_now <- max(world$life, na.rm = TRUE)
+  AnswerTests: any_of_exprs('ceiling_now <- max(world$life, na.rm = TRUE)', 'ceiling_now <- max(world$life, na.rm=TRUE)')
+  Hint: Type ceiling_now <- max(world$life, na.rm = TRUE).
+
+- Class: cmd_question
+  Output: Add it to the plot as a horizontal line, with geom_hline(yintercept = ceiling_now, linetype = "dashed") on the end of the previous plot command.
+  CorrectAnswer: ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)) + geom_hline(yintercept = ceiling_now, linetype = "dashed")
+  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)) + geom_hline(yintercept = ceiling_now, linetype = "dashed")')
+  Hint: Add + geom_hline(yintercept = ceiling_now, linetype = "dashed") to the previous plot.
+
+- Class: text
+  Output: One more thing to fix. The numbers along the bottom are printed as 5e+04 and 1e+05, which is not something to put in front of a reader.
+
+- Class: cmd_question
+  Output: Add + scale_x_continuous(labels = scales::label_comma()) to the end of that plot.
+  CorrectAnswer: ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)) + geom_hline(yintercept = ceiling_now, linetype = "dashed") + scale_x_continuous(labels = scales::label_comma())
+  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)) + geom_hline(yintercept = ceiling_now, linetype = "dashed") + scale_x_continuous(labels = scales::label_comma())')
+  Hint: Add + scale_x_continuous(labels = scales::label_comma()) to the end.
+
+- Class: text
+  Output: Last idea, and the one that does the most work. Sometimes a whole region of a plot is not merely empty but impossible - no case could ever appear there.
+
+- Class: cmd_question
+  Output: Here is one. Make a new column called gap, the male literacy rate minus the female one. Use world$gap on the left of the arrow.
+  CorrectAnswer: world$gap <- world$lit_m - world$lit_f
+  AnswerTests: omnitest(correctExpr='world$gap <- world$lit_m - world$lit_f')
+  Hint: Type world$gap <- world$lit_m - world$lit_f.
+
+- Class: mult_question
+  Output: Plot gap against lit_f. Both original rates are between 0 and 100. If female literacy is 90, what is the largest the gap can possibly be?
+  CorrectAnswer: 10, because male literacy cannot exceed 100.
+  AnswerChoices: 10, because male literacy cannot exceed 100.; 90, because female literacy is 90.; 100, because that is the top of the scale.
+  AnswerTests: omnitest(correctVal='10, because male literacy cannot exceed 100.')
+  Hint: The gap is male minus female. Female is fixed at 90. How big can male get?
+
+- Class: text
+  Output: So the gap is squeezed as female literacy rises - the region above the line gap equals 100 minus lit_f cannot contain any country. That boundary is not an estimate. It comes from the scales.
+
+- Class: cmd_question
+  Output: Draw it. Type ggplot(world, aes(x = lit_f, y = gap)) + geom_point() + geom_abline(intercept = 100, slope = -1, linetype = "dashed").
+  CorrectAnswer: ggplot(world, aes(x = lit_f, y = gap)) + geom_point() + geom_abline(intercept = 100, slope = -1, linetype = "dashed")
+  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = lit_f, y = gap)) + geom_point() + geom_abline(intercept = 100, slope = -1, linetype = "dashed")')
+  Hint: Type ggplot(world, aes(x = lit_f, y = gap)) + geom_point() + geom_abline(intercept = 100, slope = -1, linetype = "dashed").
+
+- Class: cmd_question
+  Output: Confirm that no country is above the line. Count how many have a gap larger than 100 minus their female literacy rate, using sum().
+  CorrectAnswer: sum(world$gap > 100 - world$lit_f)
+  AnswerTests: omnitest(correctExpr='sum(world$gap > 100 - world$lit_f)')
+  Hint: Type sum(world$gap > 100 - world$lit_f).
+
+- Class: text
+  Output: Zero, as logic requires. That is not a finding - a case up there would mean an error in the data or in your code. What is a finding is that the countries with the biggest gaps sit close to the boundary, because the boundary is what constrains them.
+
+- Class: text
+  Output: That is the whole idea. Work out the limits of both scales, mark the anchor points, shade what cannot exist, and only then look at the data. Next week we take the plotting itself apart properly.

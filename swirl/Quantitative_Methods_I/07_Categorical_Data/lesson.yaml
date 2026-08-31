@@ -1,0 +1,172 @@
+- Class: meta
+  Course: Quantitative Methods I
+  Lesson: 07 - Analysing Categorical Data
+  Author: Martin Molder
+  Type: Standard
+  Organization: University of Tartu
+  Version: 1.0.0
+
+- Class: text
+  Output: Two categorical variables - are they related, and how strongly? The Swedish survey is loaded as swe, with a readable sex variable already made for you.
+
+- Class: cmd_question
+  Output: Make a factor for Sweden Democrat voting, so that tables print words rather than 0 and 1. Type swe$sd_vote <- factor(swe$vote_sd, levels = c(0, 1), labels = c("Other party", "Sweden Democrats")).
+  CorrectAnswer: swe$sd_vote <- factor(swe$vote_sd, levels = c(0, 1), labels = c("Other party", "Sweden Democrats"))
+  AnswerTests: omnitest(correctExpr='swe$sd_vote <- factor(swe$vote_sd, levels = c(0, 1), labels = c("Other party", "Sweden Democrats"))')
+  Hint: Type swe$sd_vote <- factor(swe$vote_sd, levels = c(0, 1), labels = c("Other party", "Sweden Democrats")).
+
+- Class: cmd_question
+  Output: Now cross-tabulate. Put table(swe$sex, swe$sd_vote) into an object called counts.
+  CorrectAnswer: counts <- table(swe$sex, swe$sd_vote)
+  AnswerTests: omnitest(correctExpr='counts <- table(swe$sex, swe$sd_vote)')
+  Hint: Type counts <- table(swe$sex, swe$sd_vote). The first variable makes the rows.
+
+- Class: cmd_question
+  Output: Print counts to see it.
+  CorrectAnswer: counts
+  AnswerTests: omnitest(correctExpr='counts')
+  Hint: Just type counts.
+
+- Class: text
+  Output: Counts are hard to read when the groups are different sizes. Percentages are better - but you have to choose what adds up to 100, and choosing wrongly is one of the commonest errors in student work.
+
+- Class: cmd_question
+  Output: Percentage within each row, so that each sex adds to 100. Type round(100 * prop.table(counts, 1), 1).
+  CorrectAnswer: round(100 * prop.table(counts, 1), 1)
+  AnswerTests: omnitest(correctExpr='round(100 * prop.table(counts, 1), 1)')
+  Hint: Type round(100 * prop.table(counts, 1), 1). The 1 means rows.
+
+- Class: cmd_question
+  Output: Now the other direction, with 2 for columns.
+  CorrectAnswer: round(100 * prop.table(counts, 2), 1)
+  AnswerTests: omnitest(correctExpr='round(100 * prop.table(counts, 2), 1)')
+  Hint: Type round(100 * prop.table(counts, 2), 1).
+
+- Class: mult_question
+  Output: You want to know whether being a man makes Sweden Democrat voting more likely. Which of the two tables answers that?
+  CorrectAnswer: The row percentages, because they show the SD share within each sex.
+  AnswerChoices: The row percentages, because they show the SD share within each sex.; The column percentages, because they show the sex breakdown of SD voters.; Either one - they contain the same information.
+  AnswerTests: omnitest(correctVal='The row percentages, because they show the SD share within each sex.')
+  Hint: Percentage within the explanatory variable. Which variable is doing the explaining here?
+
+- Class: text
+  Output: 18.9 per cent against 10.3 per cent. That looks like a difference. But we have a sample, so the question from last week applies - could a gap this size come from a population where men and women vote alike?
+
+- Class: text
+  Output: The test compares what we observed with what we would expect if the two variables were unrelated. If sex made no difference, the SD share would be the same in both rows and equal to the overall share.
+
+- Class: cmd_question
+  Output: Get the row totals with rowSums(counts), and put them in an object called row_totals.
+  CorrectAnswer: row_totals <- rowSums(counts)
+  AnswerTests: omnitest(correctExpr='row_totals <- rowSums(counts)')
+  Hint: Type row_totals <- rowSums(counts).
+
+- Class: cmd_question
+  Output: Now the overall column shares - colSums(counts) divided by sum(counts), in an object called col_shares.
+  CorrectAnswer: col_shares <- colSums(counts) / sum(counts)
+  AnswerTests: any_of_exprs('col_shares <- colSums(counts) / sum(counts)', 'col_shares <- colSums(counts)/sum(counts)')
+  Hint: Type col_shares <- colSums(counts) / sum(counts).
+
+- Class: cmd_question
+  Output: Multiply every row total by every column share to get the expected table. outer() does exactly that. Type expected <- outer(row_totals, col_shares).
+  CorrectAnswer: expected <- outer(row_totals, col_shares)
+  AnswerTests: omnitest(correctExpr='expected <- outer(row_totals, col_shares)')
+  Hint: Type expected <- outer(row_totals, col_shares).
+
+- Class: cmd_question
+  Output: Compare the two. Print round(expected, 1) and put it beside the counts in your head.
+  CorrectAnswer: round(expected, 1)
+  AnswerTests: omnitest(correctExpr='round(expected, 1)')
+  Hint: Type round(expected, 1).
+
+- Class: text
+  Output: More SD-voting men than expected, fewer SD-voting women. The chi-squared statistic turns that comparison into one number - for each cell, observed minus expected, squared, divided by expected, all added up.
+
+- Class: cmd_question
+  Output: Write that straight into R. Type sum((counts - expected)^2 / expected).
+  CorrectAnswer: sum((counts - expected)^2 / expected)
+  AnswerTests: any_of_exprs('sum((counts - expected)^2 / expected)', 'sum((counts-expected)^2/expected)')
+  Hint: Type sum((counts - expected)^2 / expected).
+
+- Class: cmd_question
+  Output: R will do the whole thing, p-value included. Type chisq.test(counts, correct = FALSE).
+  CorrectAnswer: chisq.test(counts, correct = FALSE)
+  AnswerTests: any_of_exprs('chisq.test(counts, correct = FALSE)', 'chisq.test(counts, correct=FALSE)')
+  Hint: Type chisq.test(counts, correct = FALSE). The correct argument switches off a small adjustment, so the number matches what you just calculated by hand.
+
+- Class: text
+  Output: Same statistic, 34.97, and a p-value far below 0.05. A gap this size would be very unusual if men and women voted alike.
+
+- Class: text
+  Output: But a test only says whether something is there. It says nothing about size - and with a large enough sample, a trivial difference will pass. For categorical data the standard measure of size is the odds ratio.
+
+- Class: cmd_question
+  Output: Odds are the count in one category divided by the count in the other. Calculate the odds of SD voting for men - counts["Men", "Sweden Democrats"] divided by counts["Men", "Other party"] - and call it odds_men.
+  CorrectAnswer: odds_men <- counts["Men", "Sweden Democrats"] / counts["Men", "Other party"]
+  AnswerTests: any_of_exprs('odds_men <- counts["Men", "Sweden Democrats"] / counts["Men", "Other party"]', 'odds_men <- counts["Men","Sweden Democrats"]/counts["Men","Other party"]')
+  Hint: Type odds_men <- counts["Men", "Sweden Democrats"] / counts["Men", "Other party"].
+
+- Class: cmd_question
+  Output: Now the same for women, in an object called odds_women.
+  CorrectAnswer: odds_women <- counts["Women", "Sweden Democrats"] / counts["Women", "Other party"]
+  AnswerTests: any_of_exprs('odds_women <- counts["Women", "Sweden Democrats"] / counts["Women", "Other party"]', 'odds_women <- counts["Women","Sweden Democrats"]/counts["Women","Other party"]')
+  Hint: Type odds_women <- counts["Women", "Sweden Democrats"] / counts["Women", "Other party"].
+
+- Class: cmd_question
+  Output: The odds ratio is one divided by the other. Type odds_men / odds_women.
+  CorrectAnswer: odds_men / odds_women
+  AnswerTests: any_of_exprs('odds_men / odds_women', 'odds_men/odds_women')
+  Hint: Type odds_men / odds_women.
+
+- Class: mult_question
+  Output: The odds ratio is about 2.03, and the probabilities were 18.9 per cent and 10.3 per cent. Which statement is correct?
+  CorrectAnswer: The odds of SD voting were about twice as high for men, while the probability was about 1.8 times as high.
+  AnswerChoices: The odds of SD voting were about twice as high for men, while the probability was about 1.8 times as high.; Men were about twice as likely as women to vote SD.; Men were 2.03 percentage points more likely to vote SD.
+  AnswerTests: omnitest(correctVal='The odds of SD voting were about twice as high for men, while the probability was about 1.8 times as high.')
+  Hint: Odds are not probabilities. Divide 18.9 by 10.3 and compare with 2.03.
+
+- Class: text
+  Output: An odds ratio of 1 means no association, so 1 plays the role that 0 plays elsewhere. A confidence interval that excludes 1 says the same thing as a p-value below 0.05.
+
+- Class: text
+  Output: All of this works on tables of any size, and the multiparty data is where it gets interesting.
+
+- Class: cmd_question
+  Output: Cross-tabulate education against vote. Put table(swe$educ3, swe$vote) into an object called educ_vote.
+  CorrectAnswer: educ_vote <- table(swe$educ3, swe$vote)
+  AnswerTests: omnitest(correctExpr='educ_vote <- table(swe$educ3, swe$vote)')
+  Hint: Type educ_vote <- table(swe$educ3, swe$vote).
+
+- Class: cmd_question
+  Output: Run the test on it and keep the result. Type test <- chisq.test(educ_vote).
+  CorrectAnswer: test <- chisq.test(educ_vote)
+  AnswerTests: omnitest(correctExpr='test <- chisq.test(educ_vote)')
+  Hint: Type test <- chisq.test(educ_vote).
+
+- Class: cmd_question
+  Output: Print test to see the result.
+  CorrectAnswer: test
+  AnswerTests: omnitest(correctExpr='test')
+  Hint: Just type test.
+
+- Class: text
+  Output: Highly significant. But with 24 cells, 'there is an association' is not much of a finding. Where is it?
+
+- Class: cmd_question
+  Output: The test object keeps the standardised residuals - how far each cell is from what no-association would predict. Type round(test$residuals, 2).
+  CorrectAnswer: round(test$residuals, 2)
+  AnswerTests: omnitest(correctExpr='round(test$residuals, 2)')
+  Hint: Type round(test$residuals, 2).
+
+- Class: mult_question
+  Output: Positive means more cases than expected and negative means fewer, with anything beyond about plus or minus 2 worth looking at. Which pair of columns shows the sharpest education divide?
+  CorrectAnswer: The Sweden Democrats and the Greens, in opposite directions.
+  AnswerChoices: The Sweden Democrats and the Greens, in opposite directions.; The Social Democrats and the Moderates, the two largest parties.; The Christian Democrats and the Liberals, the two smallest.
+  AnswerTests: omnitest(correctVal='The Sweden Democrats and the Greens, in opposite directions.')
+  Hint: Look for the largest numbers in the table, ignoring the sign.
+
+- Class: text
+  Output: SD strongly over-represented among those with no degree and under-represented among postgraduates. The Greens the same in reverse, and even sharper. That is the education divide in Swedish politics, from one table.
+
+- Class: text
+  Output: One warning before we finish. The chi-squared approximation needs expected counts of at least about 5 in every cell. When R warns you about that, look at the expected table - small categories should be merged, dropped and reported, or handled with fisher.test() instead.

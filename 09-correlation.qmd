@@ -263,5 +263,5 @@ Give *r*, its interval, the *n*, and say which way it runs. Mistakes to avoid:
 :::
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 9, *Correlation*. Covariance and correlation, `cor()` and `cor.test()`, correlation matrices, and what a coefficient hides. Around 30 minutes.
+**In the seminar.** `swirl` lesson **09 Correlation**. Covariance and correlation, `cor()` and `cor.test()`, correlation matrices, and what a coefficient hides. Around 30 minutes.
 :::

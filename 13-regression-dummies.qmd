@@ -254,5 +254,5 @@ Say which category is the reference — without it the table cannot be read. Mis
 :::
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 13, *Regression with dummy variables*. Binary and multi-category predictors, reference categories, `relevel()`, testing a factor as a whole, and what happens when a factor is treated as a number. Around 30 minutes.
+**In the seminar.** `swirl` lesson **13 Regression Dummies**. Binary and multi-category predictors, reference categories, `relevel()`, testing a factor as a whole, and what happens when a factor is treated as a number. Around 30 minutes.
 :::

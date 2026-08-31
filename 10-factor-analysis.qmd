@@ -383,5 +383,5 @@ Say which items, which method, how many factors and why, the loadings, the varia
 :::
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 10, *Factor Analysis*. Checking whether a set of items hangs together, deciding how many factors, reading loadings, reliability, and saving factor scores. Around 30 minutes.
+**In the seminar.** `swirl` lesson **10 Factor Analysis**. Checking whether a set of items hangs together, deciding how many factors, reading loadings, reliability, and saving factor scores. Around 30 minutes.
 :::

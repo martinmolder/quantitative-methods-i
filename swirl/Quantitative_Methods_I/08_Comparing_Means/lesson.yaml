@@ -1,0 +1,148 @@
+- Class: meta
+  Course: Quantitative Methods I
+  Lesson: 08 - Comparing Means
+  Author: Martin Molder
+  Type: Standard
+  Organization: University of Tartu
+  Version: 1.0.0
+
+- Class: text
+  Output: One categorical variable and one continuous one - does the average differ between groups? Three versions of that question, in order of how much they ask for. The survey is loaded as swe, with a readable sex variable ready.
+
+- Class: text
+  Output: Start with the simplest. The left-right scale runs 0 to 10, so its midpoint is 5. Do Swedes on average sit at the midpoint?
+
+- Class: cmd_question
+  Output: Look first. Draw a histogram of swe$lr_self with hist().
+  CorrectAnswer: hist(swe$lr_self)
+  AnswerTests: omnitest(correctExpr='hist(swe$lr_self)')
+  Hint: Type hist(swe$lr_self).
+
+- Class: cmd_question
+  Output: Now the mean, dropping the missing values.
+  CorrectAnswer: mean(swe$lr_self, na.rm = TRUE)
+  AnswerTests: any_of_exprs('mean(swe$lr_self, na.rm = TRUE)', 'mean(swe$lr_self, na.rm=TRUE)')
+  Hint: Type mean(swe$lr_self, na.rm = TRUE).
+
+- Class: cmd_question
+  Output: 5.24 against a midpoint of 5. The one-sample t-test asks whether a gap that size could be sampling noise. The argument mu is the value being tested against. Type t.test(swe$lr_self, mu = 5).
+  CorrectAnswer: t.test(swe$lr_self, mu = 5)
+  AnswerTests: any_of_exprs('t.test(swe$lr_self, mu = 5)', 't.test(swe$lr_self, mu=5)')
+  Hint: Type t.test(swe$lr_self, mu = 5).
+
+- Class: text
+  Output: Read that output line by line, because every t-test in R prints the same shape. t is the gap divided by its standard error. df is degrees of freedom. The p-value is 0.0000288. The confidence interval is for the mean, and it excludes 5.
+
+- Class: mult_question
+  Output: So Swedes do not sit at the midpoint. But look at what we found - 0.24 of one point, on a scale with eleven positions. How should that be described?
+  CorrectAnswer: Statistically significant and substantively negligible - both are true.
+  AnswerChoices: Statistically significant and substantively negligible - both are true.; Significant, therefore important.; Not really significant, because the difference is small.
+  AnswerTests: omnitest(correctVal='Statistically significant and substantively negligible - both are true.')
+  Hint: The p-value answers 'could this be chance'. With 2448 respondents, what is the answer to that for very small differences?
+
+- Class: text
+  Output: So we need a measure of how big, alongside the p-value. The standard one is Cohen's d - the difference expressed in standard deviations.
+
+- Class: cmd_question
+  Output: Calculate it by hand. Divide the gap, mean(swe$lr_self, na.rm = TRUE) - 5, by sd(swe$lr_self, na.rm = TRUE).
+  CorrectAnswer: (mean(swe$lr_self, na.rm = TRUE) - 5) / sd(swe$lr_self, na.rm = TRUE)
+  AnswerTests: any_of_exprs('(mean(swe$lr_self, na.rm = TRUE) - 5) / sd(swe$lr_self, na.rm = TRUE)', '(mean(swe$lr_self, na.rm=TRUE) - 5) / sd(swe$lr_self, na.rm=TRUE)')
+  Hint: Type (mean(swe$lr_self, na.rm = TRUE) - 5) / sd(swe$lr_self, na.rm = TRUE).
+
+- Class: text
+  Output: 0.085 standard deviations. The rough convention is 0.2 small, 0.5 medium, 0.8 large - so this is well below small. Always report both. The p-value says whether an effect is distinguishable from zero; the effect size says whether it is worth caring about.
+
+- Class: text
+  Output: Second case - two separate groups of people. Do men and women place themselves differently?
+
+- Class: cmd_question
+  Output: Look first, with a boxplot. Type boxplot(lr_self ~ sex, data = swe).
+  CorrectAnswer: boxplot(lr_self ~ sex, data = swe)
+  AnswerTests: omnitest(correctExpr='boxplot(lr_self ~ sex, data = swe)')
+  Hint: Type boxplot(lr_self ~ sex, data = swe). The tilde means 'by'.
+
+- Class: cmd_question
+  Output: Now the test, in the same formula notation. Type t.test(lr_self ~ sex, data = swe).
+  CorrectAnswer: t.test(lr_self ~ sex, data = swe)
+  AnswerTests: omnitest(correctExpr='t.test(lr_self ~ sex, data = swe)')
+  Hint: Type t.test(lr_self ~ sex, data = swe). The data argument says where to find the variables, which is why they appear without swe dollar sign.
+
+- Class: text
+  Output: The confidence interval now refers to the difference between the two means, and it does not contain zero. R subtracts the second group from the first, following the factor levels - Men minus Women - so a positive interval means men place themselves further right.
+
+- Class: mult_question
+  Output: R called it a Welch test and gave a fractional degrees of freedom. What is Welch's test doing differently?
+  CorrectAnswer: It does not assume the two groups have equal variance.
+  AnswerChoices: It does not assume the two groups have equal variance.; It corrects for the groups being different sizes.; It uses ranks instead of the raw values.
+  AnswerTests: omnitest(correctVal='It does not assume the two groups have equal variance.')
+  Hint: The older Student's t-test makes an assumption about the spread of the two groups that Welch's does not.
+
+- Class: text
+  Output: Welch is the right default. When the variances are equal it gives essentially the same answer, and when they are not it gives the correct one. There is rarely a reason to switch it off.
+
+- Class: text
+  Output: Third case, and the one most often got wrong. Sometimes the two numbers come from the same respondents. Everyone rated every party from 0 to 10, and separately rated every party leader.
+
+- Class: cmd_question
+  Output: Compare the Social Democrats with their leader. First the party - mean of swe$like_s, dropping missing values.
+  CorrectAnswer: mean(swe$like_s, na.rm = TRUE)
+  AnswerTests: any_of_exprs('mean(swe$like_s, na.rm = TRUE)', 'mean(swe$like_s, na.rm=TRUE)')
+  Hint: Type mean(swe$like_s, na.rm = TRUE).
+
+- Class: cmd_question
+  Output: Now Magdalena Andersson - the mean of swe$lead_andersson.
+  CorrectAnswer: mean(swe$lead_andersson, na.rm = TRUE)
+  AnswerTests: any_of_exprs('mean(swe$lead_andersson, na.rm = TRUE)', 'mean(swe$lead_andersson, na.rm=TRUE)')
+  Hint: Type mean(swe$lead_andersson, na.rm = TRUE).
+
+- Class: cmd_question
+  Output: 6.33 for the party and 6.97 for the leader. Test it with paired = TRUE, which works on the differences - one per respondent. Type t.test(swe$like_s, swe$lead_andersson, paired = TRUE).
+  CorrectAnswer: t.test(swe$like_s, swe$lead_andersson, paired = TRUE)
+  AnswerTests: any_of_exprs('t.test(swe$like_s, swe$lead_andersson, paired = TRUE)', 't.test(swe$like_s, swe$lead_andersson, paired=TRUE)')
+  Hint: Type t.test(swe$like_s, swe$lead_andersson, paired = TRUE).
+
+- Class: mult_question
+  Output: Why is the paired test the right one here, rather than a convenience?
+  CorrectAnswer: It removes the variation between people, which would otherwise swamp the comparison.
+  AnswerChoices: It removes the variation between people, which would otherwise swamp the comparison.; It corrects for the two variables having different sample sizes.; It is more conservative, so the p-value is safer.
+  AnswerTests: omnitest(correctVal='It removes the variation between people, which would otherwise swamp the comparison.')
+  Hint: Some people love the Social Democrats and some detest them. Does that variation matter when you only ask which of a person's own two scores is higher?
+
+- Class: text
+  Output: Use the paired version whenever the two numbers come from the same unit. Using an independent test on paired data throws the pairing away and usually hides a real effect. Using a paired test on data that is not paired is simply invalid, whatever R prints.
+
+- Class: cmd_question
+  Output: Try another pair. Compare the Moderates with Ulf Kristersson - t.test on swe$like_m and swe$lead_kristersson, paired.
+  CorrectAnswer: t.test(swe$like_m, swe$lead_kristersson, paired = TRUE)
+  AnswerTests: any_of_exprs('t.test(swe$like_m, swe$lead_kristersson, paired = TRUE)', 't.test(swe$like_m, swe$lead_kristersson, paired=TRUE)')
+  Hint: Type t.test(swe$like_m, swe$lead_kristersson, paired = TRUE).
+
+- Class: text
+  Output: This time the difference runs the other way - Kristersson is rated lower than his party, where Andersson was rated higher than hers. Six of the eight leaders differ from their parties, and not all in the same direction.
+
+- Class: cmd_question
+  Output: One where there is nothing to find. Try the Christian Democrats and Ebba Busch - swe$like_kd and swe$lead_busch, paired.
+  CorrectAnswer: t.test(swe$like_kd, swe$lead_busch, paired = TRUE)
+  AnswerTests: any_of_exprs('t.test(swe$like_kd, swe$lead_busch, paired = TRUE)', 't.test(swe$like_kd, swe$lead_busch, paired=TRUE)')
+  Hint: Type t.test(swe$like_kd, swe$lead_busch, paired = TRUE).
+
+- Class: text
+  Output: A p-value of 0.88 and a confidence interval straddling zero. That is what no difference looks like - and it is a result, not a failure.
+
+- Class: text
+  Output: Last thing. With three or more groups, running a t-test on every pair is wrong - each test has its own chance of a false positive, and with enough pairs one will fire.
+
+- Class: cmd_question
+  Output: The tool is analysis of variance, which asks whether any of the group means differ. Fit it with model <- aov(lr_self ~ ses, data = swe).
+  CorrectAnswer: model <- aov(lr_self ~ ses, data = swe)
+  AnswerTests: omnitest(correctExpr='model <- aov(lr_self ~ ses, data = swe)')
+  Hint: Type model <- aov(lr_self ~ ses, data = swe).
+
+- Class: cmd_question
+  Output: Print the test with summary(model).
+  CorrectAnswer: summary(model)
+  AnswerTests: omnitest(correctExpr='summary(model)')
+  Hint: Type summary(model).
+
+- Class: text
+  Output: The four social class groups do not all place themselves in the same place. That is all it says - not which groups differ. ANOVA is a special case of regression, which starts in session 11, and it is easier to understand from that direction. Treat this as a signpost.

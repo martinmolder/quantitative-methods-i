@@ -306,5 +306,5 @@ Report the estimate, the interval, and the number of cases the estimate rests on
 :::
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 6, *The Logic of Hypothesis Testing*. Variation, drawing repeated samples and watching the sampling distribution appear, the standard error, and confidence intervals. Around 30 minutes.
+**In the seminar.** `swirl` lesson **06 Hypothesis Testing**. Variation, drawing repeated samples and watching the sampling distribution appear, the standard error, and confidence intervals. Around 30 minutes.
 :::

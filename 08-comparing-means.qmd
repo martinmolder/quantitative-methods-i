@@ -282,5 +282,5 @@ Give the means, the difference with its confidence interval, the test, and an ef
 :::
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 8, *Comparing Means*. One-sample, independent and paired t-tests, reading the output, and effect sizes. Around 30 minutes.
+**In the seminar.** `swirl` lesson **08 Comparing Means**. One-sample, independent and paired t-tests, reading the output, and effect sizes. Around 30 minutes.
 :::

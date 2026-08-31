@@ -271,5 +271,5 @@ A statistical model gives you a number. On its own, a number cannot be checked. 
 This is Taagepera's argument, and it is the reason this session sits where it does — after learning to handle data and before learning to model it. From next week onwards every method in this course produces numbers. What you know about the limits of your scales is what tells you whether to believe them.
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 4, *Thinking Logically and Visually*. Working out the limits of a pair of scales, plotting the region where cases can exist, and putting real data inside it. Around 30 minutes.
+**In the seminar.** `swirl` lesson **04 Logical And Visual**. Working out the limits of a pair of scales, plotting the region where cases can exist, and putting real data inside it. Around 30 minutes.
 :::

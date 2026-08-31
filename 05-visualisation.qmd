@@ -387,5 +387,5 @@ ggsave(
 The file type comes from the extension. Use `.pdf` for anything going into a written document — it stays sharp at any size. Use `.png` for slides or the web, and set `dpi = 300` or better.
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 5, *Data Visualisation*. The grammar, one-variable and two-variable plots, mapping against setting, faceting, and labelling a figure properly. Around 30 minutes.
+**In the seminar.** `swirl` lesson **05 Visualisation**. The grammar, one-variable and two-variable plots, mapping against setting, faceting, and labelling a figure properly. Around 30 minutes.
 :::

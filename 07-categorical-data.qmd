@@ -261,5 +261,5 @@ Give the percentages, the test with its degrees of freedom, the *n*, and a measu
 :::
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 7, *Analysing Categorical Data*. Cross-tabulations and percentaging, expected counts, the chi-squared test, odds ratios, and reading the residuals of a bigger table. Around 30 minutes.
+**In the seminar.** `swirl` lesson **07 Categorical Data**. Cross-tabulations and percentaging, expected counts, the chi-squared test, odds ratios, and reading the residuals of a bigger table. Around 30 minutes.
 :::

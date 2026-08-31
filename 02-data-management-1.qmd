@@ -503,5 +503,5 @@ Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
 The general lesson is worth more than the specific fix. Errors that produce a message are cheap: you find them immediately. Errors that produce a *wrong answer* are expensive, and text comparison is one of the places they live.
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 2, *Data and Data Management I*. Reading the survey file, looking at it, dealing with the missing-value codes, subsetting and recoding. Around 30 minutes.
+**In the seminar.** `swirl` lesson **02 Data Management I**. Reading the survey file, looking at it, dealing with the missing-value codes, subsetting and recoding. Around 30 minutes.
 :::

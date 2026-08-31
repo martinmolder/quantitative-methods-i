@@ -277,5 +277,5 @@ Mistakes to avoid:
 :::
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 14, *Interactions and non-linear associations*. Fitting and reading an interaction, plotting it, and fixing a relationship that a straight line gets wrong. Around 30 minutes.
+**In the seminar.** `swirl` lesson **14 Interactions Nonlinear**. Fitting and reading an interaction, plotting it, and fixing a relationship that a straight line gets wrong. Around 30 minutes.
 :::

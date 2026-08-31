@@ -1,0 +1,168 @@
+- Class: meta
+  Course: Quantitative Methods I
+  Lesson: 09 - Correlation
+  Author: Martin Molder
+  Type: Standard
+  Organization: University of Tartu
+  Version: 1.0.0
+
+- Class: text
+  Output: Two continuous variables this time. The survey is loaded as swe.
+
+- Class: text
+  Output: The rule before anything else - look at it first. Every time.
+
+- Class: cmd_question
+  Output: Do people on the right like the Sweden Democrats more? Plot it with plot(swe$lr_self, swe$like_sd).
+  CorrectAnswer: plot(swe$lr_self, swe$like_sd)
+  AnswerTests: omnitest(correctExpr='plot(swe$lr_self, swe$like_sd)')
+  Hint: Type plot(swe$lr_self, swe$like_sd).
+
+- Class: text
+  Output: A clear pattern running from bottom left to top right, and far from tidy - plenty of people on the right dislike the party, and a few on the left like it. Now we want one number for that.
+
+- Class: text
+  Output: The starting point is the same as last week - how far each case sits from the mean of its variable. But now there are two variables, and we ask whether the deviations go together. Multiply each person's two deviations. Both above their means, or both below, gives a positive product. One above and one below gives a negative one. Average those, and you have the covariance.
+
+- Class: cmd_question
+  Output: Calculate it with cov(), telling it to use only respondents who answered both. Type cov(swe$lr_self, swe$like_sd, use = "complete.obs").
+  CorrectAnswer: cov(swe$lr_self, swe$like_sd, use = "complete.obs")
+  AnswerTests: any_of_exprs('cov(swe$lr_self, swe$like_sd, use = "complete.obs")', 'cov(swe$lr_self, swe$like_sd, use="complete.obs")')
+  Hint: Type cov(swe$lr_self, swe$like_sd, use = "complete.obs").
+
+- Class: mult_question
+  Output: The covariance is about 6.3. What are its units?
+  CorrectAnswer: Scale points times scale points, which is not comparable to anything.
+  AnswerChoices: Scale points times scale points, which is not comparable to anything.; Scale points, the same as the original variables.; It has no units, because it is a correlation.
+  AnswerTests: omnitest(correctVal='Scale points times scale points, which is not comparable to anything.')
+  Hint: You multiplied two deviations together. What happens to the units when you multiply?
+
+- Class: text
+  Output: The fix is to divide by both standard deviations, which strips the units out. The result is the correlation coefficient, r.
+
+- Class: cmd_question
+  Output: Use cor(), with the same use argument. Type cor(swe$lr_self, swe$like_sd, use = "complete.obs").
+  CorrectAnswer: cor(swe$lr_self, swe$like_sd, use = "complete.obs")
+  AnswerTests: any_of_exprs('cor(swe$lr_self, swe$like_sd, use = "complete.obs")', 'cor(swe$lr_self, swe$like_sd, use="complete.obs")')
+  Hint: Type cor(swe$lr_self, swe$like_sd, use = "complete.obs").
+
+- Class: text
+  Output: 0.61. Because of that division, r always lies between minus 1 and plus 1. That is a hard limit in the sense of session 4 - a correlation of 1.3 is not a strong relationship, it is an error.
+
+- Class: cmd_question
+  Output: Add the hypothesis test and a confidence interval with cor.test(). Type cor.test(swe$lr_self, swe$like_sd).
+  CorrectAnswer: cor.test(swe$lr_self, swe$like_sd)
+  AnswerTests: omnitest(correctExpr='cor.test(swe$lr_self, swe$like_sd)')
+  Hint: Type cor.test(swe$lr_self, swe$like_sd).
+
+- Class: text
+  Output: The null hypothesis is that the correlation in the population is zero. The interval runs from 0.58 to 0.63, nowhere near it.
+
+- Class: cmd_question
+  Output: Now a warning about reading the stars instead of the number. Test age against left-right placement - cor.test(swe$age, swe$lr_self).
+  CorrectAnswer: cor.test(swe$age, swe$lr_self)
+  AnswerTests: omnitest(correctExpr='cor.test(swe$age, swe$lr_self)')
+  Hint: Type cor.test(swe$age, swe$lr_self).
+
+- Class: text
+  Output: An r of 0.038, which is nothing at all, and yet with 2448 respondents the interval is narrow and nearly excludes zero. Read the coefficient, not the stars.
+
+- Class: text
+  Output: Give cor() several columns and it returns every pair at once. This is where the multiparty data earns its keep.
+
+- Class: cmd_question
+  Output: Select the eight party ratings into an object called ratings. Type ratings <- swe[, c("like_v", "like_mp", "like_s", "like_c", "like_l", "like_kd", "like_m", "like_sd")].
+  CorrectAnswer: ratings <- swe[, c("like_v", "like_mp", "like_s", "like_c", "like_l", "like_kd", "like_m", "like_sd")]
+  AnswerTests: omnitest(correctExpr='ratings <- swe[, c("like_v", "like_mp", "like_s", "like_c", "like_l", "like_kd", "like_m", "like_sd")]')
+  Hint: Type ratings <- swe[, c("like_v", "like_mp", "like_s", "like_c", "like_l", "like_kd", "like_m", "like_sd")].
+
+- Class: cmd_question
+  Output: Now the matrix, using pairwise deletion so that each pair uses whoever answered both. Type round(cor(ratings, use = "pairwise.complete.obs"), 2).
+  CorrectAnswer: round(cor(ratings, use = "pairwise.complete.obs"), 2)
+  AnswerTests: any_of_exprs('round(cor(ratings, use = "pairwise.complete.obs"), 2)', 'round(cor(ratings, use="pairwise.complete.obs"), 2)')
+  Hint: Type round(cor(ratings, use = "pairwise.complete.obs"), 2).
+
+- Class: mult_question
+  Output: Read the structure. The first four columns are V, MP, S and C; the last four are L, KD, M and SD. What do you see?
+  CorrectAnswer: The two blocs - parties on the same side correlate positively, across the sides negatively.
+  AnswerChoices: The two blocs - parties on the same side correlate positively, across the sides negatively.; Nothing systematic - the correlations are essentially random.; Every party correlates positively with every other.
+  AnswerTests: omnitest(correctVal='The two blocs - parties on the same side correlate positively, across the sides negatively.')
+  Hint: Look at the sign of the correlations within the first four, then between the first four and the last four.
+
+- Class: text
+  Output: That is the bloc structure of Swedish politics, recovered from nothing but who likes whom. It is also exactly the input to next week, when we ask whether a pattern like this can be summarised by a smaller number of underlying dimensions.
+
+- Class: text
+  Output: Now four things a single coefficient hides. R ships with Anscombe's quartet, four small data sets built to make the point.
+
+- Class: cmd_question
+  Output: Look at the first pair. Type plot(anscombe$x1, anscombe$y1).
+  CorrectAnswer: plot(anscombe$x1, anscombe$y1)
+  AnswerTests: omnitest(correctExpr='plot(anscombe$x1, anscombe$y1)')
+  Hint: Type plot(anscombe$x1, anscombe$y1).
+
+- Class: cmd_question
+  Output: Now the second. Type plot(anscombe$x2, anscombe$y2).
+  CorrectAnswer: plot(anscombe$x2, anscombe$y2)
+  AnswerTests: omnitest(correctExpr='plot(anscombe$x2, anscombe$y2)')
+  Hint: Type plot(anscombe$x2, anscombe$y2).
+
+- Class: cmd_question
+  Output: And the fourth. Type plot(anscombe$x4, anscombe$y4).
+  CorrectAnswer: plot(anscombe$x4, anscombe$y4)
+  AnswerTests: omnitest(correctExpr='plot(anscombe$x4, anscombe$y4)')
+  Hint: Type plot(anscombe$x4, anscombe$y4).
+
+- Class: cmd_question
+  Output: Three completely different pictures. Now compare their correlations - cor(anscombe$x1, anscombe$y1).
+  CorrectAnswer: cor(anscombe$x1, anscombe$y1)
+  AnswerTests: omnitest(correctExpr='cor(anscombe$x1, anscombe$y1)')
+  Hint: Type cor(anscombe$x1, anscombe$y1).
+
+- Class: cmd_question
+  Output: And the second - cor(anscombe$x2, anscombe$y2).
+  CorrectAnswer: cor(anscombe$x2, anscombe$y2)
+  AnswerTests: omnitest(correctExpr='cor(anscombe$x2, anscombe$y2)')
+  Hint: Type cor(anscombe$x2, anscombe$y2).
+
+- Class: text
+  Output: The same coefficient, 0.816, to three decimal places, for all four. One is a straight line, one is a curve, one is a line plus an outlier, and one has no relationship at all except for a single point. That is the argument for the scatterplot, and it is not a small one.
+
+- Class: text
+  Output: A third thing r depends on is the range you look at.
+
+- Class: cmd_question
+  Output: Take only respondents in the middle three positions of the scale. Type centre <- swe[!is.na(swe$lr_self) & swe$lr_self >= 4 & swe$lr_self <= 6, ].
+  CorrectAnswer: centre <- swe[!is.na(swe$lr_self) & swe$lr_self >= 4 & swe$lr_self <= 6, ]
+  AnswerTests: omnitest(correctExpr='centre <- swe[!is.na(swe$lr_self) & swe$lr_self >= 4 & swe$lr_self <= 6, ]')
+  Hint: Type centre <- swe[!is.na(swe$lr_self) & swe$lr_self >= 4 & swe$lr_self <= 6, ].
+
+- Class: cmd_question
+  Output: Now the same correlation within that group. Type cor(centre$lr_self, centre$like_sd, use = "complete.obs").
+  CorrectAnswer: cor(centre$lr_self, centre$like_sd, use = "complete.obs")
+  AnswerTests: any_of_exprs('cor(centre$lr_self, centre$like_sd, use = "complete.obs")', 'cor(centre$lr_self, centre$like_sd, use="complete.obs")')
+  Hint: Type cor(centre$lr_self, centre$like_sd, use = "complete.obs").
+
+- Class: text
+  Output: 0.18, against 0.61 across everybody. Same relationship, same data, a third of the coefficient. Restricting the range of a variable shrinks its correlation with everything - which is why correlations from a narrow group cannot be compared with correlations from a wide one.
+
+- Class: text
+  Output: The fourth thing is the oldest warning in statistics. Correlation says nothing about direction or cause. Right-wing self-placement and liking the Sweden Democrats could run either way, or both follow from something else, or be the same thing measured twice. Correlation cannot separate them - and neither can regression, which is coming.
+
+- Class: text
+  Output: One last tool. Pearson's r assumes the distances between scale points are equal. Spearman's rho does not - it replaces the values with their ranks.
+
+- Class: cmd_question
+  Output: Compare the two on a pair of four-point scales. First Pearson - cor(swe$satdem, swe$tr_govt, use = "complete.obs").
+  CorrectAnswer: cor(swe$satdem, swe$tr_govt, use = "complete.obs")
+  AnswerTests: any_of_exprs('cor(swe$satdem, swe$tr_govt, use = "complete.obs")', 'cor(swe$satdem, swe$tr_govt, use="complete.obs")')
+  Hint: Type cor(swe$satdem, swe$tr_govt, use = "complete.obs").
+
+- Class: cmd_question
+  Output: Now Spearman, by adding method = "spearman".
+  CorrectAnswer: cor(swe$satdem, swe$tr_govt, use = "complete.obs", method = "spearman")
+  AnswerTests: any_of_exprs('cor(swe$satdem, swe$tr_govt, use = "complete.obs", method = "spearman")', 'cor(swe$satdem, swe$tr_govt, use="complete.obs", method="spearman")')
+  Hint: Type cor(swe$satdem, swe$tr_govt, use = "complete.obs", method = "spearman").
+
+- Class: text
+  Output: 0.447 against 0.430 - close enough that the choice does not change the conclusion, which is the usual outcome. Use Spearman for ordinal scales with few categories, and when one variable has a long tail.

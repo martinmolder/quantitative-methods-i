@@ -1,0 +1,173 @@
+- Class: meta
+  Course: Quantitative Methods I
+  Lesson: 15 - Logistic regression
+  Author: Martin Molder
+  Type: Standard
+  Organization: University of Tartu
+  Version: 1.0.0
+
+- Class: text
+  Output: The last lesson, and it closes a thread that has run through the whole course. Sessions 4, 12 and 14 all ran into the same thing - a straight line does not know a scale has ends. This week the outcome is nothing but ends.
+
+- Class: cmd_question
+  Output: The question is who voted for the Sweden Democrats. Look at the outcome first - table(swe$vote_sd, useNA = "ifany").
+  CorrectAnswer: table(swe$vote_sd, useNA = "ifany")
+  AnswerTests: any_of_exprs('table(swe$vote_sd, useNA = "ifany")', 'table(swe$vote_sd, useNA="ifany")')
+  Hint: Type table(swe$vote_sd, useNA = "ifany").
+
+- Class: text
+  Output: 336 SD voters out of 2334 who voted, about 14 per cent. Nothing stops you putting a 0/1 outcome straight into lm(). The result even has a name - a linear probability model.
+
+- Class: cmd_question
+  Output: Try it. Type linear_model <- lm(vote_sd ~ trust + lr_self + sex + educ, data = swe).
+  CorrectAnswer: linear_model <- lm(vote_sd ~ trust + lr_self + sex + educ, data = swe)
+  AnswerTests: omnitest(correctExpr='linear_model <- lm(vote_sd ~ trust + lr_self + sex + educ, data = swe)')
+  Hint: Type linear_model <- lm(vote_sd ~ trust + lr_self + sex + educ, data = swe).
+
+- Class: cmd_question
+  Output: Perfectly reasonable-looking coefficients. Now ask what it believes - type range(predict(linear_model)).
+  CorrectAnswer: range(predict(linear_model))
+  AnswerTests: omnitest(correctExpr='range(predict(linear_model))')
+  Hint: Type range(predict(linear_model)).
+
+- Class: mult_question
+  Output: The model predicts a probability of minus 0.29 for somebody. What is wrong?
+  CorrectAnswer: A probability cannot be negative - the scale has hard limits at 0 and 1, and a straight line has none.
+  AnswerChoices: A probability cannot be negative - the scale has hard limits at 0 and 1, and a straight line has none.; The sample is too small to estimate the model.; A variable is missing from the model.
+  AnswerTests: omnitest(correctVal='A probability cannot be negative - the scale has hard limits at 0 and 1, and a straight line has none.')
+  Hint: This is the session 4 point in its sharpest form. What are the limits of a probability?
+
+- Class: text
+  Output: The fix is to change the scale until it has no ends. Step one, from probability to odds - the probability of the thing divided by the probability of not. Odds have a floor at zero but no ceiling. Step two, take the logarithm - now the scale runs from minus infinity to plus infinity. That is a scale a straight line can live on.
+
+- Class: cmd_question
+  Output: Fit it. glm() is the generalised linear model - the same formula notation plus a family argument. Type model <- glm(vote_sd ~ trust + lr_self + sex + educ, data = swe, family = "binomial").
+  CorrectAnswer: model <- glm(vote_sd ~ trust + lr_self + sex + educ, data = swe, family = "binomial")
+  AnswerTests: any_of_exprs('model <- glm(vote_sd ~ trust + lr_self + sex + educ, data = swe, family = "binomial")', 'model <- glm(vote_sd ~ trust + lr_self + sex + educ, data = swe, family="binomial")')
+  Hint: Type model <- glm(vote_sd ~ trust + lr_self + sex + educ, data = swe, family = "binomial").
+
+- Class: cmd_question
+  Output: Print summary(model).
+  CorrectAnswer: summary(model)
+  AnswerTests: omnitest(correctExpr='summary(model)')
+  Hint: Type summary(model).
+
+- Class: text
+  Output: Nearly the same shape as lm(). The test statistic is z rather than t, there is no R-squared, and the estimates are in log odds - which is why none of the numbers look like anything. The signs are readable though. Trust negative, left-right positive, women lower, education lower.
+
+- Class: cmd_question
+  Output: The first step to readability is to exponentiate, which turns a log-odds coefficient into an odds ratio. Type round(exp(coef(model)), 3).
+  CorrectAnswer: round(exp(coef(model)), 3)
+  AnswerTests: omnitest(correctExpr='round(exp(coef(model)), 3)')
+  Hint: Type round(exp(coef(model)), 3). exp() undoes log().
+
+- Class: mult_question
+  Output: The odds ratio on lr_self is 1.70. What does it say?
+  CorrectAnswer: Each point further right multiplies the odds of voting SD by about 1.7.
+  AnswerChoices: Each point further right multiplies the odds of voting SD by about 1.7.; People on the right are 1.7 times as likely to vote SD.; The probability of voting SD rises by 1.7 points per step.
+  AnswerTests: omnitest(correctVal='Each point further right multiplies the odds of voting SD by about 1.7.')
+  Hint: An odds ratio is about odds, not probabilities. The two are not the same, as session 7 warned.
+
+- Class: cmd_question
+  Output: Add confidence intervals. Type round(exp(confint.default(model)), 3).
+  CorrectAnswer: round(exp(confint.default(model)), 3)
+  AnswerTests: omnitest(correctExpr='round(exp(confint.default(model)), 3)')
+  Hint: Type round(exp(confint.default(model)), 3).
+
+- Class: text
+  Output: An odds ratio of 1 means no effect, so an interval containing 1 is the equivalent of a coefficient whose interval contains zero. Note that the intervals are lopsided - odds ratios are multiplicative, so 2 and 0.5 are the same size of effect in opposite directions.
+
+- Class: text
+  Output: Odds ratios are precise and hard to picture. Probabilities are what people understand.
+
+- Class: cmd_question
+  Output: Compute predicted probabilities across the left-right scale. Type probs <- predict_response(model, terms = "lr_self [0:10 by=1]").
+  CorrectAnswer: probs <- predict_response(model, terms = "lr_self [0:10 by=1]")
+  AnswerTests: any_of_exprs('probs <- predict_response(model, terms = "lr_self [0:10 by=1]")', 'probs <- predict_response(model, terms="lr_self [0:10 by=1]")')
+  Hint: Type probs <- predict_response(model, terms = "lr_self [0:10 by=1]").
+
+- Class: cmd_question
+  Output: Print probs.
+  CorrectAnswer: probs
+  AnswerTests: omnitest(correctExpr='probs')
+  Hint: Just type probs.
+
+- Class: cmd_question
+  Output: Now plot it with plot(probs).
+  CorrectAnswer: plot(probs)
+  AnswerTests: omnitest(correctExpr='plot(probs)')
+  Hint: Type plot(probs).
+
+- Class: mult_question
+  Output: There is the S-curve. Moving from 2 to 3 on the scale barely changes anything; moving from 7 to 8 changes a great deal. Why must a probability model have that shape?
+  CorrectAnswer: It has to flatten as it approaches 0 and 1, because it can never cross them.
+  AnswerChoices: It has to flatten as it approaches 0 and 1, because it can never cross them.; Because the data happens to be distributed that way.; Because the logarithm makes everything curved.
+  AnswerTests: omnitest(correctVal='It has to flatten as it approaches 0 and 1, because it can never cross them.')
+  Hint: Think about anchor points and approaches to limits, from session 4.
+
+- Class: text
+  Output: That is the payoff. A linear model insists the change is the same everywhere and predicts negative probabilities at one end. The logistic model bends, and stays inside the limits by construction.
+
+- Class: text
+  Output: Now how good is it? There is no R-squared. Several substitutes exist, all called pseudo R-squared, and none means what R-squared means.
+
+- Class: cmd_question
+  Output: Type pscl::pR2(model)["McFadden"].
+  CorrectAnswer: pscl::pR2(model)["McFadden"]
+  AnswerTests: omnitest(correctExpr='pscl::pR2(model)["McFadden"]')
+  Hint: Type pscl::pR2(model)["McFadden"].
+
+- Class: text
+  Output: 0.31. For McFadden, above about 0.2 is usually considered a good fit - a different scale from ordinary R-squared, which is why you must always say which one you are reporting.
+
+- Class: text
+  Output: The other way to judge a binary model is to ask how often it gets the answer right.
+
+- Class: cmd_question
+  Output: Build a confusion table. Type confusion <- table(Predicted = ifelse(fitted(model) > 0.5, 1, 0), Actual = model$model$vote_sd).
+  CorrectAnswer: confusion <- table(Predicted = ifelse(fitted(model) > 0.5, 1, 0), Actual = model$model$vote_sd)
+  AnswerTests: omnitest(correctExpr='confusion <- table(Predicted = ifelse(fitted(model) > 0.5, 1, 0), Actual = model$model$vote_sd)')
+  Hint: Type confusion <- table(Predicted = ifelse(fitted(model) > 0.5, 1, 0), Actual = model$model$vote_sd).
+
+- Class: cmd_question
+  Output: Print confusion.
+  CorrectAnswer: confusion
+  AnswerTests: omnitest(correctExpr='confusion')
+  Hint: Just type confusion.
+
+- Class: cmd_question
+  Output: Work out the accuracy - the diagonal over the total. Type sum(diag(confusion)) / sum(confusion).
+  CorrectAnswer: sum(diag(confusion)) / sum(confusion)
+  AnswerTests: any_of_exprs('sum(diag(confusion)) / sum(confusion)', 'sum(diag(confusion))/sum(confusion)')
+  Hint: Type sum(diag(confusion)) / sum(confusion). diag() takes the diagonal.
+
+- Class: cmd_question
+  Output: 87 per cent correct sounds excellent. Now compare with the laziest possible model - predict that nobody voted SD. Type max(table(model$model$vote_sd)) / nobs(model).
+  CorrectAnswer: max(table(model$model$vote_sd)) / nobs(model)
+  AnswerTests: any_of_exprs('max(table(model$model$vote_sd)) / nobs(model)', 'max(table(model$model$vote_sd))/nobs(model)')
+  Hint: Type max(table(model$model$vote_sd)) / nobs(model).
+
+- Class: mult_question
+  Output: 85.6 per cent, from a model with no variables in it at all. What does that tell you about the 87 per cent?
+  CorrectAnswer: The model beats guessing by about one and a half points, so accuracy alone was hiding how little it adds.
+  AnswerChoices: The model beats guessing by about one and a half points, so accuracy alone was hiding how little it adds.; The model is broken and should be refitted.; Accuracy is the wrong measure and should never be reported.
+  AnswerTests: omnitest(correctVal='The model beats guessing by about one and a half points, so accuracy alone was hiding how little it adds.')
+  Hint: Compare 87.0 with 85.6. How much did four highly significant predictors actually buy?
+
+- Class: cmd_question
+  Output: The reason is in the table. Work out sensitivity - the share of actual SD voters the model catches. Type confusion[2, 2] / sum(confusion[, 2]).
+  CorrectAnswer: confusion[2, 2] / sum(confusion[, 2])
+  AnswerTests: any_of_exprs('confusion[2, 2] / sum(confusion[, 2])', 'confusion[2,2]/sum(confusion[,2])')
+  Hint: Type confusion[2, 2] / sum(confusion[, 2]).
+
+- Class: cmd_question
+  Output: And specificity - the share of non-voters it correctly leaves alone. Type confusion[1, 1] / sum(confusion[, 1]).
+  CorrectAnswer: confusion[1, 1] / sum(confusion[, 1])
+  AnswerTests: any_of_exprs('confusion[1, 1] / sum(confusion[, 1])', 'confusion[1,1]/sum(confusion[,1])')
+  Hint: Type confusion[1, 1] / sum(confusion[, 1]).
+
+- Class: text
+  Output: 31 per cent sensitivity against 96 per cent specificity. The model is excellent at saying no and poor at saying yes - which is what happens when an outcome is rare. Never report accuracy without the baseline, and always report sensitivity too.
+
+- Class: text
+  Output: And that is the course. The outcome was bounded, so a straight line was the wrong shape - session 4. The fix was to change the scale until it was unbounded, fit there, and convert back. Reading it meant getting to units a person can hold - session 12. Judging it meant knowing what the number would be if the model were useless - session 6. None of that is specific to logistic regression. It is what you do with any model.

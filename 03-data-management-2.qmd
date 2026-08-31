@@ -435,5 +435,5 @@ write.csv(swe, "data/swe.csv", row.names = FALSE)
 > If your data contains å, ä, ö or any other letter outside plain English, say so explicitly when you save. `readr::write_excel_csv()` writes UTF-8 and marks it, which avoids the silent comparison failure described at the end of last week's chapter.
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 3, *Data and Data Management II*. The pipe, the five verbs, `group_by()` and `summarise()`, `across()`, and a join. Around 30 minutes.
+**In the seminar.** `swirl` lesson **03 Data Management II**. The pipe, the five verbs, `group_by()` and `summarise()`, `across()`, and a join. Around 30 minutes.
 :::

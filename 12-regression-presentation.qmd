@@ -223,5 +223,5 @@ Walk the reader through the table rather than repeating it. Mistakes to avoid:
 :::
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson 12, *Presenting regression results*. Building a table with several models, renaming and ordering coefficients, coefficient plots, and predicted values. Around 30 minutes.
+**In the seminar.** `swirl` lesson **12 Regression Presentation**. Building a table with several models, renaming and ordering coefficients, coefficient plots, and predicted values. Around 30 minutes.
 :::
