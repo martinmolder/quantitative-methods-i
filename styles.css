@@ -7,25 +7,27 @@ body {
   text-align: justify;
 }
 
-code {
-  font-size: 13px;
-}
+/* ---------------------------------------------------------------------------
+   Centre the page.
 
-pre {
-  font-size: 13px;
-}
+   Quarto anchors the sidebar to the left edge and lets the layout run the
+   full width of the window, which leaves a wide empty band on the right of a
+   large screen. Constraining the grid container and centring it puts equal
+   space on both sides. The !important is needed because Quarto's own rule is
+   more specific.
 
-/* Output blocks (the result of the code) on a grey background, so that they
-   are visibly different from the code itself */
-pre:not([class]) {
-  background-color: #ececec;
-  color: black;
-}
+   The right-hand gap stays about 40px wider than the left, because the grid
+   keeps a trailing gutter of its own. On a wide screen that is under 2% of
+   the width and not noticeable.
+   --------------------------------------------------------------------------- */
 
-h1 { text-align: left; font-weight: bold; }
-h2 { text-align: left; }
-h3 { text-align: left; }
-h4 { text-align: left; }
+@media (min-width: 1450px) {
+  #quarto-content {
+    max-width: 1450px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
 
 /* ---------------------------------------------------------------------------
    Block quotes -- the course "note this" remarks.

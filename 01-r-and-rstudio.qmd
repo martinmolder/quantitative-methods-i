@@ -443,9 +443,13 @@ Which of these will fail, which will silently do the wrong thing, and which is w
 
 ## swirl
 
-The second half of every seminar from now on is a `swirl` lesson. `swirl` is a package that turns the R console into an interactive tutorial: it asks you to do something, you type the command, and it tells you whether it worked before moving on. You are doing real work in a real console the whole time, which is why it is worth more than watching me type.
+The second half of every seminar is a `swirl` lesson. `swirl` is a package that turns the R console into an interactive tutorial: it asks you to do something, you type the command, and it tells you whether it worked before moving on. You are doing real work in a real console the whole time, which is why it is worth more than watching me type.
 
-Install it once:
+> **Today is the exception.** You were asked to install R and RStudio before this session, and in the second half we set `swirl` up together and walk through the first lesson as a demonstration — so that everyone has seen how it behaves before doing one on their own. From session 2 the half hour is yours to work through the lesson at your own pace.
+>
+> If the installation did not go smoothly, today is the time to say so.
+
+Install `swirl` once:
 
 ```{r}
 #| eval: false
@@ -485,5 +489,5 @@ Some things worth knowing before you start:
 ::: {.swirl}
 **In the seminar.** `swirl` lesson 1, *Getting Started*. Working with the console, objects, vectors, and missing values. Around 30 minutes.
 
-Bring a laptop with R, RStudio and `swirl` already installed — installation is not what the half hour is for.
+We install `swirl` and the course lessons together and go through this one as a demonstration. **Bring a laptop with R and RStudio already installed** — that part is not what the half hour is for.
 :::
