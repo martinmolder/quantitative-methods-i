@@ -1,0 +1,120 @@
+﻿"iso3","country","region","income","lit_f","lit_m","lit_year","gdp","life","women","pop"
+"AFG","Afghanistan","Middle East, North Africa, Afghanistan & Pakistan","Low income",26.6,52.1,2022,1964,66.3,27,42647492
+"ALB","Albania","Europe & Central Asia","Upper middle income",97.2,98.2,2023,21641,79.8,35.7,2377128
+"AGO","Angola","Sub-Saharan Africa ","Lower middle income",54.4,84,2023,8753,64.8,39.5,37885849
+"ARG","Argentina","Latin America & Caribbean ","Upper middle income",99.2,99.1,2020,26772,77.5,42.4,45696159
+"ARM","Armenia","Europe & Central Asia","Upper middle income",99.9,99.8,2023,20079,78.3,36.4,3033500
+"AZE","Azerbaijan","Europe & Central Asia","Upper middle income",99.7,99.8,2023,22091,74.6,20.8,10202830
+"BHR","Bahrain","Middle East, North Africa, Afghanistan & Pakistan","High income",96.3,98.7,2024,59060,81.4,20,1588670
+"BGD","Bangladesh","South Asia","Lower middle income",76.5,81.4,2022,8487,74.9,20.9,173562364
+"BLR","Belarus","Europe & Central Asia","Upper middle income",99.9,99.9,2019,29136,74.4,33.6,9132629
+"BLZ","Belize","Latin America & Caribbean ","Upper middle income",87.9,87.9,2022,12621,73.7,15.6,417072
+"BEN","Benin","Sub-Saharan Africa ","Lower middle income",41.5,62.6,2022,3901,61,26.6,14462724
+"BTN","Bhutan","South Asia","Lower middle income",57,73.4,2022,15604,73.3,4.3,791524
+"BOL","Bolivia","Latin America & Caribbean ","Lower middle income",94.8,98.8,2024,11329,68.7,46.2,12413315
+"BRA","Brazil","Latin America & Caribbean ","Upper middle income",95,94.4,2024,19652,76,17.5,211998573
+"BFA","Burkina Faso","Sub-Saharan Africa ","Low income",35.7,48.7,2023,2549,61.3,18.3,23548781
+"BDI","Burundi","Sub-Saharan Africa ","Low income",66.1,77.9,2020,1048,63.8,38.2,14047786
+"CPV","Cabo Verde","Sub-Saharan Africa ","Upper middle income",84.1,92.9,2024,9826,76.2,38.9,524877
+"KHM","Cambodia","East Asia & Pacific","Lower middle income",63.6,90.3,2021,7012,70.8,13.6,17638801
+"CMR","Cameroon","Sub-Saharan Africa ","Lower middle income",66.2,79.7,2018,4917,64,33.9,29123744
+"CYM","Cayman Islands","Latin America & Caribbean ","High income",99,98.7,2017,80997,80.5,NA,74457
+"CAF","Central African Republic","Sub-Saharan Africa ","Low income",27.1,59.8,2019,1111,57.7,11.4,5330690
+"TCD","Chad","Sub-Saharan Africa ","Low income",18.6,44.5,2019,2431,55.2,26.1,20299123
+"CHL","Chile","Latin America & Caribbean ","High income",96.3,96.5,2017,30268,81.4,35.5,19764771
+"CHN","China","East Asia & Pacific","Upper middle income",95.1,98.4,2020,23841,78,26.5,1408975000
+"COL","Colombia","Latin America & Caribbean ","Upper middle income",95.7,95,2024,18482,77.9,29.4,52886363
+"COM","Comoros","Sub-Saharan Africa ","Lower middle income",72,79.6,2021,3556,67,16.7,866628
+"COD","Congo, Dem. Rep.","Sub-Saharan Africa ","Low income",53.8,85.4,2023,1602,62.1,13,109276265
+"CIV","Cote d'Ivoire","Sub-Saharan Africa ","Lower middle income",40.3,68,2021,6747,62.1,13.4,31934230
+"CUB","Cuba","Latin America & Caribbean ","Upper middle income",96.3,99,2019,NA,78.3,55.7,10979783
+"DOM","Dominican Republic","Latin America & Caribbean ","Upper middle income",94.4,93.6,2024,24230,73.9,36.8,11427557
+"ECU","Ecuador","Latin America & Caribbean ","Upper middle income",92.6,94.5,2024,13922,77.6,43.1,18135478
+"EGY","Egypt, Arab Rep.","Middle East, North Africa, Afghanistan & Pakistan","Lower middle income",73.3,85.3,2022,16798,71.8,27.7,116538258
+"SLV","El Salvador","Latin America & Caribbean ","Upper middle income",88.2,91.6,2024,11647,72.3,31.7,6338193
+"SWZ","Eswatini","Sub-Saharan Africa ","Lower middle income",90.4,91.1,2022,10386,64.3,21.6,1242822
+"ETH","Ethiopia","Sub-Saharan Africa ","Low income",50,71,2022,2892,67.6,41.3,132059767
+"GAB","Gabon","Sub-Saharan Africa ","Upper middle income",87.1,90.8,2021,18924,68.5,25.5,2538952
+"GMB","Gambia, The","Sub-Saharan Africa ","Low income",40.5,65.3,2021,3058,66.1,8.6,2759988
+"GEO","Georgia","Europe & Central Asia","Upper middle income",99.6,99.8,2024,24147,74.7,22.7,3812518
+"GHA","Ghana","Sub-Saharan Africa ","Lower middle income",72.1,81.3,2021,7073,65.7,14.5,34427414
+"GTM","Guatemala","Latin America & Caribbean ","Upper middle income",78.5,86.9,2024,12644,72.7,20,18406359
+"GIN","Guinea","Sub-Saharan Africa ","Lower middle income",27.7,54.4,2018,4016,60.9,29.6,14754785
+"GNB","Guinea-Bissau","Sub-Saharan Africa ","Low income",52.2,77.3,2022,2718,64.3,9.8,2201352
+"GUY","Guyana","Latin America & Caribbean ","High income",86.9,84.2,2020,70517,70.3,39.4,831087
+"HTI","Haiti","Latin America & Caribbean ","Lower middle income",63.9,72.9,2017,2784,65.1,2.5,11772557
+"HND","Honduras","Latin America & Caribbean ","Lower middle income",88.8,87.6,2024,6591,73,27.3,10825703
+"IND","India","South Asia","Lower middle income",70.7,85.7,2024,9416,72.2,13.7,1450935791
+"IDN","Indonesia","East Asia & Pacific","Upper middle income",94.6,97.4,2020,14471,71.3,21,283487931
+"IRN","Iran, Islamic Rep.","Middle East, North Africa, Afghanistan & Pakistan","Upper middle income",85.1,92.8,2023,17484,77.9,4.8,91567738
+"IRQ","Iraq","Middle East, North Africa, Afghanistan & Pakistan","Upper middle income",77.8,90.3,2021,12725,72.4,28.9,46042015
+"ITA","Italy","Europe & Central Asia","High income",99.2,99.5,2019,53285,84,32.2,58952704
+"JOR","Jordan","Middle East, North Africa, Afghanistan & Pakistan","Upper middle income",92,96.6,2024,10468,78,19.6,11552876
+"KIR","Kiribati","East Asia & Pacific","Lower middle income",98.9,98.6,2020,3275,66.6,11.1,134518
+"KWT","Kuwait","Middle East, North Africa, Afghanistan & Pakistan","High income",95.3,97.1,2020,46664,84.6,3.1,4897263
+"LAO","Lao PDR","East Asia & Pacific","Lower middle income",66.7,85.1,2023,8600,69.2,22,7769819
+"LBN","Lebanon","Middle East, North Africa, Afghanistan & Pakistan","Lower middle income",89.5,94.8,2019,10469,77.9,6.2,5805962
+"LSO","Lesotho","Sub-Saharan Africa ","Lower middle income",96.6,83.2,2024,2698,57.8,25,2337423
+"MAC","Macao SAR, China","East Asia & Pacific","High income",95,98.2,2016,111694,83.3,NA,687000
+"MDG","Madagascar","Sub-Saharan Africa ","Low income",71.8,77.9,2021,1659,63.8,16,31964956
+"MWI","Malawi","Sub-Saharan Africa ","Low income",62.7,78.6,2020,1634,67.6,20.7,21655286
+"MYS","Malaysia","East Asia & Pacific","Upper middle income",94.7,96.8,2022,34116,76.8,13.5,35557673
+"MDV","Maldives","South Asia","Upper middle income",98.3,98.2,2019,23034,81.3,3.2,527799
+"MLI","Mali","Sub-Saharan Africa ","Low income",27.7,45.2,2024,2918,60.7,30.7,24478595
+"MHL","Marshall Islands","East Asia & Pacific","Upper middle income",96.3,95.7,2021,7237,67.1,12.1,37548
+"MRT","Mauritania","Sub-Saharan Africa ","Lower middle income",51.8,70.1,2020,6483,68.7,23.3,5169395
+"MUS","Mauritius","Sub-Saharan Africa ","Upper middle income",92.7,96.1,2023,27845,73.8,19.4,1245779
+"MEX","Mexico","Latin America & Caribbean ","Upper middle income",94.9,96.3,2024,21970,75.3,50.2,130861007
+"MNG","Mongolia","East Asia & Pacific","Upper middle income",98.9,98.4,2024,16843,72.4,25.4,3524788
+"MNE","Montenegro","Europe & Central Asia","Upper middle income",97.9,99.2,2018,28106,77.9,27.2,623525
+"MOZ","Mozambique","Sub-Saharan Africa ","Low income",50.9,74,2022,1501,63.8,39.2,34631766
+"MMR","Myanmar","East Asia & Pacific","Lower middle income",92.6,94.6,2020,5276,67.1,15.3,54500091
+"NAM","Namibia","Sub-Saharan Africa ","Lower middle income",87.4,87.9,2023,10276,67.5,40.6,3030131
+"NRU","Naoero","East Asia & Pacific","High income",99.7,93.4,2023,11958,62.3,10.5,11947
+"NPL","Nepal","South Asia","Lower middle income",59.4,79.8,2019,5047,70.6,33.1,29651054
+"NER","Niger","Sub-Saharan Africa ","Low income",25.7,47.9,2022,1796,61.4,25.9,27032412
+"NGA","Nigeria","Sub-Saharan Africa ","Lower middle income",62.4,78.4,2024,7994,54.6,3.9,232679478
+"OMN","Oman","Middle East, North Africa, Afghanistan & Pakistan","High income",94.9,98.6,2022,36721,80.2,0,5281538
+"PAK","Pakistan","Middle East, North Africa, Afghanistan & Pakistan","Lower middle income",48.5,69.1,2021,5502,67.8,17,251269164
+"PLW","Palau","East Asia & Pacific","High income",99.7,100,2020,18500,69.4,25,17695
+"PAN","Panama","Latin America & Caribbean ","High income",95.8,97.1,2024,36395,79.8,21.4,4515577
+"PNG","Papua New Guinea","East Asia & Pacific","Lower middle income",61.5,90.2,2017,4293,66.3,2.7,10576502
+"PRY","Paraguay","Latin America & Caribbean ","Upper middle income",94.3,95.4,2024,16367,74,23.8,6929153
+"PER","Peru","Latin America & Caribbean ","Upper middle income",90.7,97,2024,15709,77.9,38.5,34217848
+"PHL","Philippines","East Asia & Pacific","Upper middle income",97,98.4,2022,10378,69.9,27.3,115843670
+"PRI","Puerto Rico (US)","Latin America & Caribbean ","High income",92.4,92.4,2017,44216,81.9,NA,3202521
+"ROU","Romania","Europe & Central Asia","High income",99.3,99,2021,40504,76.5,19.2,19051804
+"RUS","Russian Federation","Europe & Central Asia","High income",99.9,99.9,2021,41891,73.4,16.4,143669648
+"RWA","Rwanda","Sub-Saharan Africa ","Low income",76.7,81,2022,3325,68,63.8,14256567
+"WSM","Samoa","East Asia & Pacific","Upper middle income",97.7,98.3,2019,7687,71.8,13,218019
+"SMR","San Marino","Europe & Central Asia","High income",99.9,99.9,2022,70952,85.8,35,33977
+"STP","Sao Tome and Principe","Sub-Saharan Africa ","Lower middle income",82.8,92.5,2019,5512,69.9,14.5,235536
+"SAU","Saudi Arabia","Middle East, North Africa, Afghanistan & Pakistan","High income",96.7,98.6,2024,63194,79,19.9,35300280
+"SEN","Senegal","Sub-Saharan Africa ","Lower middle income",41.5,61.5,2023,4478,68.9,41.2,18501984
+"SRB","Serbia","Europe & Central Asia","Upper middle income",99.1,99.6,2022,26901,76,38,6586476
+"SLE","Sierra Leone","Sub-Saharan Africa ","Low income",33.9,54.6,2019,3099,62,29.5,8642022
+"SGP","Singapore","East Asia & Pacific","High income",96.4,98.9,2021,134549,83.3,29.3,6036860
+"SOM","Somalia, Fed. Rep.","Sub-Saharan Africa ","Low income",43.9,64.5,2022,1409,59,19.6,19009151
+"ZAF","South Africa","Sub-Saharan Africa ","Upper middle income",90.8,91.5,2024,13598,66.3,44.7,64007187
+"ESP","Spain","Europe & Central Asia","High income",99.6,99.8,2021,48460,83.9,44.3,48848840
+"LKA","Sri Lanka","South Asia","Upper middle income",92.1,93.5,2024,13793,77.7,10,21916000
+"SYR","Syrian Arab Republic","Middle East, North Africa, Afghanistan & Pakistan","Low income",91.8,97.2,2021,4579,72.6,9.6,24672760
+"TZA","Tanzania","Sub-Saharan Africa ","Lower middle income",73.1,84.2,2022,3713,67.2,37.4,68560157
+"THA","Thailand","East Asia & Pacific","Upper middle income",91.5,90.7,2022,21882,76.6,19.4,71668011
+"TLS","Timor-Leste","East Asia & Pacific","Lower middle income",65.7,73.1,2022,3891,67.9,35.4,1400638
+"TGO","Togo","Sub-Saharan Africa ","Lower middle income",63.7,82.8,2022,3351,62.9,18.6,8406558
+"TON","Tonga","East Asia & Pacific","Upper middle income",99.6,99.3,2023,7181,73.1,7.1,104175
+"TUN","Tunisia","Middle East, North Africa, Afghanistan & Pakistan","Lower middle income",80.1,92.7,2023,12775,76.7,15.7,12277109
+"TUR","Turkiye","Europe & Central Asia","Upper middle income",95.3,99.3,2021,36154,77.4,19.9,85518661
+"TKM","Turkmenistan","Europe & Central Asia","Upper middle income",99.9,99.9,2022,18471,70.2,25.6,7494498
+"TUV","Tuvalu","East Asia & Pacific","Upper middle income",100,100,2022,5592,67.3,0,9646
+"UGA","Uganda","Sub-Saharan Africa ","Low income",73.5,81.3,2024,2880,68.5,33.9,50015092
+"ARE","United Arab Emirates","Middle East, North Africa, Afghanistan & Pakistan","High income",98.4,99,2024,69702,83.1,50,10986400
+"URY","Uruguay","Latin America & Caribbean ","High income",99.2,98.6,2024,32149,78.3,28.3,3386588
+"UZB","Uzbekistan","Europe & Central Asia","Lower middle income",100,100,2022,10997,72.5,38,36361859
+"VUT","Vanuatu","East Asia & Pacific","Lower middle income",88.2,87.7,2023,3837,71.7,2,327777
+"VEN","Venezuela, RB","Latin America & Caribbean ","Lower middle income",97.2,97.2,2017,NA,72.7,22.2,28405543
+"VNM","Viet Nam","East Asia & Pacific","Upper middle income",95.1,97.2,2022,14396,74.7,30.6,100987686
+"PSE","West Bank and Gaza","Middle East, North Africa, Afghanistan & Pakistan","Lower middle income",96.8,99.4,2024,4191,69.2,NA,5289152
+"ZMB","Zambia","Sub-Saharan Africa ","Lower middle income",64.4,80.6,2024,3708,66.5,15,21314956
+"ZWE","Zimbabwe","Sub-Saharan Africa ","Lower middle income",93.4,93.1,2019,5212,63.1,28.1,16634373

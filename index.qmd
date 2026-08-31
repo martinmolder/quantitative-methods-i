@@ -118,6 +118,27 @@ Note the words **advance release**. The data are published before the module is 
 >
 > Keep this in mind every time we calculate something from these data. A sample tells you about a sample, and getting from there to a population takes work.
 
+### The files
+
+Everything the course uses is downloadable here as well as from Moodle.
+
+| File | What it is |
+|---|---|
+| [`swe.rds`](data/swe.rds) | The analysis data set. Used from session 4 onwards. |
+| [`swe.csv`](data/swe.csv) | The same, as plain text, for other software. |
+| [`codebook.csv`](data/codebook.csv) | Every variable, what it is, and how it is coded. |
+| [`cses6_swe_raw.csv`](data/cses6_swe_raw.csv) | The survey as it comes from the archive. Sessions 2 and 3. |
+| [`cses6_swe_raw.sav`](data/cses6_swe_raw.sav) | The same in SPSS format, with labels. |
+| [`counties.csv`](data/counties.csv) | The 21 Swedish counties. Used for joining in session 3. |
+| [`world.csv`](data/world.csv) | 119 countries from the World Bank. Session 4. |
+| [`turnout.csv`](data/turnout.csv) | Reported against official turnout, all 18 CSES studies. Session 6. |
+| [`build_swe.R`](data/build_swe.R) | The script that turns the raw file into the clean one. Read it in session 3. |
+| [`Quantitative_Methods_I.zip`](data/Quantitative_Methods_I.zip) | The `swirl` lessons. See session 1 for how to install them. |
+
+: {tbl-colwidths="[34,66]"}
+
+Put the data files in a `data` folder inside your course project, which is how every path in these materials is written.
+
 ### Where social scientists get data
 
 CSES is not the only option. These are the larger surveys whose data are **free to use**, including in a thesis. Most require you to make an account, which is also free.

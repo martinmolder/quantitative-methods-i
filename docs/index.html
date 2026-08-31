@@ -221,6 +221,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#simple-first-then-harder" id="toc-simple-first-then-harder" class="nav-link" data-scroll-target="#simple-first-then-harder">Simple first, then harder</a></li>
   <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">The data</a>
   <ul class="collapse">
+  <li><a href="#the-files" id="toc-the-files" class="nav-link" data-scroll-target="#the-files">The files</a></li>
   <li><a href="#where-social-scientists-get-data" id="toc-where-social-scientists-get-data" class="nav-link" data-scroll-target="#where-social-scientists-get-data">Where social scientists get data</a></li>
   </ul></li>
   <li><a href="#how-to-use-these-materials" id="toc-how-to-use-these-materials" class="nav-link" data-scroll-target="#how-to-use-these-materials">How to use these materials</a></li>
@@ -253,7 +254,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">26.08.2026</p>
+      <p class="date">31.08.2026</p>
     </div>
   </div>
   
@@ -371,6 +372,65 @@ ul.task-list li input[type="checkbox"] {
 <p>Turnout is stranger still. 97.3% of our respondents say they voted, when real turnout in 2022 was 84.2%. That is not a fault in the Swedish study — <strong>every one of the 18 election studies in CSES Module 6 over-reports turnout</strong>, by between 5.2 and 30.5 percentage points. When every measurement is wrong in the same direction, the problem is not bad luck. Session 6 is about telling those two things apart.</p>
 <p>Keep this in mind every time we calculate something from these data. A sample tells you about a sample, and getting from there to a population takes work.</p>
 </blockquote>
+<section id="the-files" class="level3">
+<h3 class="anchored" data-anchor-id="the-files">The files</h3>
+<p>Everything the course uses is downloadable here as well as from Moodle.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 34%">
+<col style="width: 66%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="data/swe.rds"><code>swe.rds</code></a></td>
+<td>The analysis data set. Used from session 4 onwards.</td>
+</tr>
+<tr class="even">
+<td><a href="data/swe.csv"><code>swe.csv</code></a></td>
+<td>The same, as plain text, for other software.</td>
+</tr>
+<tr class="odd">
+<td><a href="data/codebook.csv"><code>codebook.csv</code></a></td>
+<td>Every variable, what it is, and how it is coded.</td>
+</tr>
+<tr class="even">
+<td><a href="data/cses6_swe_raw.csv"><code>cses6_swe_raw.csv</code></a></td>
+<td>The survey as it comes from the archive. Sessions 2 and 3.</td>
+</tr>
+<tr class="odd">
+<td><a href="data/cses6_swe_raw.sav"><code>cses6_swe_raw.sav</code></a></td>
+<td>The same in SPSS format, with labels.</td>
+</tr>
+<tr class="even">
+<td><a href="data/counties.csv"><code>counties.csv</code></a></td>
+<td>The 21 Swedish counties. Used for joining in session 3.</td>
+</tr>
+<tr class="odd">
+<td><a href="data/world.csv"><code>world.csv</code></a></td>
+<td>119 countries from the World Bank. Session 4.</td>
+</tr>
+<tr class="even">
+<td><a href="data/turnout.csv"><code>turnout.csv</code></a></td>
+<td>Reported against official turnout, all 18 CSES studies. Session 6.</td>
+</tr>
+<tr class="odd">
+<td><a href="data/build_swe.R"><code>build_swe.R</code></a></td>
+<td>The script that turns the raw file into the clean one. Read it in session 3.</td>
+</tr>
+<tr class="even">
+<td><a href="data/Quantitative_Methods_I.zip"><code>Quantitative_Methods_I.zip</code></a></td>
+<td>The <code>swirl</code> lessons. See session 1 for how to install them.</td>
+</tr>
+</tbody>
+</table>
+<p>Put the data files in a <code>data</code> folder inside your course project, which is how every path in these materials is written.</p>
+</section>
 <section id="where-social-scientists-get-data" class="level3">
 <h3 class="anchored" data-anchor-id="where-social-scientists-get-data">Where social scientists get data</h3>
 <p>CSES is not the only option. These are the larger surveys whose data are <strong>free to use</strong>, including in a thesis. Most require you to make an account, which is also free.</p>

@@ -1,6 +1,10 @@
 project:
   type: book
   output-dir: docs
+  # Copied into docs/ unchanged, so that the data files can be downloaded
+  # from the site rather than only from the repository.
+  resources:
+    - data/
 
 book:
   title: "Quantitative Methods I"
