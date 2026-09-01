@@ -477,7 +477,7 @@ You do this once, and again whenever a new version is posted. To start:
 swirl()
 ```
 
-`swirl` then asks your name, offers you the course, and lists the lessons in it. **They are numbered by seminar** — lesson `05 Visualisation` goes with session 5 and chapter 5 — so pick the number of the week you are in.
+`swirl` then asks your name, offers you the course, and lists the lessons in it. **They are numbered by seminar** — lesson `04 Visualisation` goes with session 4 and chapter 4 — so pick the number of the week you are in.
 
 Some things worth knowing before you start:
 

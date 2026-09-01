@@ -132,7 +132,7 @@ Everything the course uses is downloadable here as well as from Moodle.
 | [`cses6_swe_raw.csv`](data/cses6_swe_raw.csv) | The survey as it comes from the archive. Sessions 2 and 3. |
 | [`cses6_swe_raw.sav`](data/cses6_swe_raw.sav) | The same in SPSS format, with labels. |
 | [`counties.csv`](data/counties.csv) | The 21 Swedish counties. Used for joining in session 3. |
-| [`world.csv`](data/world.csv) | 119 countries from the World Bank. Session 4. |
+| [`world.csv`](data/world.csv) | 119 countries from the World Bank. Sessions 4 and 5. |
 | [`turnout.csv`](data/turnout.csv) | Reported against official turnout, all 18 CSES studies. Session 6. |
 | [`build_swe.R`](data/build_swe.R) | The script that turns the raw file into the clean one. Read it in session 3. |
 | [`Quantitative_Methods_I.zip`](data/Quantitative_Methods_I.zip) | The `swirl` lessons. See session 1 for how to install them. |
@@ -183,8 +183,8 @@ All of these are available on Moodle.
 | 1 | 02.09.2026 | Introduction: the course, R and RStudio, swirl |
 | 2 | 09.09.2026 | Data and data management I: base R |
 | 3 | 16.09.2026 | Data and data management II: the tidyverse |
-| 4 | 23.09.2026 | Thinking logically and visually about data |
-| 5 | 30.09.2026 | Data visualisation with ggplot |
+| 4 | 23.09.2026 | Data visualisation with ggplot |
+| 5 | 30.09.2026 | Thinking logically and visually about data |
 | 6 | 07.10.2026 | The logic of hypothesis testing |
 | 7 | 14.10.2026 | Analysing categorical data |
 | 8 | 21.10.2026 | Comparing means |

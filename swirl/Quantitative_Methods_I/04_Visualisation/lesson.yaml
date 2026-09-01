@@ -1,13 +1,13 @@
 - Class: meta
   Course: Quantitative Methods I
-  Lesson: 05 - Data Visualisation
+  Lesson: 04 - Data Visualisation
   Author: Martin Molder
   Type: Standard
   Organization: University of Tartu
   Version: 1.0.0
 
 - Class: text
-  Output: Last week was about what belongs on a plot. This week is about how to put it there. The Swedish survey is loaded as swe.
+  Output: This lesson is about how to make a plot in R. Next week is about what belongs on one, which is the harder question. The Swedish survey is loaded as swe.
 
 - Class: text
   Output: Every ggplot is built the same way. ggplot() says which data. aes() maps variables onto parts of the plot. A geom_ function says what to draw. Layers are joined with a plus sign - not the pipe, because ggplot2 is older than the pipe and kept its own way of stacking.
@@ -170,4 +170,4 @@
   Output: Then ggsave("figure.pdf", plot = p, width = 6, height = 4) writes it out. The width and height are in inches and they matter - they set how large the text is relative to the plot. Save a figure at the size you will actually use it, or its labels end up half the size of the body text.
 
 - Class: text
-  Output: That is the toolkit. Next week we stop describing data and start asking whether what we see in a sample tells us anything about the world it came from.
+  Output: That is the toolkit. Next week we come back to plots from the other direction - not how to draw one, but what has to be on it before you have looked at any data.

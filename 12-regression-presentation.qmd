@@ -119,7 +119,7 @@ modelplot(
   theme_bw()
 ```
 
-`modelplot()` comes from the same package and returns an ordinary ggplot, so everything from session 5 applies. `labels[-1]` drops the intercept, which is not a comparable quantity and would compress everything else; `rev()` reverses the order, because a plot builds upwards from the bottom while a table reads downwards.
+`modelplot()` comes from the same package and returns an ordinary ggplot, so everything from session 4 applies. `labels[-1]` drops the intercept, which is not a comparable quantity and would compress everything else; `rev()` reverses the order, because a plot builds upwards from the bottom while a table reads downwards.
 
 The dashed line at zero is doing real work. **Any interval crossing it is a coefficient we cannot distinguish from no relationship.**
 
@@ -186,7 +186,7 @@ The predicted value at the top of the range is `r fmt(predictions$predicted[pred
 
 **The scale stops at 10.** The model has produced a prediction that cannot happen, and it did so without complaint.
 
-This is session 4 arriving in the middle of a regression. OLS fits a straight line, and a straight line does not know that the outcome is bounded. Extend it far enough in either direction and it will predict impossible values — a rating of 12, a negative income, a probability of 1.4.
+This is session 5 arriving in the middle of a regression. OLS fits a straight line, and a straight line does not know that the outcome is bounded. Extend it far enough in either direction and it will predict impossible values — a rating of 12, a negative income, a probability of 1.4.
 
 Three things follow.
 
@@ -196,7 +196,7 @@ Three things follow.
 
 ## Formatting a table or figure
 
-The rules from session 5 apply, plus a few specific to model output.
+The rules from session 4 apply, plus a few specific to model output.
 
 - **Name variables in words.** "Trust in institutions", not `trust`.
 - **Say what one unit is**, in the caption or a note. A coefficient without its units cannot be read.

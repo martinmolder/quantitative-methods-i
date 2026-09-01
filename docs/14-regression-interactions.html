@@ -170,14 +170,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-logical-models.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span></a>
+  <a href="./04-visualisation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data visualisation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-visualisation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data visualisation</span></span></a>
+  <a href="./05-logical-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -371,7 +371,7 @@ Figure&nbsp;14.1
 </div>
 </div>
 </div>
-<p>Giving <code>terms</code> two variables produces one line per group of the second, and <code>scale_colour_viridis_d()</code> and <code>scale_fill_viridis_d()</code> put the two lines on the colourblind-safe palette from session 5. Now the interaction is obvious: two lines that are not parallel, and that <strong>cross</strong>.</p>
+<p>Giving <code>terms</code> two variables produces one line per group of the second, and <code>scale_colour_viridis_d()</code> and <code>scale_fill_viridis_d()</code> put the two lines on the colourblind-safe palette from session 4. Now the interaction is obvious: two lines that are not parallel, and that <strong>cross</strong>.</p>
 <p>Read what it says. Among people who distrust institutions, left-bloc voters rate Swedish democracy <em>higher</em> than right-bloc voters. Among people who trust institutions, it is the other way round. The lines meet at about 0.63 standard deviations of trust.</p>
 <p>So the answer to “is there a winner–loser gap?” is: it depends who you ask. That is what an interaction means, and no single coefficient could have said it.</p>
 <p><strong>Non-parallel lines are what an interaction is.</strong> If you cannot see it on this plot, it is not there in any meaningful sense, whatever the p-value says.</p>
@@ -433,12 +433,12 @@ Figure&nbsp;14.2
 </section>
 <section id="non-linear-relationships" class="level2" data-number="14.2">
 <h2 data-number="14.2" class="anchored" data-anchor-id="non-linear-relationships"><span class="header-section-number">14.2</span> Non-linear relationships</h2>
-<p>The second assumption. Sometimes the relationship is not a straight line at all — and session 4 gave us a case where it <em>cannot</em> be.</p>
+<p>The second assumption. Sometimes the relationship is not a straight line at all — and session 5 gave us a case where it <em>cannot</em> be.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"data/world.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> world <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(gdp), <span class="sc">!</span><span class="fu">is.na</span>(life))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Income has a floor at zero and no ceiling. Life expectancy has both. We argued in session 4 that this rules out a straight line, because a line rising forever eventually promises impossible lifespans.</p>
+<p>Income has a floor at zero and no ceiling. Life expectancy has both. We argued in session 5 that this rules out a straight line, because a line rising forever eventually promises impossible lifespans.</p>
 <p>Fit one anyway and see.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>linear <span class="ot">&lt;-</span> <span class="fu">lm</span>(life <span class="sc">~</span> gdp, <span class="at">data =</span> world)</span>
@@ -555,7 +555,7 @@ Figure&nbsp;14.3
 </div>
 <p>The dashed line is the straight fit and the solid one the logged fit. The straight line is above the data in the middle and below it at both ends — the signature of fitting a line to a curve, and exactly what the residual plot in session 11 was looking for.</p>
 <div class="discussion">
-<p><strong>A question.</strong> The logged model fits better by every measure, and it is the shape session 4 said the limits of the scales required.</p>
+<p><strong>A question.</strong> The logged model fits better by every measure, and it is the shape session 5 said the limits of the scales required.</p>
 <p>It still predicts a life expectancy of 95.4 years for a country with an income per head of a million dollars. Is that a problem with the model, and if so what would fix it?</p>
 </div>
 <div class="reporting">

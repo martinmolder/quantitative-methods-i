@@ -14,7 +14,7 @@
 .path2csv <- file.path(
   .get_course_path(),
   "Quantitative_Methods_I",
-  "04_Logical_And_Visual",
+  "05_Logical_And_Visual",
   "world.csv"
 )
 

@@ -231,7 +231,7 @@ ggplot(party_means, aes(x = vote, y = mean)) +
   theme_bw()
 ```
 
-`geom_errorbar()` draws the intervals: `ymin` and `ymax` give the bottom and top of each bar, and `width` is the size of the caps. The vertical axis runs the full 0 to 10 because the scale is bounded and session 4 said to show all of it.
+`geom_errorbar()` draws the intervals: `ymin` and `ymax` give the bottom and top of each bar, and `width` is the size of the caps. The vertical axis runs the full 0 to 10 because the scale is bounded and session 5 said to show all of it.
 
 Now the comparison the coefficient table could not make is easy: the Moderates and the Sweden Democrats have overlapping intervals, so their voters are not distinguishable on this scale, while the Christian Democrats sit slightly below both.
 

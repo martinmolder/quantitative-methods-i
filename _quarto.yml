@@ -22,8 +22,8 @@ book:
     - 01-r-and-rstudio.qmd
     - 02-data-management-1.qmd
     - 03-data-management-2.qmd
-    - 04-logical-models.qmd
-    - 05-visualisation.qmd
+    - 04-visualisation.qmd
+    - 05-logical-models.qmd
     - 06-hypothesis-testing.qmd
     - 07-categorical-data.qmd
     - 08-comparing-means.qmd

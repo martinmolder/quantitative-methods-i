@@ -75,7 +75,7 @@ cov(both$lr_self, both$like_sd) / (sd(both$lr_self) * sd(both$like_sd))
 cor(both$lr_self, both$like_sd)
 ```
 
-Because of that division, **r always lies between −1 and +1**. That is a hard limit, in the sense of session 4: a correlation of 1.3 is not a strong relationship, it is an error.
+Because of that division, **r always lies between −1 and +1**. That is a hard limit, in the sense of session 5: a correlation of 1.3 is not a strong relationship, it is an error.
 
 - **+1** — every point on a straight upward line.
 - **0** — no linear relationship.

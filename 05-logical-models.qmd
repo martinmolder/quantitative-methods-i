@@ -22,9 +22,7 @@ world <- readr::read_csv("data/world.csv", show_col_types = FALSE)
 
 `world` holds `r nrow(world)` countries with a handful of indicators from the World Bank. We use it because its variables have real limits.
 
-> The plots below use `ggplot2`, which is the subject of next week's session. For now, read the code as instructions rather than as something to memorise — take these points, put this on the horizontal axis and that on the vertical, draw a line here. Next week the mechanics get taken apart properly.
->
-> Four pieces recur. `ggplot()` starts a plot and says which data it uses. `labs()` sets the axis titles. `theme_bw()` swaps the grey background for a plain one. And the layers are joined with `+` rather than the pipe.
+The plots below use `ggplot2`, which was last week's session, so the code should be readable. Everything here is the same handful of pieces: `ggplot()` and `aes()` to say what goes where, a `geom_` to draw it, `coord_cartesian()` to fix the axes, `labs()` for the labels.
 
 ## What you know before you look
 
@@ -254,6 +252,56 @@ Pulling the three cases together. When you draw a relationship between two conti
 
 Numbers 1 to 6 are about the logic of the thing. Numbers 7 and 8 are about not wasting the reader's attention, and next week is largely about them.
 
+### The same rules, as ggplot
+
+You have the tools for all eight from last week.
+
+| Rule | How |
+|---|---|
+| Show the whole of a bounded scale | `coord_cartesian(xlim = , ylim = )` |
+| Equal intervals | the default; do not use a log axis without saying so |
+| Human-language axis labels with units | `labs(x = , y = )` |
+| Mark the anchor points | `annotate("point", x = , y = )` |
+| Shade the forbidden region | `annotate("polygon", x = , y = , fill = )` |
+| Draw the equality line | `geom_abline(intercept = 0, slope = 1)` |
+| One piece of information per element | do not map a variable that is already on an axis |
+| Nothing that carries no information | `theme(legend.position = "none")` when the legend is redundant |
+
+: {tbl-colwidths="[46,54]"}
+
+And all of it together:
+
+```{r}
+#| label: fig-finished
+#| fig-cap: "Everything above, on one plot."
+#| fig-height: 4.2
+world <- readr::read_csv("data/world.csv", show_col_types = FALSE)
+
+ggplot(world, aes(x = lit_m, y = lit_f)) +
+  annotate(
+    "point",
+    x = c(0, 100),
+    y = c(0, 100),
+    size = 2.5
+  ) +
+  geom_point(alpha = 0.5) +
+  geom_abline(
+    intercept = 0,
+    slope = 1,
+    linetype = "dashed"
+  ) +
+  coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) +
+  labs(
+    x = "Male literacy rate (%)",
+    y = "Female literacy rate (%)",
+    title = paste(
+      "Women are less often literate than men,",
+      "and the gap widens as literacy falls"
+    )
+  ) +
+  theme_bw()
+```
+
 ::: {.discussion}
 **A question.** Rule 1 says to start axes at zero when zero is meaningful, and the income plot above obeys it on the vertical axis.
 
@@ -268,8 +316,8 @@ The point of all of this is comparison.
 
 A statistical model gives you a number. On its own, a number cannot be checked. Fitted to the income and life-expectancy data, a straight line will give you a slope, a standard error and a p-value, and every one of those will look like a result. Knowing beforehand that the relationship must flatten is what lets you see that the straight line is answering a question nobody asked.
 
-This is Taagepera's argument, and it is the reason this session sits where it does — after learning to handle data and before learning to model it. From next week onwards every method in this course produces numbers. What you know about the limits of your scales is what tells you whether to believe them.
+This is Taagepera's argument, and it is the reason this session sits where it does — after learning to handle and draw data, and before learning to model it. From next week onwards every method in this course produces numbers. What you know about the limits of your scales is what tells you whether to believe them.
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson **04 Logical And Visual**. Working out the limits of a pair of scales, plotting the region where cases can exist, and putting real data inside it. Around 30 minutes.
+**In the seminar.** `swirl` lesson **05 Logical And Visual**. Working out the limits of a pair of scales, plotting the region where cases can exist, and putting real data inside it. Around 30 minutes.
 :::

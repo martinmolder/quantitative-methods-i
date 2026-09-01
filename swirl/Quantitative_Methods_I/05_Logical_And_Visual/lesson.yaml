@@ -1,6 +1,6 @@
 - Class: meta
   Course: Quantitative Methods I
-  Lesson: 04 - Thinking Logically and Visually
+  Lesson: 05 - Thinking Logically and Visually
   Author: Martin Molder
   Type: Standard
   Organization: University of Tartu
@@ -167,4 +167,4 @@
   Output: Zero, as logic requires. That is not a finding - a case up there would mean an error in the data or in your code. What is a finding is that the countries with the biggest gaps sit close to the boundary, because the boundary is what constrains them.
 
 - Class: text
-  Output: That is the whole idea. Work out the limits of both scales, mark the anchor points, shade what cannot exist, and only then look at the data. Next week we take the plotting itself apart properly.
+  Output: That is the whole idea. Work out the limits of both scales, mark the anchor points, shade what cannot exist, and only then look at the data. Next week we stop describing data and start asking whether what we see in a sample tells us anything about the world it came from.

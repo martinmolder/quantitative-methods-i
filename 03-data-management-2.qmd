@@ -16,7 +16,7 @@ library(dplyr)
 raw <- read.csv("data/cses6_swe_raw.csv")
 ```
 
-`dplyr` is the part of the tidyverse that handles data frames. You can load the whole collection with `library(tidyverse)` instead, which also brings in `ggplot2` for session 5 and a few others.
+`dplyr` is the part of the tidyverse that handles data frames. You can load the whole collection with `library(tidyverse)` instead, which also brings in `ggplot2` for session 4 and a few others.
 
 > When you load `dplyr` you will see a message about objects being **masked**. `dplyr` has functions called `filter()` and `lag()`, and so does base R. The message tells you which version wins. This is normal and not a problem — but it is the reason a function can behave differently depending on what you have loaded.
 

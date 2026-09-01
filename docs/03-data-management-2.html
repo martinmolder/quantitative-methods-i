@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./04-logical-models.html" rel="next">
+<link href="./04-visualisation.html" rel="next">
 <link href="./02-data-management-1.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -170,14 +170,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-logical-models.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span></a>
+  <a href="./04-visualisation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data visualisation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-visualisation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data visualisation</span></span></a>
+  <a href="./05-logical-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -299,7 +299,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/cses6_swe_raw.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p><code>dplyr</code> is the part of the tidyverse that handles data frames. You can load the whole collection with <code>library(tidyverse)</code> instead, which also brings in <code>ggplot2</code> for session 5 and a few others.</p>
+<p><code>dplyr</code> is the part of the tidyverse that handles data frames. You can load the whole collection with <code>library(tidyverse)</code> instead, which also brings in <code>ggplot2</code> for session 4 and a few others.</p>
 <blockquote class="blockquote">
 <p>When you load <code>dplyr</code> you will see a message about objects being <strong>masked</strong>. <code>dplyr</code> has functions called <code>filter()</code> and <code>lag()</code>, and so does base R. The message tells you which version wins. This is normal and not a problem — but it is the reason a function can behave differently depending on what you have loaded.</p>
 </blockquote>
@@ -1192,8 +1192,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./04-logical-models.html" class="pagination-link" aria-label="Thinking logically and visually about data">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./04-visualisation.html" class="pagination-link" aria-label="Data visualisation">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data visualisation</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

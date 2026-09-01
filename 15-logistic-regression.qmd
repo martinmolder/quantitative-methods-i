@@ -62,7 +62,7 @@ sum(predicted_p < 0 | predicted_p > 1)
 
 The model predicts a **negative probability** for some respondents, and `r sum(predict(lm(vote_sd ~ trust + lr_self + sex + educ, data = swe)) < 0 | predict(lm(vote_sd ~ trust + lr_self + sex + educ, data = swe)) > 1)` cases fall outside 0 and 1 altogether.
 
-This is the session 4 point in its sharpest form. A probability is bounded at 0 and 1, hard limits, no exceptions. A straight line is unbounded. Fit one to the other and impossible predictions are not a risk at the edges — they are guaranteed.
+This is the session 5 point in its sharpest form. A probability is bounded at 0 and 1, hard limits, no exceptions. A straight line is unbounded. Fit one to the other and impossible predictions are not a risk at the edges — they are guaranteed.
 
 ## The fix, in words
 
@@ -78,7 +78,7 @@ $$\log\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots$$
 
 and then converts back. The conversion is what gives logistic regression its S-shape: a straight line in log odds becomes a curve in probability that flattens as it approaches 0 and 1, and never reaches either.
 
-That curve is doing exactly what session 4 said a relationship with a bounded outcome has to do. Logistic regression is a limit built into a model rather than apologised for afterwards.
+That curve is doing exactly what session 5 said a relationship with a bounded outcome has to do. Logistic regression is a limit built into a model rather than apologised for afterwards.
 
 The price is that the coefficients are now in log odds, and nobody thinks in log odds. Most of this chapter is about getting back to something readable.
 
@@ -170,7 +170,7 @@ This is the payoff for the whole apparatus. A linear model would have insisted t
 ::: {.discussion}
 **A question.** The steepest part of the curve is in the middle, around a predicted probability of 0.5, and it flattens towards both ends.
 
-Why must that be true of *any* model whose outcome is a probability? Relate your answer to the anchor points and approaches to limits from session 4.
+Why must that be true of *any* model whose outcome is a probability? Relate your answer to the anchor points and approaches to limits from session 5.
 :::
 
 ## How good is the model?
@@ -233,7 +233,7 @@ The model is excellent at saying no and poor at saying yes. That is what happens
 
 Look back at what the last session did.
 
-The outcome was bounded, so a straight line was the wrong shape — session 4. The fix was to change the scale until it was unbounded, fit the line there, and convert back. Reading the result meant getting from log odds to odds ratios to probabilities, because each step is more interpretable than the last — session 12. Judging it meant knowing what the number would be if the model were useless — session 6.
+The outcome was bounded, so a straight line was the wrong shape — session 5. The fix was to change the scale until it was unbounded, fit the line there, and convert back. Reading the result meant getting from log odds to odds ratios to probabilities, because each step is more interpretable than the last — session 12. Judging it meant knowing what the number would be if the model were useless — session 6.
 
 None of that is specific to logistic regression. It is what you do with any model: know what your scales can and cannot do before you fit anything, get the results into units a reader can hold, and compare every number against what it would be if nothing were going on.
 

@@ -35,7 +35,7 @@
   CorrectAnswer: A probability cannot be negative - the scale has hard limits at 0 and 1, and a straight line has none.
   AnswerChoices: A probability cannot be negative - the scale has hard limits at 0 and 1, and a straight line has none.; The sample is too small to estimate the model.; A variable is missing from the model.
   AnswerTests: omnitest(correctVal='A probability cannot be negative - the scale has hard limits at 0 and 1, and a straight line has none.')
-  Hint: This is the session 4 point in its sharpest form. What are the limits of a probability?
+  Hint: This is the session 5 point in its sharpest form. What are the limits of a probability?
 
 - Class: text
   Output: The fix is to change the scale until it has no ends. Step one, from probability to odds - the probability of the thing divided by the probability of not. Odds have a floor at zero but no ceiling. Step two, take the logarithm - now the scale runs from minus infinity to plus infinity. That is a scale a straight line can live on.
@@ -103,7 +103,7 @@
   CorrectAnswer: It has to flatten as it approaches 0 and 1, because it can never cross them.
   AnswerChoices: It has to flatten as it approaches 0 and 1, because it can never cross them.; Because the data happens to be distributed that way.; Because the logarithm makes everything curved.
   AnswerTests: omnitest(correctVal='It has to flatten as it approaches 0 and 1, because it can never cross them.')
-  Hint: Think about anchor points and approaches to limits, from session 4.
+  Hint: Think about anchor points and approaches to limits, from session 5.
 
 - Class: text
   Output: That is the payoff. A linear model insists the change is the same everywhere and predicts negative probabilities at one end. The logistic model bends, and stays inside the limits by construction.
@@ -170,4 +170,4 @@
   Output: 31 per cent sensitivity against 96 per cent specificity. The model is excellent at saying no and poor at saying yes - which is what happens when an outcome is rare. Never report accuracy without the baseline, and always report sensitivity too.
 
 - Class: text
-  Output: And that is the course. The outcome was bounded, so a straight line was the wrong shape - session 4. The fix was to change the scale until it was unbounded, fit there, and convert back. Reading it meant getting to units a person can hold - session 12. Judging it meant knowing what the number would be if the model were useless - session 6. None of that is specific to logistic regression. It is what you do with any model.
+  Output: And that is the course. The outcome was bounded, so a straight line was the wrong shape - session 5. The fix was to change the scale until it was unbounded, fit there, and convert back. Reading it meant getting to units a person can hold - session 12. Judging it meant knowing what the number would be if the model were useless - session 6. None of that is specific to logistic regression. It is what you do with any model.

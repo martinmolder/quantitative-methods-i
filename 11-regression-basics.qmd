@@ -208,7 +208,7 @@ plot(model4, which = 2)
 
 **Residuals vs Fitted** checks two things at once. The residuals should form a shapeless band around zero. A curve means the relationship is not straight — session 14. A funnel, widening or narrowing, means the errors are larger at some predicted values than others.
 
-Ours shows a diagonal edge along the bottom right. That is not a modelling failure but a **floor effect**: the outcome cannot go below 0, so for high predicted values the residual cannot be very negative. This is session 4 reappearing — the limits of the scale constrain what the model can do.
+Ours shows a diagonal edge along the bottom right. That is not a modelling failure but a **floor effect**: the outcome cannot go below 0, so for high predicted values the residual cannot be very negative. This is session 5 reappearing — the limits of the scale constrain what the model can do.
 
 **Q-Q plot** checks whether the residuals are normally distributed. Points on the diagonal means yes. Ours bends away at the bottom left, the same floor effect seen from another angle.
 

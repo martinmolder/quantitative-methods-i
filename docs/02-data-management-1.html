@@ -170,14 +170,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-logical-models.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span></a>
+  <a href="./04-visualisation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data visualisation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-visualisation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data visualisation</span></span></a>
+  <a href="./05-logical-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -484,7 +484,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>Two things follow, and we use both.</p>
 <p><strong>First, limits let you check your work.</strong> If a calculation gives a share of 140%, or a probability of −0.2, you do not need to check the data to know something is wrong. The result left the region where answers can exist. We come back to this at the end of the chapter, and every time we compute anything from here on.</p>
-<p><strong>Second, limits are the beginning of a model.</strong> If you know that a relationship must pass through the point where both variables are zero, and that neither can exceed 100, you already know a great deal about what shape it can have — before collecting a single observation. That is the subject of session 4, and it is worth knowing now that the groundwork is being laid here.</p>
+<p><strong>Second, limits are the beginning of a model.</strong> If you know that a relationship must pass through the point where both variables are zero, and that neither can exceed 100, you already know a great deal about what shape it can have — before collecting a single observation. That is the subject of session 5, and it is worth knowing now that the groundwork is being laid here.</p>
 <div class="discussion">
 <p><strong>A question.</strong> For each of these, what are the limits, and are they hard or soft? &gt; &gt; - The percentage of women in a parliament. &gt; - The difference between how much you like one party and how much you like another, when both are rated 0 to 10. &gt; - The number of days per week someone reads the news. &gt; - Turnout in an election.</p>
 </div>
@@ -528,7 +528,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p><code>sd()</code> is the standard deviation. All three of these numbers are wrong, for the same reason as before.</p>
-<p><code>hist()</code> draws a quick histogram. It is not pretty — session 5 is about making plots properly — but it is one word and it shows you the shape.</p>
+<p><code>hist()</code> draws a quick histogram. It is not pretty — session 4 is about making plots properly — but it is one word and it shows you the shape.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(raw<span class="sc">$</span>F3020_R)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">

@@ -198,14 +198,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-logical-models.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span></a>
+  <a href="./04-visualisation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data visualisation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-visualisation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data visualisation</span></span></a>
+  <a href="./05-logical-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -375,7 +375,7 @@ window.Quarto = {
 </div>
 </div>
 <p>The model predicts a <strong>negative probability</strong> for some respondents, and 401 cases fall outside 0 and 1 altogether.</p>
-<p>This is the session 4 point in its sharpest form. A probability is bounded at 0 and 1, hard limits, no exceptions. A straight line is unbounded. Fit one to the other and impossible predictions are not a risk at the edges — they are guaranteed.</p>
+<p>This is the session 5 point in its sharpest form. A probability is bounded at 0 and 1, hard limits, no exceptions. A straight line is unbounded. Fit one to the other and impossible predictions are not a risk at the edges — they are guaranteed.</p>
 </section>
 <section id="the-fix-in-words" class="level2" data-number="15.2">
 <h2 data-number="15.2" class="anchored" data-anchor-id="the-fix-in-words"><span class="header-section-number">15.2</span> The fix, in words</h2>
@@ -385,7 +385,7 @@ window.Quarto = {
 <p>That is a scale a straight line can live on. So the model fits a straight line to the log odds:</p>
 <p><span class="math display">\[\log\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots\]</span></p>
 <p>and then converts back. The conversion is what gives logistic regression its S-shape: a straight line in log odds becomes a curve in probability that flattens as it approaches 0 and 1, and never reaches either.</p>
-<p>That curve is doing exactly what session 4 said a relationship with a bounded outcome has to do. Logistic regression is a limit built into a model rather than apologised for afterwards.</p>
+<p>That curve is doing exactly what session 5 said a relationship with a bounded outcome has to do. Logistic regression is a limit built into a model rather than apologised for afterwards.</p>
 <p>The price is that the coefficients are now in log odds, and nobody thinks in log odds. Most of this chapter is about getting back to something readable.</p>
 </section>
 <section id="fitting-it" class="level2" data-number="15.3">
@@ -539,7 +539,7 @@ Figure&nbsp;15.1
 <p>This is the payoff for the whole apparatus. A linear model would have insisted the change was the same everywhere and predicted negative probabilities at one end. The logistic model bends, and stays inside the limits by construction.</p>
 <div class="discussion">
 <p><strong>A question.</strong> The steepest part of the curve is in the middle, around a predicted probability of 0.5, and it flattens towards both ends.</p>
-<p>Why must that be true of <em>any</em> model whose outcome is a probability? Relate your answer to the anchor points and approaches to limits from session 4.</p>
+<p>Why must that be true of <em>any</em> model whose outcome is a probability? Relate your answer to the anchor points and approaches to limits from session 5.</p>
 </div>
 </section>
 <section id="how-good-is-the-model" class="level2" data-number="15.6">
@@ -611,7 +611,7 @@ Figure&nbsp;15.1
 <section id="and-that-is-the-course" class="level2" data-number="15.7">
 <h2 data-number="15.7" class="anchored" data-anchor-id="and-that-is-the-course"><span class="header-section-number">15.7</span> And that is the course</h2>
 <p>Look back at what the last session did.</p>
-<p>The outcome was bounded, so a straight line was the wrong shape — session 4. The fix was to change the scale until it was unbounded, fit the line there, and convert back. Reading the result meant getting from log odds to odds ratios to probabilities, because each step is more interpretable than the last — session 12. Judging it meant knowing what the number would be if the model were useless — session 6.</p>
+<p>The outcome was bounded, so a straight line was the wrong shape — session 5. The fix was to change the scale until it was unbounded, fit the line there, and convert back. Reading the result meant getting from log odds to odds ratios to probabilities, because each step is more interpretable than the last — session 12. Judging it meant knowing what the number would be if the model were useless — session 6.</p>
 <p>None of that is specific to logistic regression. It is what you do with any model: know what your scales can and cannot do before you fit anything, get the results into units a reader can hold, and compare every number against what it would be if nothing were going on.</p>
 <div class="reporting">
 <p><strong>How to write it up.</strong></p>

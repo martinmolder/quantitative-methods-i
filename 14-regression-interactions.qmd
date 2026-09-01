@@ -90,7 +90,7 @@ plot(predictions) +
   theme_bw()
 ```
 
-Giving `terms` two variables produces one line per group of the second, and `scale_colour_viridis_d()` and `scale_fill_viridis_d()` put the two lines on the colourblind-safe palette from session 5. Now the interaction is obvious: two lines that are not parallel, and that **cross**.
+Giving `terms` two variables produces one line per group of the second, and `scale_colour_viridis_d()` and `scale_fill_viridis_d()` put the two lines on the colourblind-safe palette from session 4. Now the interaction is obvious: two lines that are not parallel, and that **cross**.
 
 Read what it says. Among people who distrust institutions, left-bloc voters rate Swedish democracy *higher* than right-bloc voters. Among people who trust institutions, it is the other way round. The lines meet at about `r fmt(-coef(model_int)[3] / coef(model_int)[4])` standard deviations of trust.
 
@@ -144,14 +144,14 @@ Nothing about the data has changed. What does that tell you about reporting "the
 
 ## Non-linear relationships
 
-The second assumption. Sometimes the relationship is not a straight line at all — and session 4 gave us a case where it *cannot* be.
+The second assumption. Sometimes the relationship is not a straight line at all — and session 5 gave us a case where it *cannot* be.
 
 ```{r}
 world <- readr::read_csv("data/world.csv", show_col_types = FALSE)
 world <- world |> filter(!is.na(gdp), !is.na(life))
 ```
 
-Income has a floor at zero and no ceiling. Life expectancy has both. We argued in session 4 that this rules out a straight line, because a line rising forever eventually promises impossible lifespans.
+Income has a floor at zero and no ceiling. Life expectancy has both. We argued in session 5 that this rules out a straight line, because a line rising forever eventually promises impossible lifespans.
 
 Fit one anyway and see.
 
@@ -249,7 +249,7 @@ ggplot(world, aes(x = gdp, y = life)) +
 The dashed line is the straight fit and the solid one the logged fit. The straight line is above the data in the middle and below it at both ends — the signature of fitting a line to a curve, and exactly what the residual plot in session 11 was looking for.
 
 ::: {.discussion}
-**A question.** The logged model fits better by every measure, and it is the shape session 4 said the limits of the scales required.
+**A question.** The logged model fits better by every measure, and it is the shape session 5 said the limits of the scales required.
 
 It still predicts a life expectancy of `r fmt(predict(logged, newdata = data.frame(gdp = 1000000)), 1)` years for a country with an income per head of a million dollars. Is that a problem with the model, and if so what would fix it?
 :::

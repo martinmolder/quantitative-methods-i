@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>5&nbsp; Data visualisation – Quantitative Methods I</title>
+<title>4&nbsp; Data visualisation – Quantitative Methods I</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,8 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./06-hypothesis-testing.html" rel="next">
-<link href="./04-logical-models.html" rel="prev">
+<link href="./05-logical-models.html" rel="next">
+<link href="./03-data-management-2.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -119,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./05-visualisation.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data visualisation</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./04-visualisation.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data visualisation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -170,14 +170,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-logical-models.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span></a>
+  <a href="./04-visualisation.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data visualisation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-visualisation.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data visualisation</span></span></a>
+  <a href="./05-logical-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -250,32 +250,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#the-grammar" id="toc-the-grammar" class="nav-link active" data-scroll-target="#the-grammar"><span class="header-section-number">5.1</span> The grammar</a></li>
-  <li><a href="#one-variable-at-a-time" id="toc-one-variable-at-a-time" class="nav-link" data-scroll-target="#one-variable-at-a-time"><span class="header-section-number">5.2</span> One variable at a time</a>
+  <li><a href="#the-grammar" id="toc-the-grammar" class="nav-link active" data-scroll-target="#the-grammar"><span class="header-section-number">4.1</span> The grammar</a></li>
+  <li><a href="#one-variable-at-a-time" id="toc-one-variable-at-a-time" class="nav-link" data-scroll-target="#one-variable-at-a-time"><span class="header-section-number">4.2</span> One variable at a time</a>
   <ul class="collapse">
-  <li><a href="#categorical-a-bar-chart" id="toc-categorical-a-bar-chart" class="nav-link" data-scroll-target="#categorical-a-bar-chart"><span class="header-section-number">5.2.1</span> Categorical: a bar chart</a></li>
-  <li><a href="#continuous-a-histogram" id="toc-continuous-a-histogram" class="nav-link" data-scroll-target="#continuous-a-histogram"><span class="header-section-number">5.2.2</span> Continuous: a histogram</a></li>
-  <li><a href="#a-density-plot" id="toc-a-density-plot" class="nav-link" data-scroll-target="#a-density-plot"><span class="header-section-number">5.2.3</span> A density plot</a></li>
+  <li><a href="#categorical-a-bar-chart" id="toc-categorical-a-bar-chart" class="nav-link" data-scroll-target="#categorical-a-bar-chart"><span class="header-section-number">4.2.1</span> Categorical: a bar chart</a></li>
+  <li><a href="#continuous-a-histogram" id="toc-continuous-a-histogram" class="nav-link" data-scroll-target="#continuous-a-histogram"><span class="header-section-number">4.2.2</span> Continuous: a histogram</a></li>
+  <li><a href="#a-density-plot" id="toc-a-density-plot" class="nav-link" data-scroll-target="#a-density-plot"><span class="header-section-number">4.2.3</span> A density plot</a></li>
   </ul></li>
-  <li><a href="#two-variables" id="toc-two-variables" class="nav-link" data-scroll-target="#two-variables"><span class="header-section-number">5.3</span> Two variables</a>
+  <li><a href="#two-variables" id="toc-two-variables" class="nav-link" data-scroll-target="#two-variables"><span class="header-section-number">4.3</span> Two variables</a>
   <ul class="collapse">
-  <li><a href="#two-categorical-bars-side-by-side" id="toc-two-categorical-bars-side-by-side" class="nav-link" data-scroll-target="#two-categorical-bars-side-by-side"><span class="header-section-number">5.3.1</span> Two categorical: bars side by side</a></li>
-  <li><a href="#categorical-and-continuous-a-boxplot" id="toc-categorical-and-continuous-a-boxplot" class="nav-link" data-scroll-target="#categorical-and-continuous-a-boxplot"><span class="header-section-number">5.3.2</span> Categorical and continuous: a boxplot</a></li>
-  <li><a href="#two-continuous-a-scatterplot" id="toc-two-continuous-a-scatterplot" class="nav-link" data-scroll-target="#two-continuous-a-scatterplot"><span class="header-section-number">5.3.3</span> Two continuous: a scatterplot</a></li>
-  <li><a href="#over-time-a-line" id="toc-over-time-a-line" class="nav-link" data-scroll-target="#over-time-a-line"><span class="header-section-number">5.3.4</span> Over time: a line</a></li>
+  <li><a href="#two-categorical-bars-side-by-side" id="toc-two-categorical-bars-side-by-side" class="nav-link" data-scroll-target="#two-categorical-bars-side-by-side"><span class="header-section-number">4.3.1</span> Two categorical: bars side by side</a></li>
+  <li><a href="#categorical-and-continuous-a-boxplot" id="toc-categorical-and-continuous-a-boxplot" class="nav-link" data-scroll-target="#categorical-and-continuous-a-boxplot"><span class="header-section-number">4.3.2</span> Categorical and continuous: a boxplot</a></li>
+  <li><a href="#two-continuous-a-scatterplot" id="toc-two-continuous-a-scatterplot" class="nav-link" data-scroll-target="#two-continuous-a-scatterplot"><span class="header-section-number">4.3.3</span> Two continuous: a scatterplot</a></li>
+  <li><a href="#over-time-a-line" id="toc-over-time-a-line" class="nav-link" data-scroll-target="#over-time-a-line"><span class="header-section-number">4.3.4</span> Over time: a line</a></li>
   </ul></li>
-  <li><a href="#mapping-and-setting" id="toc-mapping-and-setting" class="nav-link" data-scroll-target="#mapping-and-setting"><span class="header-section-number">5.4</span> Mapping and setting</a></li>
-  <li><a href="#faceting" id="toc-faceting" class="nav-link" data-scroll-target="#faceting"><span class="header-section-number">5.5</span> Faceting</a></li>
-  <li><a href="#making-it-readable" id="toc-making-it-readable" class="nav-link" data-scroll-target="#making-it-readable"><span class="header-section-number">5.6</span> Making it readable</a>
+  <li><a href="#mapping-and-setting" id="toc-mapping-and-setting" class="nav-link" data-scroll-target="#mapping-and-setting"><span class="header-section-number">4.4</span> Mapping and setting</a></li>
+  <li><a href="#faceting" id="toc-faceting" class="nav-link" data-scroll-target="#faceting"><span class="header-section-number">4.5</span> Faceting</a></li>
+  <li><a href="#making-it-readable" id="toc-making-it-readable" class="nav-link" data-scroll-target="#making-it-readable"><span class="header-section-number">4.6</span> Making it readable</a>
   <ul class="collapse">
-  <li><a href="#labels" id="toc-labels" class="nav-link" data-scroll-target="#labels"><span class="header-section-number">5.6.1</span> Labels</a></li>
-  <li><a href="#themes" id="toc-themes" class="nav-link" data-scroll-target="#themes"><span class="header-section-number">5.6.2</span> Themes</a></li>
-  <li><a href="#colour-that-survives-contact-with-a-reader" id="toc-colour-that-survives-contact-with-a-reader" class="nav-link" data-scroll-target="#colour-that-survives-contact-with-a-reader"><span class="header-section-number">5.6.3</span> Colour that survives contact with a reader</a></li>
-  <li><a href="#and-one-thing-never-to-do" id="toc-and-one-thing-never-to-do" class="nav-link" data-scroll-target="#and-one-thing-never-to-do"><span class="header-section-number">5.6.4</span> And one thing never to do</a></li>
+  <li><a href="#labels" id="toc-labels" class="nav-link" data-scroll-target="#labels"><span class="header-section-number">4.6.1</span> Labels</a></li>
+  <li><a href="#themes" id="toc-themes" class="nav-link" data-scroll-target="#themes"><span class="header-section-number">4.6.2</span> Themes</a></li>
+  <li><a href="#colour-that-survives-contact-with-a-reader" id="toc-colour-that-survives-contact-with-a-reader" class="nav-link" data-scroll-target="#colour-that-survives-contact-with-a-reader"><span class="header-section-number">4.6.3</span> Colour that survives contact with a reader</a></li>
+  <li><a href="#and-one-thing-never-to-do" id="toc-and-one-thing-never-to-do" class="nav-link" data-scroll-target="#and-one-thing-never-to-do"><span class="header-section-number">4.6.4</span> And one thing never to do</a></li>
   </ul></li>
-  <li><a href="#putting-last-weeks-rules-into-code" id="toc-putting-last-weeks-rules-into-code" class="nav-link" data-scroll-target="#putting-last-weeks-rules-into-code"><span class="header-section-number">5.7</span> Putting last week’s rules into code</a></li>
-  <li><a href="#before-it-leaves-your-computer" id="toc-before-it-leaves-your-computer" class="nav-link" data-scroll-target="#before-it-leaves-your-computer"><span class="header-section-number">5.8</span> Before it leaves your computer</a></li>
-  <li><a href="#saving" id="toc-saving" class="nav-link" data-scroll-target="#saving"><span class="header-section-number">5.9</span> Saving</a></li>
+  <li><a href="#before-it-leaves-your-computer" id="toc-before-it-leaves-your-computer" class="nav-link" data-scroll-target="#before-it-leaves-your-computer"><span class="header-section-number">4.7</span> Before it leaves your computer</a></li>
+  <li><a href="#saving" id="toc-saving" class="nav-link" data-scroll-target="#saving"><span class="header-section-number">4.8</span> Saving</a></li>
   </ul>
 </nav>
     </div>
@@ -284,7 +283,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data visualisation</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data visualisation</span></h1>
 </div>
 
 
@@ -301,7 +300,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Last week was about what belongs on a plot. This week is about how to put it there.</p>
+<p>This session is about how to make a plot in R. Next week is about what belongs on one — which is the harder question, and the one that needs these tools to answer.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
@@ -309,8 +308,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>swe <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/swe.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>R can plot without any extra packages — <code>hist()</code> and <code>plot()</code> in session 2 were doing exactly that. Those are fine for a quick look at something for your own benefit. For anything another person will see, use <strong>ggplot2</strong>, which is what this chapter is about.</p>
-<section id="the-grammar" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="the-grammar"><span class="header-section-number">5.1</span> The grammar</h2>
+<section id="the-grammar" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="the-grammar"><span class="header-section-number">4.1</span> The grammar</h2>
 <p>Every ggplot is built the same way, and once you see the pattern the rest is vocabulary.</p>
 <ol type="1">
 <li><code>ggplot()</code> says which data frame you are using.</li>
@@ -325,17 +324,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>That is a complete plot: a data frame, one mapping, one geom.</p>
 </section>
-<section id="one-variable-at-a-time" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="one-variable-at-a-time"><span class="header-section-number">5.2</span> One variable at a time</h2>
-<section id="categorical-a-bar-chart" class="level3" data-number="5.2.1">
-<h3 data-number="5.2.1" class="anchored" data-anchor-id="categorical-a-bar-chart"><span class="header-section-number">5.2.1</span> Categorical: a bar chart</h3>
+<section id="one-variable-at-a-time" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="one-variable-at-a-time"><span class="header-section-number">4.2</span> One variable at a time</h2>
+<section id="categorical-a-bar-chart" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="categorical-a-bar-chart"><span class="header-section-number">4.2.1</span> Categorical: a bar chart</h3>
 <p>For a categorical variable, <code>geom_bar()</code> counts the cases in each category and draws one bar per category.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(swe, <span class="fu">aes</span>(<span class="at">x =</span> vote)) <span class="sc">+</span></span>
@@ -343,7 +342,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
@@ -351,8 +350,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The parties come out in left-to-right order because that is the order of the factor levels, which we set when the data was built. Had they been left as plain text they would be in alphabetical order, which would mean nothing.</p>
 <p>The bar for <code>NA</code> is everyone who did not vote or did not say. It is worth leaving visible rather than quietly dropping it.</p>
 </section>
-<section id="continuous-a-histogram" class="level3" data-number="5.2.2">
-<h3 data-number="5.2.2" class="anchored" data-anchor-id="continuous-a-histogram"><span class="header-section-number">5.2.2</span> Continuous: a histogram</h3>
+<section id="continuous-a-histogram" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="continuous-a-histogram"><span class="header-section-number">4.2.2</span> Continuous: a histogram</h3>
 <p>For a continuous variable, <code>geom_histogram()</code> cuts the range into intervals and counts how many fall in each.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(swe, <span class="fu">aes</span>(<span class="at">x =</span> age)) <span class="sc">+</span></span>
@@ -360,7 +359,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
@@ -370,8 +369,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The gap between bars in a bar chart and the absence of one in a histogram is not decoration. Separate bars say the categories are distinct; touching bars say the scale is continuous and the intervals are cuts through it.</p>
 </blockquote>
 </section>
-<section id="a-density-plot" class="level3" data-number="5.2.3">
-<h3 data-number="5.2.3" class="anchored" data-anchor-id="a-density-plot"><span class="header-section-number">5.2.3</span> A density plot</h3>
+<section id="a-density-plot" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="a-density-plot"><span class="header-section-number">4.2.3</span> A density plot</h3>
 <p><code>geom_density()</code> draws the same thing as a histogram with a smooth line instead of bars.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(swe, <span class="fu">aes</span>(<span class="at">x =</span> age)) <span class="sc">+</span></span>
@@ -379,7 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
@@ -387,10 +386,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Ignore the numbers on the vertical axis. “Density” is scaled so that the area under the curve is 1, which makes it comparable between groups but meaningless on its own.</p>
 </section>
 </section>
-<section id="two-variables" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="two-variables"><span class="header-section-number">5.3</span> Two variables</h2>
-<section id="two-categorical-bars-side-by-side" class="level3" data-number="5.3.1">
-<h3 data-number="5.3.1" class="anchored" data-anchor-id="two-categorical-bars-side-by-side"><span class="header-section-number">5.3.1</span> Two categorical: bars side by side</h3>
+<section id="two-variables" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="two-variables"><span class="header-section-number">4.3</span> Two variables</h2>
+<section id="two-categorical-bars-side-by-side" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="two-categorical-bars-side-by-side"><span class="header-section-number">4.3.1</span> Two categorical: bars side by side</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>swe <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(vote), <span class="sc">!</span><span class="fu">is.na</span>(educ3)) <span class="sc">|&gt;</span></span>
@@ -399,7 +398,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
@@ -411,8 +410,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Which one you want depends on the question. What question is each of them the right answer to?</p>
 </div>
 </section>
-<section id="categorical-and-continuous-a-boxplot" class="level3" data-number="5.3.2">
-<h3 data-number="5.3.2" class="anchored" data-anchor-id="categorical-and-continuous-a-boxplot"><span class="header-section-number">5.3.2</span> Categorical and continuous: a boxplot</h3>
+<section id="categorical-and-continuous-a-boxplot" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="categorical-and-continuous-a-boxplot"><span class="header-section-number">4.3.2</span> Categorical and continuous: a boxplot</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>swe <span class="sc">|&gt;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(vote)) <span class="sc">|&gt;</span></span>
@@ -421,7 +420,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
@@ -429,20 +428,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><code>geom_boxplot()</code> summarises a distribution with five numbers. The thick line is the median. The box covers the middle half of the cases, from the 25th to the 75th percentile. The whiskers reach out to the most extreme case within 1.5 box-widths of the box, and anything beyond that is drawn as an individual point.</p>
 <p>This one plot contains a large part of Swedish politics: the median Left Party voter places themselves near the left end, the median Sweden Democrat voter well to the right, and the boxes overlap far more than party competition suggests.</p>
 </section>
-<section id="two-continuous-a-scatterplot" class="level3" data-number="5.3.3">
-<h3 data-number="5.3.3" class="anchored" data-anchor-id="two-continuous-a-scatterplot"><span class="header-section-number">5.3.3</span> Two continuous: a scatterplot</h3>
+<section id="two-continuous-a-scatterplot" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="two-continuous-a-scatterplot"><span class="header-section-number">4.3.3</span> Two continuous: a scatterplot</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(swe, <span class="fu">aes</span>(<span class="at">x =</span> like_s, <span class="at">y =</span> like_m)) <span class="sc">+</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>That plot is nearly useless, and the reason is worth understanding. Both variables take eleven whole-number values, so 2,845 respondents are stacked on 121 positions. Every dot looks the same whether one person or four hundred are underneath it.</p>
+<p><code>geom_point()</code> draws one dot per case. That plot is nearly useless, though, and the reason is worth understanding: both variables take eleven whole-number values, so 2,845 respondents are stacked on 121 positions. Every dot looks the same whether one person or four hundred are underneath it.</p>
 <p>Two ways out, both from last week:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(swe, <span class="fu">aes</span>(<span class="at">x =</span> like_s, <span class="at">y =</span> like_m)) <span class="sc">+</span></span>
@@ -450,15 +449,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
 </div>
 <p><code>geom_count()</code> sizes each dot by how many cases sit there. For genuinely continuous variables the usual alternative is <code>alpha</code>, which makes points transparent so that overlaps show up darker.</p>
 </section>
-<section id="over-time-a-line" class="level3" data-number="5.3.4">
-<h3 data-number="5.3.4" class="anchored" data-anchor-id="over-time-a-line"><span class="header-section-number">5.3.4</span> Over time: a line</h3>
+<section id="over-time-a-line" class="level3" data-number="4.3.4">
+<h3 data-number="4.3.4" class="anchored" data-anchor-id="over-time-a-line"><span class="header-section-number">4.3.4</span> Over time: a line</h3>
 <p><code>geom_line()</code> joins the points in order. A line implies that the thing between two points is real, which makes it right for time and wrong for categories — joining the tops of eight party bars with a line would suggest the space between the Greens and the Social Democrats means something.</p>
 <p>Our survey is a single moment, so this example uses <code>economics</code>, a data set of US economic time series that comes with ggplot2.</p>
 <div class="cell">
@@ -467,15 +466,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
 </section>
-<section id="mapping-and-setting" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="mapping-and-setting"><span class="header-section-number">5.4</span> Mapping and setting</h2>
+<section id="mapping-and-setting" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="mapping-and-setting"><span class="header-section-number">4.4</span> Mapping and setting</h2>
 <p>This distinction catches everybody once, so it is worth meeting deliberately.</p>
 <p><strong>Mapping</strong> means “let this variable decide”. It goes <strong>inside</strong> <code>aes()</code>.</p>
 <div class="cell">
@@ -486,7 +485,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
@@ -498,15 +497,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Put a fixed value inside <code>aes()</code> and ggplot treats it as a variable with one category — you get a legend saying “steelblue” and a colour that is not the one you asked for. Put a variable outside <code>aes()</code> and you get an error.</p>
 </section>
-<section id="faceting" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="faceting"><span class="header-section-number">5.5</span> Faceting</h2>
+<section id="faceting" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="faceting"><span class="header-section-number">4.5</span> Faceting</h2>
 <p>Rather than crowding groups onto one plot, draw one small plot per group.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>swe <span class="sc">|&gt;</span></span>
@@ -517,7 +516,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
@@ -525,11 +524,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><code>facet_wrap()</code> takes a variable after a <code>~</code> and makes one panel per value. The <code>~</code> marks a <strong>formula</strong>, which is R’s way of writing “in terms of”; it turns up again in every model from session 11 onwards.</p>
 <p>All panels share the same axes, which is the point — it makes the panels comparable. <code>facet_grid(rows ~ cols)</code> splits by two variables at once.</p>
 </section>
-<section id="making-it-readable" class="level2" data-number="5.6">
-<h2 data-number="5.6" class="anchored" data-anchor-id="making-it-readable"><span class="header-section-number">5.6</span> Making it readable</h2>
+<section id="making-it-readable" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="making-it-readable"><span class="header-section-number">4.6</span> Making it readable</h2>
 <p>Everything so far has been about getting the data onto the page. The rest is about the reader.</p>
-<section id="labels" class="level3" data-number="5.6.1">
-<h3 data-number="5.6.1" class="anchored" data-anchor-id="labels"><span class="header-section-number">5.6.1</span> Labels</h3>
+<section id="labels" class="level3" data-number="4.6.1">
+<h3 data-number="4.6.1" class="anchored" data-anchor-id="labels"><span class="header-section-number">4.6.1</span> Labels</h3>
 <p>The single most common failure in student work: axes labelled with variable names.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>swe <span class="sc">|&gt;</span></span>
@@ -544,7 +543,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
@@ -552,8 +551,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><code>labs()</code> sets the axis titles, the plot title, and the legend titles — the argument for a legend is named after the aesthetic it belongs to, so <code>colour = "..."</code> or <code>fill = "..."</code>.</p>
 <p><code>lr_self</code> is a name for you. “Left-right self-placement (0 = left, 10 = right)” is a name for the reader, and it carries the direction of the scale, which the reader otherwise has to guess.</p>
 </section>
-<section id="themes" class="level3" data-number="5.6.2">
-<h3 data-number="5.6.2" class="anchored" data-anchor-id="themes"><span class="header-section-number">5.6.2</span> Themes</h3>
+<section id="themes" class="level3" data-number="4.6.2">
+<h3 data-number="4.6.2" class="anchored" data-anchor-id="themes"><span class="header-section-number">4.6.2</span> Themes</h3>
 <p>A theme is a bundle of appearance settings. <code>theme_bw()</code> and <code>theme_minimal()</code> both drop the grey background, which prints better and puts less between the reader and the data.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(swe, <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> lr_self)) <span class="sc">+</span></span>
@@ -566,7 +565,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
@@ -577,8 +576,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>The rule is that <strong>text on the figure should be about the size of the text around it</strong>. A figure shrunk to half a page carries its labels down with it, and a plot whose axis labels are half the size of the body text tells the reader it is not important.</p>
 </section>
-<section id="colour-that-survives-contact-with-a-reader" class="level3" data-number="5.6.3">
-<h3 data-number="5.6.3" class="anchored" data-anchor-id="colour-that-survives-contact-with-a-reader"><span class="header-section-number">5.6.3</span> Colour that survives contact with a reader</h3>
+<section id="colour-that-survives-contact-with-a-reader" class="level3" data-number="4.6.3">
+<h3 data-number="4.6.3" class="anchored" data-anchor-id="colour-that-survives-contact-with-a-reader"><span class="header-section-number">4.6.3</span> Colour that survives contact with a reader</h3>
 <p>Three rules, and they cost nothing to follow.</p>
 <p><strong>One. Do not encode the same thing twice.</strong> If the parties are already on the horizontal axis, colouring them by party as well adds no information and uses up the only free channel you had.</p>
 <div class="cell">
@@ -590,7 +589,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
@@ -609,7 +608,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
@@ -631,7 +630,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-visualisation_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="1050"></p>
+<p><img src="04-visualisation_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="1050"></p>
 </figure>
 </div>
 </div>
@@ -641,104 +640,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Never use a rainbow for a quantity.</strong> A rainbow has no order — nobody agrees whether green is more than orange — so it invents boundaries that are not in the data. For a quantity use a single hue from light to dark. For something with a natural middle, like a balance of opinion, use two contrasting hues with grey in the middle.</p>
 </blockquote>
 </section>
-<section id="and-one-thing-never-to-do" class="level3" data-number="5.6.4">
-<h3 data-number="5.6.4" class="anchored" data-anchor-id="and-one-thing-never-to-do"><span class="header-section-number">5.6.4</span> And one thing never to do</h3>
+<section id="and-one-thing-never-to-do" class="level3" data-number="4.6.4">
+<h3 data-number="4.6.4" class="anchored" data-anchor-id="and-one-thing-never-to-do"><span class="header-section-number">4.6.4</span> And one thing never to do</h3>
 <p><strong>Never put two different vertical scales on one plot.</strong> It looks efficient and it is not: the alignment between the two scales is arbitrary, so you can make the two series appear to move together or apart simply by choosing different limits. Any correlation the reader sees is one you drew.</p>
 <p>If you have two quantities of different sizes, use two plots side by side, or express both as an index starting from the same value.</p>
 </section>
 </section>
-<section id="putting-last-weeks-rules-into-code" class="level2" data-number="5.7">
-<h2 data-number="5.7" class="anchored" data-anchor-id="putting-last-weeks-rules-into-code"><span class="header-section-number">5.7</span> Putting last week’s rules into code</h2>
-<p>Chapter 4 ended with eight rules for showing what you know. Here they are as ggplot.</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 46%">
-<col style="width: 54%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Rule</th>
-<th>How</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Show the whole of a bounded scale</td>
-<td><code>coord_cartesian(xlim = , ylim = )</code></td>
-</tr>
-<tr class="even">
-<td>Equal intervals</td>
-<td>the default; do not use a log axis without saying so</td>
-</tr>
-<tr class="odd">
-<td>Human-language axis labels with units</td>
-<td><code>labs(x = , y = )</code></td>
-</tr>
-<tr class="even">
-<td>Mark the anchor points</td>
-<td><code>annotate("point", x = , y = )</code></td>
-</tr>
-<tr class="odd">
-<td>Shade the forbidden region</td>
-<td><code>annotate("polygon", x = , y = , fill = )</code></td>
-</tr>
-<tr class="even">
-<td>Draw the equality line</td>
-<td><code>geom_abline(intercept = 0, slope = 1)</code></td>
-</tr>
-<tr class="odd">
-<td>One piece of information per element</td>
-<td>do not map a variable that is already on an axis</td>
-</tr>
-<tr class="even">
-<td>Nothing that carries no information</td>
-<td><code>theme(legend.position = "none")</code> when the legend is redundant</td>
-</tr>
-</tbody>
-</table>
-<p>And the whole thing on one plot:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"data/world.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(world, <span class="fu">aes</span>(<span class="at">x =</span> lit_m, <span class="at">y =</span> lit_f)) <span class="sc">+</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"point"</span>,</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">2.5</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(</span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">intercept =</span> <span class="dv">0</span>,</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">slope =</span> <span class="dv">1</span>,</span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">"dashed"</span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>)) <span class="sc">+</span></span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Male literacy rate (%)"</span>,</span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Female literacy rate (%)"</span>,</span>
-<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="fu">paste</span>(</span>
-<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Women are less often literate than men,"</span>,</span>
-<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>      <span class="st">"and the gap widens as literacy falls"</span></span>
-<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div id="fig-finished" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-finished-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="05-visualisation_files/figure-html/fig-finished-1.png" class="img-fluid figure-img" width="1050">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-finished-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.1: Everything from chapter 4, in ggplot.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="before-it-leaves-your-computer" class="level2" data-number="5.8">
-<h2 data-number="5.8" class="anchored" data-anchor-id="before-it-leaves-your-computer"><span class="header-section-number">5.8</span> Before it leaves your computer</h2>
+<section id="before-it-leaves-your-computer" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="before-it-leaves-your-computer"><span class="header-section-number">4.7</span> Before it leaves your computer</h2>
 <p>A short checklist. Every item is something a marker will notice.</p>
 <ul>
 <li>Are both axes labelled in words a reader outside the course would understand, with units?</li>
@@ -751,29 +660,32 @@ Figure&nbsp;5.1: Everything from chapter 4, in ggplot.
 <li>Does the caption say what the reader is looking at, rather than repeating the title?</li>
 </ul>
 </section>
-<section id="saving" class="level2" data-number="5.9">
-<h2 data-number="5.9" class="anchored" data-anchor-id="saving"><span class="header-section-number">5.9</span> Saving</h2>
+<section id="saving" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="saving"><span class="header-section-number">4.8</span> Saving</h2>
 <p>Put the plot in an object, then write it out with <code>ggsave()</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>literacy_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(world, <span class="fu">aes</span>(<span class="at">x =</span> lit_m, <span class="at">y =</span> lit_f)) <span class="sc">+</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Male literacy rate (%)"</span>,</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Female literacy rate (%)"</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"figures/literacy.pdf"</span>,</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> literacy_plot,</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">width =</span> <span class="dv">6</span>,</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">height =</span> <span class="dv">4</span></span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>literacy_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(world, <span class="fu">aes</span>(<span class="at">x =</span> lit_m, <span class="at">y =</span> lit_f)) <span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Male literacy rate (%)"</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Female literacy rate (%)"</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"figures/literacy.pdf"</span>,</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> literacy_plot,</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">width =</span> <span class="dv">6</span>,</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">height =</span> <span class="dv">4</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>width</code> and <code>height</code> are in inches, and they matter more than they look: they set the size the text is drawn at relative to the plot. A figure saved at 12 by 8 and then shrunk to fit a page has labels half the size they should be. Save it at the size you will use it.</p>
 <p>The file type comes from the extension. Use <code>.pdf</code> for anything going into a written document — it stays sharp at any size. Use <code>.png</code> for slides or the web, and set <code>dpi = 300</code> or better.</p>
+<blockquote class="blockquote">
+<p><strong>Next week</strong> we come back to plots from the other direction: not how to draw one, but what has to be on it, and what you can work out about a relationship before you have looked at any data at all. Everything in this chapter is the equipment for that.</p>
+</blockquote>
 <div class="swirl">
-<p><strong>In the seminar.</strong> <code>swirl</code> lesson <strong>05 Visualisation</strong>. The grammar, one-variable and two-variable plots, mapping against setting, faceting, and labelling a figure properly. Around 30 minutes.</p>
+<p><strong>In the seminar.</strong> <code>swirl</code> lesson <strong>04 Visualisation</strong>. The grammar, one-variable and two-variable plots, mapping against setting, faceting, and labelling a figure properly. Around 30 minutes.</p>
 </div>
 
 
@@ -1182,13 +1094,13 @@ Figure&nbsp;5.1: Everything from chapter 4, in ggplot.
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./04-logical-models.html" class="pagination-link" aria-label="Thinking logically and visually about data">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span>
+      <a href="./03-data-management-2.html" class="pagination-link" aria-label="Data and data management II">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data and data management II</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./06-hypothesis-testing.html" class="pagination-link" aria-label="The logic of hypothesis testing">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">The logic of hypothesis testing</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./05-logical-models.html" class="pagination-link" aria-label="Thinking logically and visually about data">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

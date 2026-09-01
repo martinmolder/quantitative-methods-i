@@ -191,7 +191,7 @@ Two things follow, and we use both.
 
 **First, limits let you check your work.** If a calculation gives a share of 140%, or a probability of −0.2, you do not need to check the data to know something is wrong. The result left the region where answers can exist. We come back to this at the end of the chapter, and every time we compute anything from here on.
 
-**Second, limits are the beginning of a model.** If you know that a relationship must pass through the point where both variables are zero, and that neither can exceed 100, you already know a great deal about what shape it can have — before collecting a single observation. That is the subject of session 4, and it is worth knowing now that the groundwork is being laid here.
+**Second, limits are the beginning of a model.** If you know that a relationship must pass through the point where both variables are zero, and that neither can exceed 100, you already know a great deal about what shape it can have — before collecting a single observation. That is the subject of session 5, and it is worth knowing now that the groundwork is being laid here.
 
 ::: {.discussion}
 **A question.** For each of these, what are the limits, and are they hard or soft?
@@ -230,7 +230,7 @@ sd(raw$F3020_R)
 
 `sd()` is the standard deviation. All three of these numbers are wrong, for the same reason as before.
 
-`hist()` draws a quick histogram. It is not pretty — session 5 is about making plots properly — but it is one word and it shows you the shape.
+`hist()` draws a quick histogram. It is not pretty — session 4 is about making plots properly — but it is one word and it shows you the shape.
 
 ```{r}
 #| fig-height: 3.5

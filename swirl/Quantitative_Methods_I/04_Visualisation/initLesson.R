@@ -14,7 +14,7 @@
 .path2rds <- file.path(
   .get_course_path(),
   "Quantitative_Methods_I",
-  "05_Visualisation",
+  "04_Visualisation",
   "swe.rds"
 )
 

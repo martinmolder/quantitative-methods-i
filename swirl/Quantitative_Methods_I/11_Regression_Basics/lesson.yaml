@@ -149,4 +149,4 @@
   Hint: The outcome is a 0 to 10 scale. What is the smallest residual possible for someone predicted to be at 9?
 
 - Class: text
-  Output: That is session 4 turning up in the middle of a regression. The limits of the scale constrain what the model can do, and OLS does not know they exist. Next week - presenting all this to somebody else.
+  Output: That is session 5 turning up in the middle of a regression. The limits of the scale constrain what the model can do, and OLS does not know they exist. Next week - presenting all this to somebody else.

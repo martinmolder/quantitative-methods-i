@@ -7,7 +7,7 @@
   Version: 1.0.0
 
 - Class: text
-  Output: Every model so far has assumed two things - that each predictor has the same effect for everybody, and that the relationship is a straight line. Both are often wrong. Two objects are loaded - swe with the trust score ready, and world, the country data from session 4.
+  Output: Every model so far has assumed two things - that each predictor has the same effect for everybody, and that the relationship is a straight line. Both are often wrong. Two objects are loaded - swe with the trust score ready, and world, the country data from session 5.
 
 - Class: text
   Output: First, interactions. A model with trust plus bloc says the trust slope is identical for left and right voters, and forces it to be. An interaction lets it differ.
@@ -88,7 +88,7 @@
   Output: One warning. With ten predictors there are forty-five possible two-way interactions, and a couple would come out significant by chance. Test the ones you had a reason to expect.
 
 - Class: text
-  Output: Now the second assumption - that the relationship is a straight line. Session 4 gave us a case where it cannot be. Income has a floor at zero and no ceiling; life expectancy has both.
+  Output: Now the second assumption - that the relationship is a straight line. Session 5 gave us a case where it cannot be. Income has a floor at zero and no ceiling; life expectancy has both.
 
 - Class: cmd_question
   Output: Fit a straight line anyway. Type linear <- lm(life ~ gdp, data = world).

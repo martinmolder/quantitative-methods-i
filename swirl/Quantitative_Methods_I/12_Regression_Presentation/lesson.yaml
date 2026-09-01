@@ -133,7 +133,7 @@
   Hint: What is the largest value demlevel can take?
 
 - Class: text
-  Output: Session 4 arriving in the middle of a regression. A straight line does not know the outcome is bounded, and extend it far enough and it will predict a rating of 12, a negative income, a probability of 1.4. Do not predict outside the range of your data, and always check predictions against the limits of the scale.
+  Output: Session 5 arriving in the middle of a regression. A straight line does not know the outcome is bounded, and extend it far enough and it will predict a rating of 12, a negative income, a probability of 1.4. Do not predict outside the range of your data, and always check predictions against the limits of the scale.
 
 - Class: text
   Output: When a bounded outcome is the whole problem rather than an edge case, a straight line is the wrong model. That is session 15.

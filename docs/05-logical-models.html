@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Thinking logically and visually about data – Quantitative Methods I</title>
+<title>5&nbsp; Thinking logically and visually about data – Quantitative Methods I</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,8 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./05-visualisation.html" rel="next">
-<link href="./03-data-management-2.html" rel="prev">
+<link href="./06-hypothesis-testing.html" rel="next">
+<link href="./04-visualisation.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -119,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./04-logical-models.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./05-logical-models.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -170,14 +170,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-logical-models.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span></a>
+  <a href="./04-visualisation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data visualisation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-visualisation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data visualisation</span></span></a>
+  <a href="./05-logical-models.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -250,11 +250,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#what-you-know-before-you-look" id="toc-what-you-know-before-you-look" class="nav-link active" data-scroll-target="#what-you-know-before-you-look"><span class="header-section-number">4.1</span> What you know before you look</a></li>
-  <li><a href="#approaching-a-limit" id="toc-approaching-a-limit" class="nav-link" data-scroll-target="#approaching-a-limit"><span class="header-section-number">4.2</span> Approaching a limit</a></li>
-  <li><a href="#regions-that-cannot-exist" id="toc-regions-that-cannot-exist" class="nav-link" data-scroll-target="#regions-that-cannot-exist"><span class="header-section-number">4.3</span> Regions that cannot exist</a></li>
-  <li><a href="#rules-for-drawing" id="toc-rules-for-drawing" class="nav-link" data-scroll-target="#rules-for-drawing"><span class="header-section-number">4.4</span> Rules for drawing</a></li>
-  <li><a href="#what-this-is-for" id="toc-what-this-is-for" class="nav-link" data-scroll-target="#what-this-is-for"><span class="header-section-number">4.5</span> What this is for</a></li>
+  <li><a href="#what-you-know-before-you-look" id="toc-what-you-know-before-you-look" class="nav-link active" data-scroll-target="#what-you-know-before-you-look"><span class="header-section-number">5.1</span> What you know before you look</a></li>
+  <li><a href="#approaching-a-limit" id="toc-approaching-a-limit" class="nav-link" data-scroll-target="#approaching-a-limit"><span class="header-section-number">5.2</span> Approaching a limit</a></li>
+  <li><a href="#regions-that-cannot-exist" id="toc-regions-that-cannot-exist" class="nav-link" data-scroll-target="#regions-that-cannot-exist"><span class="header-section-number">5.3</span> Regions that cannot exist</a></li>
+  <li><a href="#rules-for-drawing" id="toc-rules-for-drawing" class="nav-link" data-scroll-target="#rules-for-drawing"><span class="header-section-number">5.4</span> Rules for drawing</a>
+  <ul class="collapse">
+  <li><a href="#the-same-rules-as-ggplot" id="toc-the-same-rules-as-ggplot" class="nav-link" data-scroll-target="#the-same-rules-as-ggplot"><span class="header-section-number">5.4.1</span> The same rules, as ggplot</a></li>
+  </ul></li>
+  <li><a href="#what-this-is-for" id="toc-what-this-is-for" class="nav-link" data-scroll-target="#what-this-is-for"><span class="header-section-number">5.5</span> What this is for</a></li>
   </ul>
 </nav>
     </div>
@@ -263,7 +266,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Thinking logically and visually about data</span></h1>
 </div>
 
 
@@ -290,12 +293,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"data/world.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>world</code> holds 119 countries with a handful of indicators from the World Bank. We use it because its variables have real limits.</p>
-<blockquote class="blockquote">
-<p>The plots below use <code>ggplot2</code>, which is the subject of next week’s session. For now, read the code as instructions rather than as something to memorise — take these points, put this on the horizontal axis and that on the vertical, draw a line here. Next week the mechanics get taken apart properly.</p>
-<p>Four pieces recur. <code>ggplot()</code> starts a plot and says which data it uses. <code>labs()</code> sets the axis titles. <code>theme_bw()</code> swaps the grey background for a plain one. And the layers are joined with <code>+</code> rather than the pipe.</p>
-</blockquote>
-<section id="what-you-know-before-you-look" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="what-you-know-before-you-look"><span class="header-section-number">4.1</span> What you know before you look</h2>
+<p>The plots below use <code>ggplot2</code>, which was last week’s session, so the code should be readable. Everything here is the same handful of pieces: <code>ggplot()</code> and <code>aes()</code> to say what goes where, a <code>geom_</code> to draw it, <code>coord_cartesian()</code> to fix the axes, <code>labs()</code> for the labels.</p>
+<section id="what-you-know-before-you-look" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="what-you-know-before-you-look"><span class="header-section-number">5.1</span> What you know before you look</h2>
 <p>Take a concrete question. <strong>Across countries, how is the literacy rate among women related to the literacy rate among men?</strong></p>
 <p>Before any data, you already know several things.</p>
 <p><strong>Both scales have hard limits.</strong> A literacy rate is a share of a population. It cannot be below 0% or above 100%. So the whole of the relationship lives inside a square: 0 to 100 on both axes, and nowhere else. That square is not a plotting choice; it is a fact about what the numbers mean.</p>
@@ -326,10 +326,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="fig-box" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-box-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="04-logical-models_files/figure-html/fig-box-1.png" class="img-fluid figure-img" width="1050">
+<img src="05-logical-models_files/figure-html/fig-box-1.png" class="img-fluid figure-img" width="1050">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-box-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.1: What is known before the data: the box, the two anchor points, and the equality line.
+Figure&nbsp;5.1: What is known before the data: the box, the two anchor points, and the equality line.
 </figcaption>
 </figure>
 </div>
@@ -355,10 +355,10 @@ Figure&nbsp;4.1: What is known before the data: the box, the two anchor points, 
 <div id="fig-lit" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-lit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="04-logical-models_files/figure-html/fig-lit-1.png" class="img-fluid figure-img" width="1050">
+<img src="05-logical-models_files/figure-html/fig-lit-1.png" class="img-fluid figure-img" width="1050">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.2: Adult literacy rates, most recent year available for each country.
+Figure&nbsp;5.2: Adult literacy rates, most recent year available for each country.
 </figcaption>
 </figure>
 </div>
@@ -387,8 +387,8 @@ Figure&nbsp;4.2: Adult literacy rates, most recent year available for each count
 <p>Why does the scatter narrow as it approaches the top-right corner? Is that a fact about education, or a consequence of where the anchor point is?</p>
 </div>
 </section>
-<section id="approaching-a-limit" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="approaching-a-limit"><span class="header-section-number">4.2</span> Approaching a limit</h2>
+<section id="approaching-a-limit" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="approaching-a-limit"><span class="header-section-number">5.2</span> Approaching a limit</h2>
 <p>The second shape. <strong>How is national income related to life expectancy?</strong></p>
 <p>The limits are not symmetric this time.</p>
 <p>Life expectancy has a hard floor at 0 and what is effectively a ceiling: no country will reach 120, and in practice nothing has passed the middle 80s. GDP per capita has a floor at 0 and <strong>no upper limit at all</strong> — a country can always be richer.</p>
@@ -414,10 +414,10 @@ Figure&nbsp;4.2: Adult literacy rates, most recent year available for each count
 <div id="fig-preston" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-preston-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="04-logical-models_files/figure-html/fig-preston-1.png" class="img-fluid figure-img" width="1050">
+<img src="05-logical-models_files/figure-html/fig-preston-1.png" class="img-fluid figure-img" width="1050">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-preston-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.3: Income and life expectancy. The dashed line marks the highest life expectancy any country has reached.
+Figure&nbsp;5.3: Income and life expectancy. The dashed line marks the highest life expectancy any country has reached.
 </figcaption>
 </figure>
 </div>
@@ -431,8 +431,8 @@ Figure&nbsp;4.3: Income and life expectancy. The dashed line marks the highest l
 <p>The sentence is grammatical, the number is computable, and the model will produce it without complaint. What exactly is wrong with it — and at which end of the income scale does it go wrong first?</p>
 </div>
 </section>
-<section id="regions-that-cannot-exist" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="regions-that-cannot-exist"><span class="header-section-number">4.3</span> Regions that cannot exist</h2>
+<section id="regions-that-cannot-exist" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="regions-that-cannot-exist"><span class="header-section-number">5.3</span> Regions that cannot exist</h2>
 <p>The third idea, and the one that does the most work.</p>
 <p>Sometimes a whole region of the plot is not merely empty but <strong>impossible</strong> — no case could ever appear there, whatever the world were like. Marking that region tells you something no amount of data can.</p>
 <p>Here is one from our own survey. For each Swedish respondent, take two numbers: how they rated <strong>the party they actually voted for</strong>, and the <strong>highest rating they gave to any party</strong>.</p>
@@ -489,10 +489,10 @@ Figure&nbsp;4.3: Income and life expectancy. The dashed line marks the highest l
 <div id="fig-forbidden" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-forbidden-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="04-logical-models_files/figure-html/fig-forbidden-1.png" class="img-fluid figure-img" width="1050">
+<img src="05-logical-models_files/figure-html/fig-forbidden-1.png" class="img-fluid figure-img" width="1050">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-forbidden-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.4: Rating of the party voted for against the respondent’s highest rating of any party. The shaded region cannot contain any case.
+Figure&nbsp;5.4: Rating of the party voted for against the respondent’s highest rating of any party. The shaded region cannot contain any case.
 </figcaption>
 </figure>
 </div>
@@ -516,8 +516,8 @@ Figure&nbsp;4.4: Rating of the party voted for against the respondent’s highes
 <p>93.4% of voters voted for a party they rate at least as highly as any other. The remaining few per cent did not — they voted for something other than their favourite, which is what a theory of strategic voting has to explain.</p>
 <p>The empty triangle is what makes that number readable. Without it you would not know whether 93% was high or low, because you would not know that 100% was the ceiling and that the ceiling is imposed by logic rather than by Swedish politics.</p>
 </section>
-<section id="rules-for-drawing" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="rules-for-drawing"><span class="header-section-number">4.4</span> Rules for drawing</h2>
+<section id="rules-for-drawing" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="rules-for-drawing"><span class="header-section-number">5.4</span> Rules for drawing</h2>
 <p>Pulling the three cases together. When you draw a relationship between two continuous variables, put on the plot <strong>everything you know</strong>, not only the data.</p>
 <ol type="1">
 <li><strong>Show the whole of both scales where they have limits.</strong> Start axes at zero when zero is meaningful. Cropping an axis to the range of the data is the commonest way to make a weak relationship look strong.</li>
@@ -530,19 +530,109 @@ Figure&nbsp;4.4: Rating of the party voted for against the respondent’s highes
 <li><strong>Nothing that carries no information.</strong> Legends for a single series, gridlines nobody reads, a third dimension on a bar chart.</li>
 </ol>
 <p>Numbers 1 to 6 are about the logic of the thing. Numbers 7 and 8 are about not wasting the reader’s attention, and next week is largely about them.</p>
+<section id="the-same-rules-as-ggplot" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="the-same-rules-as-ggplot"><span class="header-section-number">5.4.1</span> The same rules, as ggplot</h3>
+<p>You have the tools for all eight from last week.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 46%">
+<col style="width: 54%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Rule</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Show the whole of a bounded scale</td>
+<td><code>coord_cartesian(xlim = , ylim = )</code></td>
+</tr>
+<tr class="even">
+<td>Equal intervals</td>
+<td>the default; do not use a log axis without saying so</td>
+</tr>
+<tr class="odd">
+<td>Human-language axis labels with units</td>
+<td><code>labs(x = , y = )</code></td>
+</tr>
+<tr class="even">
+<td>Mark the anchor points</td>
+<td><code>annotate("point", x = , y = )</code></td>
+</tr>
+<tr class="odd">
+<td>Shade the forbidden region</td>
+<td><code>annotate("polygon", x = , y = , fill = )</code></td>
+</tr>
+<tr class="even">
+<td>Draw the equality line</td>
+<td><code>geom_abline(intercept = 0, slope = 1)</code></td>
+</tr>
+<tr class="odd">
+<td>One piece of information per element</td>
+<td>do not map a variable that is already on an axis</td>
+</tr>
+<tr class="even">
+<td>Nothing that carries no information</td>
+<td><code>theme(legend.position = "none")</code> when the legend is redundant</td>
+</tr>
+</tbody>
+</table>
+<p>And all of it together:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"data/world.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(world, <span class="fu">aes</span>(<span class="at">x =</span> lit_m, <span class="at">y =</span> lit_f)) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"point"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">2.5</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">intercept =</span> <span class="dv">0</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">slope =</span> <span class="dv">1</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">"dashed"</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Male literacy rate (%)"</span>,</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Female literacy rate (%)"</span>,</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="fu">paste</span>(</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Women are less often literate than men,"</span>,</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>      <span class="st">"and the gap widens as literacy falls"</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-finished" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-finished-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="05-logical-models_files/figure-html/fig-finished-1.png" class="img-fluid figure-img" width="1050">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-finished-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.5: Everything above, on one plot.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 <div class="discussion">
 <p><strong>A question.</strong> Rule 1 says to start axes at zero when zero is meaningful, and the income plot above obeys it on the vertical axis.</p>
 <p>But look at the horizontal one. GDP per capita runs from about a thousand dollars to over a hundred and thirty thousand, and almost every country is bunched at the left.</p>
 <p>Is the horizontal axis obeying rule 1? Is it helping? What would you do about it — and does your answer conflict with rule 2?</p>
 </div>
 </section>
-<section id="what-this-is-for" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="what-this-is-for"><span class="header-section-number">4.5</span> What this is for</h2>
+</section>
+<section id="what-this-is-for" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="what-this-is-for"><span class="header-section-number">5.5</span> What this is for</h2>
 <p>The point of all of this is comparison.</p>
 <p>A statistical model gives you a number. On its own, a number cannot be checked. Fitted to the income and life-expectancy data, a straight line will give you a slope, a standard error and a p-value, and every one of those will look like a result. Knowing beforehand that the relationship must flatten is what lets you see that the straight line is answering a question nobody asked.</p>
-<p>This is Taagepera’s argument, and it is the reason this session sits where it does — after learning to handle data and before learning to model it. From next week onwards every method in this course produces numbers. What you know about the limits of your scales is what tells you whether to believe them.</p>
+<p>This is Taagepera’s argument, and it is the reason this session sits where it does — after learning to handle and draw data, and before learning to model it. From next week onwards every method in this course produces numbers. What you know about the limits of your scales is what tells you whether to believe them.</p>
 <div class="swirl">
-<p><strong>In the seminar.</strong> <code>swirl</code> lesson <strong>04 Logical And Visual</strong>. Working out the limits of a pair of scales, plotting the region where cases can exist, and putting real data inside it. Around 30 minutes.</p>
+<p><strong>In the seminar.</strong> <code>swirl</code> lesson <strong>05 Logical And Visual</strong>. Working out the limits of a pair of scales, plotting the region where cases can exist, and putting real data inside it. Around 30 minutes.</p>
 </div>
 
 
@@ -951,13 +1041,13 @@ Figure&nbsp;4.4: Rating of the party voted for against the respondent’s highes
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./03-data-management-2.html" class="pagination-link" aria-label="Data and data management II">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data and data management II</span></span>
+      <a href="./04-visualisation.html" class="pagination-link" aria-label="Data visualisation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data visualisation</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./05-visualisation.html" class="pagination-link" aria-label="Data visualisation">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data visualisation</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./06-hypothesis-testing.html" class="pagination-link" aria-label="The logic of hypothesis testing">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">The logic of hypothesis testing</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
