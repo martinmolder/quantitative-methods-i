@@ -96,6 +96,18 @@ for (deck in decks) {
     problems <- c(problems, paste(deck, "has not been built"))
   }
 
+  # A bare \bigskip on its own line leaves LaTeX in horizontal mode, so the
+  # space is deferred to the next line break and lands mid-sentence. Written
+  # as \par\bigskip it ends the paragraph first and the space goes where
+  # it was meant to go.
+  bare <- grep("^\\s*\\\\(big|med|small)skip\\s*$", lines)
+  if (length(bare) > 0) {
+    problems <- c(problems, sprintf(
+      "%s: bare vertical space on line(s) %s -- write \\par\\bigskip",
+      deck, paste(bare, collapse = ", ")
+    ))
+  }
+
   if (frames < 12 || frames > 28) {
     problems <- c(problems, sprintf(
       "%s has %d frames -- aim for 12 to 28 in a 45-60 minute lecture",

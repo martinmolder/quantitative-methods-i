@@ -13,3 +13,6 @@ Rplots.pdf
 .DS_Store
 
 **/*.quarto_ipynb
+
+# built by hand; the real deliverable is data/Quantitative_Methods_I.zip
+swirl/*.zip
