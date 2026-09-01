@@ -71,7 +71,7 @@ The **remaining half hour** is hands-on. We work through a `swirl` lesson togeth
 
 > **The lecture slides are not these materials, and neither replaces the other.** The slides carry the parts worth talking through out loud, and they are posted on Moodle after each session. They are a record of what was said in class, not a summary of the chapter — everything you actually need is here.
 
-> This course does not work without independent effort. The three hours a week we spend together are not enough on their own to get you to the point where you can run an analysis and defend it. That comes from working through the materials, redoing the examples with your own variables, and getting stuck on your own and unstuck again.
+> This course does not work without independent effort. The hour and a half a week we spend together is not enough on its own to get you to the point where you can run an analysis and defend it. That comes from working through the materials, redoing the examples with your own variables, and getting stuck on your own and unstuck again.
 
 ## Simple first, then harder
 
