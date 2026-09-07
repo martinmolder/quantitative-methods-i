@@ -157,3 +157,13 @@ table th {
   font-size: 14px;
   line-height: 1.35;
 }
+
+/* ---------------------------------------------------------------------------
+   Tables. The body is justified, which reads well in prose and badly in a
+   narrow table cell, where it opens rivers of white space between words.
+   --------------------------------------------------------------------------- */
+
+table th,
+table td {
+  text-align: left;
+}

@@ -128,7 +128,7 @@ Everything the course uses is here. These links are permanent, so you can point 
 |---|---|
 | [`swe.rds`](data/swe.rds) | The analysis data set. Used from session 4 onwards. |
 | [`swe.csv`](data/swe.csv) | The same, as plain text, for other software. |
-| [`codebook.csv`](data/codebook.csv) | Every variable, what it is, and how it is coded. |
+| [`codebook.csv`](data/codebook.csv) | Every variable, what it is, and how it is coded. Also [as a table](02-data-management-1.qmd#appendix-what-the-variables-are). |
 | [`cses6_swe_raw.csv`](data/cses6_swe_raw.csv) | The survey as it comes from the archive. Sessions 2 and 3. |
 | [`cses6_swe_raw.sav`](data/cses6_swe_raw.sav) | The same in SPSS format, with labels. |
 | [`counties.csv`](data/counties.csv) | The 21 Swedish counties. Used for joining in session 3. |

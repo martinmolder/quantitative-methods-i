@@ -2,7 +2,7 @@
 #
 # The codebook is written by hand, so it can drift out of step with the
 # build script. This check makes drift impossible to miss: every column of
-# usa.rds must appear in the codebook, and every codebook row must
+# swe.rds must appear in the codebook, and every codebook row must
 # correspond to a real column.
 
 library(readr)

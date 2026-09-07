@@ -69,10 +69,13 @@ for (chapter in chapters) {
   code <- lines[is_code]
   prose <- lines[!is_code]
 
-  # Setup chunks are hidden from the reader, so nothing in them counts as
+  # Chunks the reader never sees are hidden, so nothing in them counts as
   # having been introduced.
   chunk_id <- cumsum(fence)
-  hidden <- unique(chunk_id[grepl("include: false", lines, fixed = TRUE)])
+  hidden <- unique(chunk_id[
+    grepl("include: false", lines, fixed = TRUE) |
+      grepl("echo: false", lines, fixed = TRUE)
+  ])
   code <- lines[is_code & !(chunk_id %in% hidden)]
 
   # Chunk options are instructions to knitr, not R the reader has to learn.

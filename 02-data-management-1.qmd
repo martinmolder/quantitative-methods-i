@@ -588,3 +588,72 @@ The general lesson is worth more than the specific fix. Errors that produce a me
 ::: {.swirl}
 **In the seminar.** `swirl` lesson **02 Data Management I**. Reading the survey file, looking at it, dealing with the missing-value codes, subsetting and recoding. Around 30 minutes.
 :::
+
+## Appendix: what the variables are
+
+CSES ships its variables under names like `F3020_R` and `F3011_LH_PL`. They are not meant to be read. They are positions in a codebook that runs to several hundred pages and covers every country in the study, and working from them directly is how people end up analysing the wrong column without noticing.
+
+So the variables were renamed when the data for this course were built: `F3020_R` became `lr_self`, `F3007_1` became `tr_parl`. The table below is the map between the two, and it is the page to come back to whenever you meet a name you do not recognise --- in these materials, in a `swirl` lesson, or in your own work.
+
+```{r}
+#| label: codebook-load
+#| include: false
+
+book <- read.csv("data/codebook.csv", stringsAsFactors = FALSE)
+names(book)[1] <- "variable"
+
+chapters <- sort(list.files(pattern = "^[0-9]{2}-.*[.]qmd$"))
+
+code_in <- function(file) {
+  lines <- readLines(file, warn = FALSE)
+  fence <- grepl("^```", lines)
+  chunks <- lines[cumsum(fence) %% 2 == 1 & !fence]
+  inline <- unlist(regmatches(lines, gregexpr("`r [^`]+`", lines)))
+  paste(c(chunks, inline), collapse = "\n")
+}
+
+code <- vapply(chapters, code_in, character(1))
+numbers <- as.integer(sub("-.*", "", chapters))
+
+sessions <- vapply(book$variable, function(v) {
+  hits <- grepl(paste0("\\b", v, "\\b(?!\\()"), code, perl = TRUE)
+  paste(numbers[hits], collapse = ", ")
+}, character(1))
+names(sessions) <- book$variable
+
+n_used <- sum(nzchar(sessions))
+```
+
+The columns are these.
+
+- **Name** --- what the variable is called in `swe.rds`, the cleaned file we use from session 4 onwards.
+- **CSES name** --- the name the variable has in the archive. This is what you will find in `cses6_swe_raw.csv` and what you look up in the official CSES codebook.
+- **What it is** --- what was asked, in one line.
+- **Coding** --- the values and what they mean, *after* cleaning. In the raw file the missing-value codes are still there, which is the whole subject of this session.
+- **Sessions** --- which sessions use the variable.
+
+`r n_used` of the `r nrow(book)` variables are used somewhere in the course. A blank in the last column means the variable is in the data set but we never touch it, and those are there deliberately: they are the obvious place to look if you want a question of your own to work on.
+
+The same table is downloadable as [`codebook.csv`](data/codebook.csv), which is easier to search than a web page.
+
+```{r}
+#| label: codebook-table
+#| echo: false
+#| results: asis
+
+escape <- function(x) gsub("|", "\\|", x, fixed = TRUE)
+
+for (group in unique(book$group)) {
+  rows <- book[book$group == group, ]
+  cat("### ", group, "\n\n", sep = "")
+  cat("| Name | CSES name | What it is | Coding | Sessions |\n")
+  cat("|---|---|---|---|---|\n")
+  cat(sprintf(
+    "| `%s` | `%s` | %s | %s | %s |\n",
+    rows$variable, rows$source, escape(rows$label), escape(rows$coding),
+    sessions[rows$variable]
+  ), sep = "")
+  cat("\n: {tbl-colwidths=\"[14,13,29,30,14]\"}\n\n")
+}
+```
+

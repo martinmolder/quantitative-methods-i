@@ -285,6 +285,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#checking-your-work" id="toc-checking-your-work" class="nav-link" data-scroll-target="#checking-your-work"><span class="header-section-number">2.9</span> Checking your work</a></li>
   <li><a href="#a-trap-worth-meeting-once" id="toc-a-trap-worth-meeting-once" class="nav-link" data-scroll-target="#a-trap-worth-meeting-once"><span class="header-section-number">2.10</span> A trap worth meeting once</a></li>
+  <li><a href="#appendix-what-the-variables-are" id="toc-appendix-what-the-variables-are" class="nav-link" data-scroll-target="#appendix-what-the-variables-are"><span class="header-section-number">2.11</span> Appendix: what the variables are</a>
+  <ul class="collapse">
+  <li><a href="#identifier-and-weight" id="toc-identifier-and-weight" class="nav-link" data-scroll-target="#identifier-and-weight"><span class="header-section-number">2.11.1</span> Identifier and weight</a></li>
+  <li><a href="#who-the-respondent-is" id="toc-who-the-respondent-is" class="nav-link" data-scroll-target="#who-the-respondent-is"><span class="header-section-number">2.11.2</span> Who the respondent is</a></li>
+  <li><a href="#politics-in-general" id="toc-politics-in-general" class="nav-link" data-scroll-target="#politics-in-general"><span class="header-section-number">2.11.3</span> Politics in general</a></li>
+  <li><a href="#views-on-democracy" id="toc-views-on-democracy" class="nav-link" data-scroll-target="#views-on-democracy"><span class="header-section-number">2.11.4</span> Views on democracy</a></li>
+  <li><a href="#trust" id="toc-trust" class="nav-link" data-scroll-target="#trust"><span class="header-section-number">2.11.5</span> Trust</a></li>
+  <li><a href="#the-government-and-the-economy" id="toc-the-government-and-the-economy" class="nav-link" data-scroll-target="#the-government-and-the-economy"><span class="header-section-number">2.11.6</span> The government and the economy</a></li>
+  <li><a href="#the-election" id="toc-the-election" class="nav-link" data-scroll-target="#the-election"><span class="header-section-number">2.11.7</span> The election</a></li>
+  <li><a href="#the-pandemic" id="toc-the-pandemic" class="nav-link" data-scroll-target="#the-pandemic"><span class="header-section-number">2.11.8</span> The pandemic</a></li>
+  <li><a href="#how-the-parties-are-rated" id="toc-how-the-parties-are-rated" class="nav-link" data-scroll-target="#how-the-parties-are-rated"><span class="header-section-number">2.11.9</span> How the parties are rated</a></li>
+  <li><a href="#how-the-party-leaders-are-rated" id="toc-how-the-party-leaders-are-rated" class="nav-link" data-scroll-target="#how-the-party-leaders-are-rated"><span class="header-section-number">2.11.10</span> How the party leaders are rated</a></li>
+  <li><a href="#left-and-right" id="toc-left-and-right" class="nav-link" data-scroll-target="#left-and-right"><span class="header-section-number">2.11.11</span> Left and right</a></li>
+  <li><a href="#voting" id="toc-voting" class="nav-link" data-scroll-target="#voting"><span class="header-section-number">2.11.12</span> Voting</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -884,8 +899,894 @@ In file(file, "rt") :
 <div class="swirl">
 <p><strong>In the seminar.</strong> <code>swirl</code> lesson <strong>02 Data Management I</strong>. Reading the survey file, looking at it, dealing with the missing-value codes, subsetting and recoding. Around 30 minutes.</p>
 </div>
+</section>
+<section id="appendix-what-the-variables-are" class="level2" data-number="2.11">
+<h2 data-number="2.11" class="anchored" data-anchor-id="appendix-what-the-variables-are"><span class="header-section-number">2.11</span> Appendix: what the variables are</h2>
+<p>CSES ships its variables under names like <code>F3020_R</code> and <code>F3011_LH_PL</code>. They are not meant to be read. They are positions in a codebook that runs to several hundred pages and covers every country in the study, and working from them directly is how people end up analysing the wrong column without noticing.</p>
+<p>So the variables were renamed when the data for this course were built: <code>F3020_R</code> became <code>lr_self</code>, <code>F3007_1</code> became <code>tr_parl</code>. The table below is the map between the two, and it is the page to come back to whenever you meet a name you do not recognise — in these materials, in a <code>swirl</code> lesson, or in your own work.</p>
+<p>The columns are these.</p>
+<ul>
+<li><strong>Name</strong> — what the variable is called in <code>swe.rds</code>, the cleaned file we use from session 4 onwards.</li>
+<li><strong>CSES name</strong> — the name the variable has in the archive. This is what you will find in <code>cses6_swe_raw.csv</code> and what you look up in the official CSES codebook.</li>
+<li><strong>What it is</strong> — what was asked, in one line.</li>
+<li><strong>Coding</strong> — the values and what they mean, <em>after</em> cleaning. In the raw file the missing-value codes are still there, which is the whole subject of this session.</li>
+<li><strong>Sessions</strong> — which sessions use the variable.</li>
+</ul>
+<p>38 of the 85 variables are used somewhere in the course. A blank in the last column means the variable is in the data set but we never touch it, and those are there deliberately: they are the obvious place to look if you want a question of your own to work on.</p>
+<p>The same table is downloadable as <a href="data/codebook.csv"><code>codebook.csv</code></a>, which is easier to search than a web page.</p>
+<section id="identifier-and-weight" class="level3" data-number="2.11.1">
+<h3 data-number="2.11.1" class="anchored" data-anchor-id="identifier-and-weight"><span class="header-section-number">2.11.1</span> Identifier and weight</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 13%">
+<col style="width: 28%">
+<col style="width: 30%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>CSES name</th>
+<th>What it is</th>
+<th>Coding</th>
+<th>Sessions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>id</code></td>
+<td><code>F1003_2</code></td>
+<td>Respondent identifier</td>
+<td>Text</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>wt</code></td>
+<td><code>F1101_2</code></td>
+<td>Survey weight</td>
+<td>Demographic raking weight (gender, age, education). Mean 1</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="who-the-respondent-is" class="level3" data-number="2.11.2">
+<h3 data-number="2.11.2" class="anchored" data-anchor-id="who-the-respondent-is"><span class="header-section-number">2.11.2</span> Who the respondent is</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 13%">
+<col style="width: 28%">
+<col style="width: 30%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>CSES name</th>
+<th>What it is</th>
+<th>Coding</th>
+<th>Sessions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>age</code></td>
+<td><code>F2001_A</code></td>
+<td>Age in years</td>
+<td>Years</td>
+<td>1, 2, 3, 4, 9, 11, 12, 14</td>
+</tr>
+<tr class="even">
+<td><code>female</code></td>
+<td><code>F2002</code></td>
+<td>Gender</td>
+<td>0 = male, 1 = female</td>
+<td>7, 8, 13, 14, 15</td>
+</tr>
+<tr class="odd">
+<td><code>educ</code></td>
+<td><code>F2003</code></td>
+<td>Education</td>
+<td>1-9 on the ISCED scale, 9 = doctoral</td>
+<td>11, 12, 15</td>
+</tr>
+<tr class="even">
+<td><code>educ3</code></td>
+<td><code>F2003</code></td>
+<td>Education in three groups</td>
+<td>No degree / Bachelor / Postgraduate</td>
+<td>4, 7, 13</td>
+</tr>
+<tr class="odd">
+<td><code>marital</code></td>
+<td><code>F2004</code></td>
+<td>Marital status</td>
+<td>Married / Widowed / Divorced / Single</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>union</code></td>
+<td><code>F2005</code></td>
+<td>Union membership</td>
+<td>0 = no, 1 = yes</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>ses</code></td>
+<td><code>F2008</code></td>
+<td>Socio-economic status</td>
+<td>White collar / Worker / Farmer / Self-employed</td>
+<td>7, 8</td>
+</tr>
+<tr class="even">
+<td><code>income</code></td>
+<td><code>F2010_1</code></td>
+<td>Household income</td>
+<td>1 = lowest quintile to 5 = highest</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>relig</code></td>
+<td><code>F2012</code></td>
+<td>Attendance at religious services</td>
+<td>1 = never to 6 = weekly or more</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>bornswe</code></td>
+<td><code>F2015</code></td>
+<td>Born in Sweden</td>
+<td>0 = no, 1 = yes</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>foreignpar</code></td>
+<td><code>F2016</code></td>
+<td>Was either parent born abroad</td>
+<td>0 = no, 1 = yes</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>urban</code></td>
+<td><code>F2020</code></td>
+<td>Rural or urban residence</td>
+<td>1 = rural to 4 = large town or city</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>county</code></td>
+<td><code>F2018</code></td>
+<td>County of residence</td>
+<td>One of the 21 Swedish counties</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td><code>land</code></td>
+<td><code>F2018</code></td>
+<td>Historical land</td>
+<td>Götaland / Svealand / Norrland, south to north</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="politics-in-general" class="level3" data-number="2.11.3">
+<h3 data-number="2.11.3" class="anchored" data-anchor-id="politics-in-general"><span class="header-section-number">2.11.3</span> Politics in general</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 13%">
+<col style="width: 28%">
+<col style="width: 30%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>CSES name</th>
+<th>What it is</th>
+<th>Coding</th>
+<th>Sessions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>polint</code></td>
+<td><code>F3001</code></td>
+<td>Political interest</td>
+<td>1 = not at all to 4 = very interested (reversed)</td>
+<td>2, 3</td>
+</tr>
+<tr class="even">
+<td><code>inteff</code></td>
+<td><code>F3003</code></td>
+<td>Internal efficacy</td>
+<td>1 = strongly disagree to 5 = strongly agree (reversed)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>news_tv</code></td>
+<td><code>F3002_1</code></td>
+<td>News on public television</td>
+<td>Days per week 0-7</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>news_web</code></td>
+<td><code>F3002_5</code></td>
+<td>Online news sites</td>
+<td>Days per week 0-7</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>news_soc</code></td>
+<td><code>F3002_6_1</code></td>
+<td>News on social media</td>
+<td>Days per week 0-7</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="views-on-democracy" class="level3" data-number="2.11.4">
+<h3 data-number="2.11.4" class="anchored" data-anchor-id="views-on-democracy"><span class="header-section-number">2.11.4</span> Views on democracy</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 13%">
+<col style="width: 28%">
+<col style="width: 30%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>CSES name</th>
+<th>What it is</th>
+<th>Coding</th>
+<th>Sessions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>dem_pref</code></td>
+<td><code>F3004_1</code></td>
+<td>Democracy is always preferable</td>
+<td>1-5, agreement (reversed)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>dem_courts</code></td>
+<td><code>F3004_2</code></td>
+<td>Courts should stop the government</td>
+<td>1-5, agreement (reversed)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>dem_strong</code></td>
+<td><code>F3004_3</code></td>
+<td>Strong leader who bends the rules is good</td>
+<td>1-5, agreement (reversed)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>dem_women</code></td>
+<td><code>F3004_4</code></td>
+<td>Representation of women has gone too far</td>
+<td>1-5, agreement (reversed)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>run_business</code></td>
+<td><code>F3005_1</code></td>
+<td>Country better run by business leaders</td>
+<td>1-5, agreement (reversed)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>run_experts</code></td>
+<td><code>F3005_2</code></td>
+<td>Country better run by independent experts</td>
+<td>1-5, agreement (reversed)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>run_referenda</code></td>
+<td><code>F3005_3</code></td>
+<td>Country better run by citizens in referendums</td>
+<td>1-5, agreement (reversed)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>demlevel</code></td>
+<td><code>F3006</code></td>
+<td>How democratic is the country</td>
+<td>0 = not at all to 10 = completely</td>
+<td>10, 11, 12, 14</td>
+</tr>
+<tr class="odd">
+<td><code>satdem</code></td>
+<td><code>F3022</code></td>
+<td>Satisfaction with democracy</td>
+<td>1 = not at all to 4 = very satisfied (reversed, gap closed)</td>
+<td>3, 9, 10</td>
+</tr>
+<tr class="even">
+<td><code>fairgroups</code></td>
+<td><code>F3026</code></td>
+<td>Are all groups in society treated fairly</td>
+<td>1 = not at all to 4 = very fairly (reversed)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>health</code></td>
+<td><code>F3027</code></td>
+<td>Does the system guarantee adequate healthcare</td>
+<td>1 = not at all to 4 = very well (reversed)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="trust" class="level3" data-number="2.11.5">
+<h3 data-number="2.11.5" class="anchored" data-anchor-id="trust"><span class="header-section-number">2.11.5</span> Trust</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 13%">
+<col style="width: 28%">
+<col style="width: 30%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>CSES name</th>
+<th>What it is</th>
+<th>Coding</th>
+<th>Sessions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>tr_parl</code></td>
+<td><code>F3007_1</code></td>
+<td>Trust in parliament</td>
+<td>1 = not at all to 4 = a lot (reversed)</td>
+<td>3, 10, 11, 12, 14, 15</td>
+</tr>
+<tr class="even">
+<td><code>tr_govt</code></td>
+<td><code>F3007_2</code></td>
+<td>Trust in the government</td>
+<td>1 = not at all to 4 = a lot (reversed)</td>
+<td>9, 10, 11, 12, 14, 15</td>
+</tr>
+<tr class="odd">
+<td><code>tr_court</code></td>
+<td><code>F3007_3</code></td>
+<td>Trust in the judiciary</td>
+<td>1 = not at all to 4 = a lot (reversed)</td>
+<td>10, 11, 12, 14, 15</td>
+</tr>
+<tr class="even">
+<td><code>tr_sci</code></td>
+<td><code>F3007_4</code></td>
+<td>Trust in scientists</td>
+<td>1 = not at all to 4 = a lot (reversed)</td>
+<td>10, 11, 12, 14, 15</td>
+</tr>
+<tr class="odd">
+<td><code>tr_party</code></td>
+<td><code>F3007_5</code></td>
+<td>Trust in political parties</td>
+<td>1 = not at all to 4 = a lot (reversed)</td>
+<td>10, 11, 12, 14, 15</td>
+</tr>
+<tr class="even">
+<td><code>tr_media</code></td>
+<td><code>F3007_6</code></td>
+<td>Trust in traditional media</td>
+<td>1 = not at all to 4 = a lot (reversed)</td>
+<td>10, 11, 12, 14, 15</td>
+</tr>
+<tr class="odd">
+<td><code>tr_socmed</code></td>
+<td><code>F3007_7</code></td>
+<td>Trust in social media</td>
+<td>1 = not at all to 4 = a lot (reversed)</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-government-and-the-economy" class="level3" data-number="2.11.6">
+<h3 data-number="2.11.6" class="anchored" data-anchor-id="the-government-and-the-economy"><span class="header-section-number">2.11.6</span> The government and the economy</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 13%">
+<col style="width: 28%">
+<col style="width: 30%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>CSES name</th>
+<th>What it is</th>
+<th>Coding</th>
+<th>Sessions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>govperf</code></td>
+<td><code>F3008_1</code></td>
+<td>Performance of the government</td>
+<td>1 = very bad to 4 = very good (reversed)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>govcovid</code></td>
+<td><code>F3008_2</code></td>
+<td>Performance of the government in the pandemic</td>
+<td>1 = very bad to 4 = very good (reversed)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>econ</code></td>
+<td><code>F3009</code></td>
+<td>State of the economy over the past year</td>
+<td>1 = much worse to 5 = much better (reversed)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-election" class="level3" data-number="2.11.7">
+<h3 data-number="2.11.7" class="anchored" data-anchor-id="the-election"><span class="header-section-number">2.11.7</span> The election</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 13%">
+<col style="width: 28%">
+<col style="width: 30%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>CSES name</th>
+<th>What it is</th>
+<th>Coding</th>
+<th>Sessions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>satvote</code></td>
+<td><code>F3012_1</code></td>
+<td>Satisfaction with own vote</td>
+<td>1 = not at all to 4 = very satisfied (reversed, gap closed)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>satchoice</code></td>
+<td><code>F3013</code></td>
+<td>Satisfaction with the choice on offer</td>
+<td>1 = not at all to 4 = very satisfied (reversed, gap closed)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>fair</code></td>
+<td><code>F3014</code></td>
+<td>Was the election conducted fairly</td>
+<td>1 = unfairly to 5 = fairly (reversed)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>exteff</code></td>
+<td><code>F3017</code></td>
+<td>External efficacy</td>
+<td>1 = voting makes no difference to 5 = a big difference</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-pandemic" class="level3" data-number="2.11.8">
+<h3 data-number="2.11.8" class="anchored" data-anchor-id="the-pandemic"><span class="header-section-number">2.11.8</span> The pandemic</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 13%">
+<col style="width: 28%">
+<col style="width: 30%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>CSES name</th>
+<th>What it is</th>
+<th>Coding</th>
+<th>Sessions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>pand_unity</code></td>
+<td><code>F3028_1</code></td>
+<td>Effect of the pandemic on a united society</td>
+<td>1 = very negative to 5 = very positive (reversed)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>pand_dem</code></td>
+<td><code>F3028_2</code></td>
+<td>Effect of the pandemic on democracy</td>
+<td>1 = very negative to 5 = very positive (reversed)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>pand_fin</code></td>
+<td><code>F3028_3</code></td>
+<td>Effect of the pandemic on personal finances</td>
+<td>1 = very negative to 5 = very positive (reversed)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>covid</code></td>
+<td><code>F3028_4</code></td>
+<td>Anyone in the household had covid-19</td>
+<td>0 = no, 1 = yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-the-parties-are-rated" class="level3" data-number="2.11.9">
+<h3 data-number="2.11.9" class="anchored" data-anchor-id="how-the-parties-are-rated"><span class="header-section-number">2.11.9</span> How the parties are rated</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 13%">
+<col style="width: 28%">
+<col style="width: 30%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>CSES name</th>
+<th>What it is</th>
+<th>Coding</th>
+<th>Sessions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>like_s</code></td>
+<td><code>F3018_A</code></td>
+<td>Rating of the Social Democrats (S)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>4, 5, 8, 9</td>
+</tr>
+<tr class="even">
+<td><code>like_sd</code></td>
+<td><code>F3018_B</code></td>
+<td>Rating of the Sweden Democrats (SD)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>5, 8, 9</td>
+</tr>
+<tr class="odd">
+<td><code>like_m</code></td>
+<td><code>F3018_C</code></td>
+<td>Rating of the Moderates (M)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>4, 5, 8, 9</td>
+</tr>
+<tr class="even">
+<td><code>like_v</code></td>
+<td><code>F3018_D</code></td>
+<td>Rating of the Left Party (V)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>5, 8, 9</td>
+</tr>
+<tr class="odd">
+<td><code>like_c</code></td>
+<td><code>F3018_E</code></td>
+<td>Rating of the Centre Party (C)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>5, 8, 9</td>
+</tr>
+<tr class="even">
+<td><code>like_kd</code></td>
+<td><code>F3018_F</code></td>
+<td>Rating of the Christian Democrats (KD)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>5, 8, 9</td>
+</tr>
+<tr class="odd">
+<td><code>like_mp</code></td>
+<td><code>F3018_G</code></td>
+<td>Rating of the Greens (MP)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>5, 8, 9</td>
+</tr>
+<tr class="even">
+<td><code>like_l</code></td>
+<td><code>F3018_H</code></td>
+<td>Rating of the Liberals (L)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>5, 8, 9</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-the-party-leaders-are-rated" class="level3" data-number="2.11.10">
+<h3 data-number="2.11.10" class="anchored" data-anchor-id="how-the-party-leaders-are-rated"><span class="header-section-number">2.11.10</span> How the party leaders are rated</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 13%">
+<col style="width: 28%">
+<col style="width: 30%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>CSES name</th>
+<th>What it is</th>
+<th>Coding</th>
+<th>Sessions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>lead_andersson</code></td>
+<td><code>F3019_A</code></td>
+<td>Rating of Magdalena Andersson (S)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td><code>lead_akesson</code></td>
+<td><code>F3019_B</code></td>
+<td>Rating of Jimmie Åkesson (SD)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td><code>lead_kristersson</code></td>
+<td><code>F3019_C</code></td>
+<td>Rating of Ulf Kristersson (M)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td><code>lead_dadgostar</code></td>
+<td><code>F3019_D</code></td>
+<td>Rating of Nooshi Dadgostar (V)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td><code>lead_loof</code></td>
+<td><code>F3019_E</code></td>
+<td>Rating of Annie Lööf (C)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td><code>lead_busch</code></td>
+<td><code>F3019_F</code></td>
+<td>Rating of Ebba Busch (KD)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td><code>lead_stenevi</code></td>
+<td><code>F3019_G</code></td>
+<td>Rating of Märta Stenevi (MP)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td><code>lead_pehrson</code></td>
+<td><code>F3019_H</code></td>
+<td>Rating of Johan Pehrson (L)</td>
+<td>0 = strongly dislike to 10 = strongly like</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="left-and-right" class="level3" data-number="2.11.11">
+<h3 data-number="2.11.11" class="anchored" data-anchor-id="left-and-right"><span class="header-section-number">2.11.11</span> Left and right</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 13%">
+<col style="width: 28%">
+<col style="width: 30%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>CSES name</th>
+<th>What it is</th>
+<th>Coding</th>
+<th>Sessions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>lr_s</code></td>
+<td><code>F3020_A</code></td>
+<td>Social Democrats on the left-right scale</td>
+<td>0 = left to 10 = right</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>lr_sd</code></td>
+<td><code>F3020_B</code></td>
+<td>Sweden Democrats on the left-right scale</td>
+<td>0 = left to 10 = right</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>lr_m</code></td>
+<td><code>F3020_C</code></td>
+<td>Moderates on the left-right scale</td>
+<td>0 = left to 10 = right</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>lr_v</code></td>
+<td><code>F3020_D</code></td>
+<td>Left Party on the left-right scale</td>
+<td>0 = left to 10 = right</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>lr_c</code></td>
+<td><code>F3020_E</code></td>
+<td>Centre Party on the left-right scale</td>
+<td>0 = left to 10 = right</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>lr_kd</code></td>
+<td><code>F3020_F</code></td>
+<td>Christian Democrats on the left-right scale</td>
+<td>0 = left to 10 = right</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>lr_mp</code></td>
+<td><code>F3020_G</code></td>
+<td>Greens on the left-right scale</td>
+<td>0 = left to 10 = right</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>lr_l</code></td>
+<td><code>F3020_H</code></td>
+<td>Liberals on the left-right scale</td>
+<td>0 = left to 10 = right</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>lr_self</code></td>
+<td><code>F3020_R</code></td>
+<td>Own place on the left-right scale</td>
+<td>0 = left to 10 = right</td>
+<td>3, 4, 6, 8, 9, 13, 14, 15</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="voting" class="level3" data-number="2.11.12">
+<h3 data-number="2.11.12" class="anchored" data-anchor-id="voting"><span class="header-section-number">2.11.12</span> Voting</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 13%">
+<col style="width: 28%">
+<col style="width: 30%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>CSES name</th>
+<th>What it is</th>
+<th>Coding</th>
+<th>Sessions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>turnout</code></td>
+<td><code>F3010</code></td>
+<td>Cast a ballot</td>
+<td>0 = no, 1 = yes. Almost no variation</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td><code>vote</code></td>
+<td><code>F3011_LH_PL</code></td>
+<td>Vote choice</td>
+<td>The eight parties, in left-to-right order</td>
+<td>1, 3, 4, 5, 6, 7, 10, 13</td>
+</tr>
+<tr class="odd">
+<td><code>prevvote</code></td>
+<td><code>F3016_LH_PL</code></td>
+<td>Vote choice in 2018</td>
+<td>The eight parties, in left-to-right order</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>switched</code></td>
+<td><code>derived</code></td>
+<td>Voted for a different party than in 2018</td>
+<td>0 = no, 1 = yes</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>bloc</code></td>
+<td><code>derived</code></td>
+<td>Government-formation bloc in 2022</td>
+<td>Left (S, V, MP, C) / Right (M, SD, KD, L)</td>
+<td>4, 7, 11, 12, 14</td>
+</tr>
+<tr class="even">
+<td><code>vote_sd</code></td>
+<td><code>derived</code></td>
+<td>Voted for the Sweden Democrats</td>
+<td>0 = no, 1 = yes</td>
+<td>7, 15</td>
+</tr>
+<tr class="odd">
+<td><code>vote_right</code></td>
+<td><code>derived</code></td>
+<td>Voted for the right bloc</td>
+<td>0 = no, 1 = yes</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>vote_inc</code></td>
+<td><code>F3011_OUTGOV</code></td>
+<td>Voted for the incumbent government</td>
+<td>0 = no, 1 = yes</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>pid</code></td>
+<td><code>F3023_1</code></td>
+<td>Feels close to a party</td>
+<td>0 = no, 1 = yes</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>pid_close</code></td>
+<td><code>F3023_4</code></td>
+<td>How close to that party</td>
+<td>1 = not very to 3 = very close (reversed). Only asked of those who feel close</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
