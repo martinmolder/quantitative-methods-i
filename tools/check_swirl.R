@@ -9,7 +9,10 @@
 #      environment seeded by initLesson.R -- this catches an answer that
 #      uses an object the lesson has not created yet;
 #   4. every mult_question's CorrectAnswer is one of its AnswerChoices;
-#   5. the lesson is roughly the right length for half an hour.
+#   5. the lesson is roughly the right length for half an hour;
+#   6. the published zip matches the lessons on disk. Students install
+#      straight from that zip over the web, so if it is stale they get the
+#      wrong lessons and nothing here would otherwise notice.
 
 library(yaml)
 library(swirl)
@@ -216,6 +219,57 @@ for (lesson in manifest) {
 }
 
 cat("\n")
+
+# The zip students install from has to be a faithful copy of what is above.
+# It is built by tools/build_swirl_zip.R; if that has not been run since the
+# lessons last changed, say so rather than letting it be published stale.
+
+course <- basename(course_dir)
+zip_path <- file.path("data", paste0(course, ".zip"))
+
+if (!file.exists(zip_path)) {
+  problems <- c(problems, sprintf("%s is missing; run tools/build_swirl_zip.R",
+                                  zip_path))
+} else {
+  in_zip <- unzip(zip_path, list = TRUE)
+  in_zip <- in_zip[!grepl("/$", in_zip$Name), ]
+  in_zip <- in_zip[!grepl("(^|/)__MACOSX/|/\\._", in_zip$Name), ]
+
+  on_disk <- list.files(course_dir, recursive = TRUE)
+  named <- file.path(course, on_disk)
+
+  missing <- setdiff(named, in_zip$Name)
+  extra <- setdiff(in_zip$Name, named)
+
+  if (length(missing) > 0) {
+    problems <- c(problems, sprintf(
+      "the zip is stale -- %d file(s) on disk are not in it, e.g. %s",
+      length(missing), missing[1]
+    ))
+  }
+  if (length(extra) > 0) {
+    problems <- c(problems, sprintf(
+      "the zip holds %d file(s) that no longer exist, e.g. %s",
+      length(extra), extra[1]
+    ))
+  }
+
+  shared <- intersect(named, in_zip$Name)
+  sizes <- in_zip$Length[match(shared, in_zip$Name)]
+  disk_sizes <- file.size(file.path(dirname(course_dir), shared))
+  differs <- shared[sizes != disk_sizes]
+
+  if (length(differs) > 0) {
+    problems <- c(problems, sprintf(
+      "the zip is out of date -- %d file(s) differ, e.g. %s",
+      length(differs), differs[1]
+    ))
+  }
+
+  if (length(missing) + length(extra) + length(differs) == 0) {
+    cat("The published zip matches the lessons.\n\n")
+  }
+}
 
 if (length(problems) == 0) {
   cat("No problems found.\n")

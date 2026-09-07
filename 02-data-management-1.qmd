@@ -20,9 +20,92 @@ There are two files, and the difference matters.
 - `cses6_swe_raw.csv` — the survey as it comes. Variable names are CSES codes like `F3020_R`, and refusals and non-answers are coded as numbers, not as missing.
 - `swe.rds` — the cleaned version we use from session 4 onwards.
 
-This week and next we work on the first one and build the second. Download `cses6_swe_raw.csv` from Moodle and put it in the `data` folder of your course project.
+This week and next we work on the first one and build the second.
 
-## Getting the data in
+### Getting the files onto your computer
+
+Every file the course uses is listed on the front page of these materials, under **The files**. You can also go straight to the two you need this week:
+
+- [`cses6_swe_raw.csv`](data/cses6_swe_raw.csv) --- the survey as it comes from the archive
+- [`codebook.csv`](data/codebook.csv) --- every variable, what it is, and how it is coded
+
+Click a link and your browser offers to save the file. Two things go wrong here often enough to be worth naming.
+
+A `.csv` file is plain text, so some browsers show its contents in a new tab instead of saving it. If that happens, go back and **right-click the link, then choose "Save link as..."**. Do not select the text in the browser window and paste it into a new file. That loses the encoding of the Swedish characters, and the last section of this chapter shows you what a broken encoding costs.
+
+The other is simply that the file lands in **Downloads**, because that is where browsers put things. It is not where R will look for it.
+
+### Where the file goes
+
+In session 1 you made an RStudio Project for this course with a `data` folder inside it. That folder is where data files belong:
+
+```
+QM/                      the project folder
+  QM.Rproj               opening this sets the working directory
+  data/
+    cses6_swe_raw.csv    move the downloaded file here
+    codebook.csv
+```
+
+Move the file out of Downloads and into `data`. Every path in these materials is written on the assumption that it is there. When you read `read.csv("data/cses6_swe_raw.csv")` further down this page, it means: the file called `cses6_swe_raw.csv`, in the folder called `data`, inside the folder R is working in.
+
+That last part is why the project matters. Open the project by double-clicking `QM.Rproj`, and R is working in the project folder, so `data/` means the right thing. Open the script some other way and it will not.
+
+`list.files()` shows what is in a folder. Give it the folder name in quotation marks:
+
+```{r}
+list.files("data")
+```
+
+If the file you just moved is in that list, you are ready.
+
+If R answers `character(0)`, the folder exists but is empty --- the file is still in Downloads. If you get a warning instead, there is no `data` folder in the place R is looking, which usually means the project is not open.
+
+### When R cannot find the file
+
+This is the error you will meet if the file is in the wrong place, and it is worth reading properly once so that you recognise it later:
+
+```{r}
+#| eval: false
+raw <- read.csv("data/cses6_swe_raw.csv")
+```
+
+```
+Error in file(file, "rt") : cannot open the connection
+In addition: Warning message:
+In file(file, "rt") :
+  cannot open file 'data/cses6_swe_raw.csv': No such file or directory
+```
+
+The first line is R being vague. The useful part is the last one: **No such file or directory**. R looked for that path and there was nothing there. It is not a problem with your code, and re-running it will not help. There are only three causes, and they are worth checking in this order: the project is not open, the file is still in Downloads, or the name is not quite right --- `cses_swe_raw.csv` and `cses6_swe_raw.csv` look identical when you are tired.
+
+### Letting R do the downloading
+
+You can also have R fetch the files. This takes longer to set up the first time and is worth it, because it makes the work reproducible: someone else can run your script and get the same data without being told where to click.
+
+`dir.create()` makes a folder. Its `showWarnings` argument controls whether it complains when the folder is already there, and `FALSE` means it stays quiet, so the line is safe to run twice.
+
+```{r}
+#| eval: false
+dir.create("data", showWarnings = FALSE)
+```
+
+`download.file()` fetches one file. `url` is the address, `destfile` is the path to save it to, and `mode` says how to write it. `"wb"` means write it as binary --- an exact copy of what came down the wire. On macOS and Linux it changes nothing, but on Windows the default alters anything that is not plain text and quietly ruins `.rds` and `.sav` files, so write `"wb"` and it is right everywhere.
+
+```{r}
+#| eval: false
+download.file(
+  url = "https://martinmolder.github.io/quantitative-methods-i/data/cses6_swe_raw.csv",
+  destfile = "data/cses6_swe_raw.csv",
+  mode = "wb"
+)
+```
+
+Every file on the front page has an address of that shape: the same beginning, then the file name.
+
+One thing you do **not** need to download: the `swirl` lessons carry their own copy of the data, so the practical at the end of the chapter works whether or not you have done any of this. The files above are for your own scripts.
+
+## Reading the data into R
 
 ### R's own format
 

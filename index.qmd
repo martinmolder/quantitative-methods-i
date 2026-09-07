@@ -122,7 +122,7 @@ Note the words **advance release**. The data are published before the module is 
 
 ### The files
 
-Everything the course uses is downloadable here as well as from Moodle.
+Everything the course uses is here. These links are permanent, so you can point a script at one instead of downloading it by hand --- [session 2](02-data-management-1.qmd) shows how, and where the files belong once you have them.
 
 | File | What it is |
 |---|---|
@@ -135,11 +135,26 @@ Everything the course uses is downloadable here as well as from Moodle.
 | [`world.csv`](data/world.csv) | 119 countries from the World Bank. Sessions 4 and 5. |
 | [`turnout.csv`](data/turnout.csv) | Reported against official turnout, all 18 CSES studies. Session 6. |
 | [`build_swe.R`](data/build_swe.R) | The script that turns the raw file into the clean one. Read it in session 3. |
-| [`Quantitative_Methods_I.zip`](data/Quantitative_Methods_I.zip) | The `swirl` lessons. See session 1 for how to install them. |
+| [`Quantitative_Methods_I.zip`](data/Quantitative_Methods_I.zip) | The `swirl` lessons. You do not need to download this --- see below. |
 
 : {tbl-colwidths="[34,66]"}
 
-Put the data files in a `data` folder inside your course project, which is how every path in these materials is written.
+Put the data files in a `data` folder inside your course project, which is how every path in these materials is written. Each file's address is the same beginning followed by its name, for example:
+
+```
+https://martinmolder.github.io/quantitative-methods-i/data/swe.rds
+```
+
+**The `swirl` lessons install themselves from that same address.** You do not download or unzip anything --- run this once in the console, and again whenever a new version is posted:
+
+```r
+library(swirl)
+install_course_url(
+  "https://martinmolder.github.io/quantitative-methods-i/data/Quantitative_Methods_I.zip"
+)
+```
+
+[Session 1](01-r-and-rstudio.qmd) covers this in full, including what to do if your network blocks the download.
 
 ### Where social scientists get data
 

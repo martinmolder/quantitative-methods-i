@@ -463,14 +463,29 @@ Then load it, as you would any package:
 library(swirl)
 ```
 
-The course lessons come as a single `.zip` file, from Moodle or from the front page of these materials. Download it, put it in your project folder, and install it with `install_course_zip()`, giving it the path to the file in quotation marks:
+The course lessons live on the web, and `install_course_url()` fetches them for you. There is nothing to download by hand. Its one argument is the address, in quotation marks:
+
+```{r}
+#| eval: false
+install_course_url(
+  "https://martinmolder.github.io/quantitative-methods-i/data/Quantitative_Methods_I.zip"
+)
+```
+
+That address is long, so copy it rather than typing it. It is also on the front page of these materials, under the downloads.
+
+R will show a progress bar while it fetches about 2 MB, and then say nothing. Silence is success — you will see the lessons listed when you start `swirl` below.
+
+Run the same `install_course_url()` line again whenever a new version is posted. It overwrites what you have, and your progress through the lessons is kept separately, so you do not lose it.
+
+If your network blocks the download — this happens on some university and workplace connections — take the `.zip` from the front page of these materials, put it in your project folder, and use `install_course_zip()` instead. It does the same job from a file you already have, and its argument is the path to that file:
 
 ```{r}
 #| eval: false
 install_course_zip("Quantitative_Methods_I.zip")
 ```
 
-You do this once, and again whenever a new version is posted. To start:
+To start:
 
 ```{r}
 #| eval: false

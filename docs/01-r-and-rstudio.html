@@ -780,13 +780,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(swirl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The course lessons come as a single <code>.zip</code> file, from Moodle or from the front page of these materials. Download it, put it in your project folder, and install it with <code>install_course_zip()</code>, giving it the path to the file in quotation marks:</p>
+<p>The course lessons live on the web, and <code>install_course_url()</code> fetches them for you. There is nothing to download by hand. Its one argument is the address, in quotation marks:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install_course_zip</span>(<span class="st">"Quantitative_Methods_I.zip"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install_course_url</span>(</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://martinmolder.github.io/quantitative-methods-i/data/Quantitative_Methods_I.zip"</span></span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>You do this once, and again whenever a new version is posted. To start:</p>
+<p>That address is long, so copy it rather than typing it. It is also on the front page of these materials, under the downloads.</p>
+<p>R will show a progress bar while it fetches about 2 MB, and then say nothing. Silence is success — you will see the lessons listed when you start <code>swirl</code> below.</p>
+<p>Run the same <code>install_course_url()</code> line again whenever a new version is posted. It overwrites what you have, and your progress through the lessons is kept separately, so you do not lose it.</p>
+<p>If your network blocks the download — this happens on some university and workplace connections — take the <code>.zip</code> from the front page of these materials, put it in your project folder, and use <code>install_course_zip()</code> instead. It does the same job from a file you already have, and its argument is the path to that file:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">swirl</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install_course_zip</span>(<span class="st">"Quantitative_Methods_I.zip"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>To start:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">swirl</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>swirl</code> then asks your name, offers you the course, and lists the lessons in it. <strong>They are numbered by seminar</strong> — lesson <code>04 Visualisation</code> goes with session 4 and chapter 4 — so pick the number of the week you are in.</p>
 <p>Some things worth knowing before you start:</p>

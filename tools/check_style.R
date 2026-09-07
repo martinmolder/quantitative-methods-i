@@ -5,7 +5,7 @@
 # Checks the code in the chapters against section 2 of the guidance:
 #   2.1  operations are not nested inside one another
 #   2.3  no alignment with runs of spaces
-#   2.5  code lines stay within 80 characters
+#   2.5  code lines stay within 80 characters (a bare URL is exempt)
 #
 # It looks at displayed code only. Setup chunks are hidden from the reader,
 # and inline code in prose is not read as code.
@@ -34,7 +34,13 @@ for (chapter in chapters) {
     if (grepl("^#\\|", line)) next        # chunk options
     if (grepl("^\\s*#", line)) next       # comments wrap like prose
 
-    if (nchar(line) > 80) {
+    # A web address cannot be wrapped, and breaking one across lines would
+    # leave the reader unable to copy it. So a line is judged on what is left
+    # once the address is taken out: only the rest has to fit in 80.
+    without_url <- gsub('"https?://[^" ]+"', '""', line)
+    too_long <- nchar(without_url) > 80
+
+    if (too_long) {
       problems <- c(problems, sprintf(
         "%s:%d  %d characters\n      %s", chapter, i, nchar(line), trimws(line)
       ))
