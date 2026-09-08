@@ -641,9 +641,17 @@ In file(file, "rt") :
 </div>
 <p>Read that middle line from the inside out. <code>polint %in% c(7, 8, 9)</code> asks, for every element of <code>polint</code>, whether it appears in the vector <code>c(7, 8, 9)</code>, and gives back <code>TRUE</code> or <code>FALSE</code> for each. Putting that inside square brackets selects the elements where the answer was <code>TRUE</code>. Assigning <code>NA</code> to that selection replaces exactly those.</p>
 <p><code>%in%</code> is worth knowing well. Without it you would write <code>polint == 7 | polint == 8 | polint == 9</code>, which does the same thing at three times the length.</p>
+<blockquote class="blockquote">
+<p><strong>One thing about that first line, which you should not copy.</strong> <code>polint &lt;- raw$F3001</code> lifts the column out of the data frame and leaves it standing on its own. That is done here so the mechanics fit into two lines, and it is a bad habit. A loose vector has lost its connection to the rows it came from: filter or sort the data frame afterwards, or drop a case, and the vector no longer lines up with it. Nothing warns you, and the result is the same class of silent error as the encoding trap at the end of this chapter.</p>
+<p>Do it <strong>inside the data frame</strong>, as a new column beside the original:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>raw<span class="sc">$</span>polint <span class="ot">&lt;-</span> raw<span class="sc">$</span>F3001</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>raw<span class="sc">$</span>polint[raw<span class="sc">$</span>polint <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Writing the cleaned values back over <code>raw$F3001</code> instead is sometimes reasonable, since the missing codes are not information anyone wants to keep. It is still the riskier choice. Once the original is gone you cannot check the recode against what it came from, and if the recode turns out to be wrong the only way back is to read the file in again. A new column costs nothing.</p>
+<p>The next chapter does all of this with <code>mutate()</code>, which exists precisely so that a new variable lands in the data frame rather than beside it.</p>
+</blockquote>
 <p>Now the table looks sensible:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(polint, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(polint, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## polint
 ##    1    2    3    4 &lt;NA&gt; 
@@ -652,7 +660,7 @@ In file(file, "rt") :
 </div>
 <p>And so does the mean:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(polint, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(polint, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## [1] 2.200792</code></pre>
 </div>
@@ -669,14 +677,14 @@ In file(file, "rt") :
 <h3 data-number="2.6.2" class="anchored" data-anchor-id="how-much-is-missing"><span class="header-section-number">2.6.2</span> How much is missing</h3>
 <p>Count missing values by testing with <code>is.na()</code> and adding up the <code>TRUE</code>s.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(polint))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(polint))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## [1] 66</code></pre>
 </div>
 </div>
 <p>As a proportion, <code>mean()</code> of a <code>TRUE</code>/<code>FALSE</code> vector gives the share that are <code>TRUE</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">is.na</span>(polint))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">is.na</span>(polint))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## [1] 0.02319859</code></pre>
 </div>
@@ -684,8 +692,8 @@ In file(file, "rt") :
 <p>So about 2.3% missing, which is fine.</p>
 <p><code>complete.cases()</code> tests whole rows, giving <code>TRUE</code> for a row with no missing values anywhere in it. Try it on three of the original columns:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>some_vars <span class="ot">&lt;-</span> raw[, <span class="fu">c</span>(<span class="st">"F3001"</span>, <span class="st">"F3020_R"</span>, <span class="st">"F2001_A"</span>)]</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">complete.cases</span>(some_vars))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>some_vars <span class="ot">&lt;-</span> raw[, <span class="fu">c</span>(<span class="st">"F3001"</span>, <span class="st">"F3020_R"</span>, <span class="st">"F2001_A"</span>)]</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">complete.cases</span>(some_vars))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## [1] 2845</code></pre>
 </div>
@@ -693,14 +701,14 @@ In file(file, "rt") :
 <p>Every single row is complete — all 2 845 of them. That is not good news. It is <code>complete.cases()</code> telling the truth about a data frame in which the missing values have not yet been marked as missing. There is nothing for it to find, because the gaps are still disguised as the numbers 9 and 99.</p>
 <p>Clean the three variables first and ask again:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>clean_vars <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">polint =</span> polint,</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">lr =</span> raw<span class="sc">$</span>F3020_R,</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">age =</span> raw<span class="sc">$</span>F2001_A</span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>clean_vars<span class="sc">$</span>lr[clean_vars<span class="sc">$</span>lr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">95</span>, <span class="dv">97</span>, <span class="dv">98</span>, <span class="dv">99</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">complete.cases</span>(clean_vars))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>clean_vars <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">polint =</span> polint,</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">lr =</span> raw<span class="sc">$</span>F3020_R,</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">age =</span> raw<span class="sc">$</span>F2001_A</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>clean_vars<span class="sc">$</span>lr[clean_vars<span class="sc">$</span>lr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">95</span>, <span class="dv">97</span>, <span class="dv">98</span>, <span class="dv">99</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">complete.cases</span>(clean_vars))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## [1] 2401</code></pre>
 </div>
@@ -716,7 +724,7 @@ In file(file, "rt") :
 <p>You already know the basic form: <code>[rows, columns]</code>.</p>
 <p>By position:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>raw[<span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>raw[<span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##   F1003_2    F1004 F1006_NAM
 ## 3    2341 SWE_2022    Sweden</code></pre>
@@ -724,7 +732,7 @@ In file(file, "rt") :
 </div>
 <p>By name, which is safer, because inserting a column shifts every number:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(raw[, <span class="fu">c</span>(<span class="st">"F2002"</span>, <span class="st">"F2003"</span>)], <span class="at">n =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(raw[, <span class="fu">c</span>(<span class="st">"F2002"</span>, <span class="st">"F2003"</span>)], <span class="at">n =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##   F2002 F2003
 ## 1     0     8
@@ -734,16 +742,16 @@ In file(file, "rt") :
 </div>
 <p>The useful case is selecting rows <strong>by condition</strong>. A comparison on a column gives a <code>TRUE</code>/<code>FALSE</code> vector as long as the data frame, and putting that in the row position keeps the <code>TRUE</code> rows.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>young <span class="ot">&lt;-</span> raw[raw<span class="sc">$</span>F2001_A <span class="sc">&lt;</span> <span class="dv">30</span>, ]</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(young)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>young <span class="ot">&lt;-</span> raw[raw<span class="sc">$</span>F2001_A <span class="sc">&lt;</span> <span class="dv">30</span>, ]</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(young)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## [1] 274  84</code></pre>
 </div>
 </div>
 <p>Conditions combine with <code>&amp;</code> for “and” and <code>|</code> for “or”.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>young_women <span class="ot">&lt;-</span> raw[raw<span class="sc">$</span>F2001_A <span class="sc">&lt;</span> <span class="dv">30</span> <span class="sc">&amp;</span> raw<span class="sc">$</span>F2002 <span class="sc">==</span> <span class="dv">1</span>, ]</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(young_women)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>young_women <span class="ot">&lt;-</span> raw[raw<span class="sc">$</span>F2001_A <span class="sc">&lt;</span> <span class="dv">30</span> <span class="sc">&amp;</span> raw<span class="sc">$</span>F2002 <span class="sc">==</span> <span class="dv">1</span>, ]</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(young_women)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## [1] 157  84</code></pre>
 </div>
@@ -765,8 +773,8 @@ In file(file, "rt") :
 <h3 data-number="2.8.1" class="anchored" data-anchor-id="reversing-a-scale"><span class="header-section-number">2.8.1</span> Reversing a scale</h3>
 <p>CSES codes political interest with 1 as <em>most</em> interested. That is backwards for reading results: in a regression, a positive coefficient would mean <em>less</em> interest. Reversing it costs one line.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>polint_rev <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="sc">-</span> polint</span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(polint_rev, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>polint_rev <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="sc">-</span> polint</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(polint_rev, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## polint_rev
 ##    1    2    3    4 &lt;NA&gt; 
@@ -780,10 +788,10 @@ In file(file, "rt") :
 <h3 data-number="2.8.2" class="anchored" data-anchor-id="grouping-a-continuous-variable"><span class="header-section-number">2.8.2</span> Grouping a continuous variable</h3>
 <p>Suppose we want age in three groups. Start by creating a variable that is entirely missing, then fill it in.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> raw<span class="sc">$</span>F2001_A</span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>age[age <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">9997</span>, <span class="dv">9998</span>, <span class="dv">9999</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> raw<span class="sc">$</span>F2001_A</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>age[age <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">9997</span>, <span class="dv">9998</span>, <span class="dv">9999</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## [1]  18 102</code></pre>
 </div>
@@ -791,16 +799,16 @@ In file(file, "rt") :
 <p>As it happens the Swedish study has no missing ages at all, so that second line changed nothing — the range runs from 18 to 102. Write it anyway. You do not know a variable has no missing codes until you have checked, and a line that does nothing costs nothing.</p>
 <p>The oldest respondent being 102 is the answer to part of the earlier question: age has a hard floor and only a soft ceiling, and 102 is on the right side of it. Unusual is not the same as impossible.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>agegroup <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(age))</span>
-<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>agegroup[<span class="fu">which</span>(age <span class="sc">&lt;</span> <span class="dv">35</span>)] <span class="ot">&lt;-</span> <span class="st">"Under 35"</span></span>
-<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>agegroup[<span class="fu">which</span>(age <span class="sc">&gt;=</span> <span class="dv">35</span> <span class="sc">&amp;</span> age <span class="sc">&lt;</span> <span class="dv">65</span>)] <span class="ot">&lt;-</span> <span class="st">"35 to 64"</span></span>
-<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>agegroup[<span class="fu">which</span>(age <span class="sc">&gt;=</span> <span class="dv">65</span>)] <span class="ot">&lt;-</span> <span class="st">"65 and over"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>agegroup <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(age))</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>agegroup[<span class="fu">which</span>(age <span class="sc">&lt;</span> <span class="dv">35</span>)] <span class="ot">&lt;-</span> <span class="st">"Under 35"</span></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>agegroup[<span class="fu">which</span>(age <span class="sc">&gt;=</span> <span class="dv">35</span> <span class="sc">&amp;</span> age <span class="sc">&lt;</span> <span class="dv">65</span>)] <span class="ot">&lt;-</span> <span class="st">"35 to 64"</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>agegroup[<span class="fu">which</span>(age <span class="sc">&gt;=</span> <span class="dv">65</span>)] <span class="ot">&lt;-</span> <span class="st">"65 and over"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>rep()</code> repeats a value; here it makes a vector of <code>NA</code> the same length as <code>age</code>. <code>length()</code> gives the number of elements.</p>
 <p>Starting from all-missing is deliberate. Anything the conditions fail to cover stays <code>NA</code> rather than silently taking a wrong value — so if the conditions have a gap, you find out.</p>
 <p>Note <code>which()</code> again, for the reason given above: <code>age</code> has missing values.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(agegroup, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(agegroup, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## agegroup
 ##    35 to 64 65 and over    Under 35 
@@ -814,12 +822,12 @@ In file(file, "rt") :
 <p>There is a problem with that table: the categories are in alphabetical order, so “65 and over” comes before “Under 35”. Alphabetical order is not the order of the variable.</p>
 <p>Text becomes an ordered categorical variable when you make it a <strong>factor</strong> and say what the order is.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>agegroup <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
-<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>  agegroup,</span>
-<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Under 35"</span>, <span class="st">"35 to 64"</span>, <span class="st">"65 and over"</span>)</span>
-<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(agegroup, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>agegroup <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  agegroup,</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Under 35"</span>, <span class="st">"35 to 64"</span>, <span class="st">"65 and over"</span>)</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(agegroup, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## agegroup
 ##    Under 35    35 to 64 65 and over 
@@ -835,18 +843,18 @@ In file(file, "rt") :
 <h3 data-number="2.8.4" class="anchored" data-anchor-id="collapsing-categories"><span class="header-section-number">2.8.4</span> Collapsing categories</h3>
 <p>Merging categories works the same way, with <code>==</code> instead of a range.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>interest2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(polint_rev))</span>
-<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>interest2[<span class="fu">which</span>(polint_rev <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))] <span class="ot">&lt;-</span> <span class="st">"Not interested"</span></span>
-<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>interest2[<span class="fu">which</span>(polint_rev <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>))] <span class="ot">&lt;-</span> <span class="st">"Interested"</span></span>
-<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>interest2 <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
-<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>  interest2,</span>
-<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Not interested"</span>, <span class="st">"Interested"</span>)</span>
-<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>interest2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(polint_rev))</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>interest2[<span class="fu">which</span>(polint_rev <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))] <span class="ot">&lt;-</span> <span class="st">"Not interested"</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>interest2[<span class="fu">which</span>(polint_rev <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>))] <span class="ot">&lt;-</span> <span class="st">"Interested"</span></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>interest2 <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>  interest2,</span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Not interested"</span>, <span class="st">"Interested"</span>)</span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>And the check, which for a collapse is a cross-table of old against new:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(interest2, polint_rev, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(interest2, polint_rev, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##                 polint_rev
 ## interest2           1    2    3    4 &lt;NA&gt;
@@ -864,17 +872,17 @@ In file(file, "rt") :
 <p>Every variable has limits. After a recode, the values must still be inside them. Checking this by eye works until you have sixty variables, at which point it stops working and you do not notice.</p>
 <p>So check by machine. <code>range()</code> gives the smallest and largest value; <code>na.rm = TRUE</code> is needed or a single <code>NA</code> makes both of them <code>NA</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(polint_rev, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(polint_rev, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## [1] 1 4</code></pre>
 </div>
 </div>
 <p>Better still, make the check fail loudly. <code>stopifnot()</code> takes one or more conditions and does nothing at all if they are all <code>TRUE</code> — but stops with an error if any is <code>FALSE</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(</span>
-<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">min</span>(polint_rev, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">&gt;=</span> <span class="dv">1</span>,</span>
-<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">max</span>(polint_rev, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">&lt;=</span> <span class="dv">4</span></span>
-<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">min</span>(polint_rev, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">&gt;=</span> <span class="dv">1</span>,</span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">max</span>(polint_rev, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">&lt;=</span> <span class="dv">4</span></span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Nothing printed, which means it passed. Had the recode been wrong, the script would have stopped there rather than carrying the mistake into a model output that looks perfectly plausible.</p>
 <blockquote class="blockquote">
@@ -893,7 +901,7 @@ In file(file, "rt") :
 <li>Pin the encoding at the top of the script, so it does not depend on the machine:</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setlocale</span>(<span class="st">"LC_CTYPE"</span>, <span class="st">"en_US.UTF-8"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setlocale</span>(<span class="st">"LC_CTYPE"</span>, <span class="st">"en_US.UTF-8"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The general lesson is worth more than the specific fix. Errors that produce a message are cheap: you find them immediately. Errors that produce a <em>wrong answer</em> are expensive, and text comparison is one of the places they live.</p>
 <div class="swirl">

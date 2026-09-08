@@ -343,6 +343,19 @@ Read that middle line from the inside out. `polint %in% c(7, 8, 9)` asks, for ev
 
 `%in%` is worth knowing well. Without it you would write `polint == 7 | polint == 8 | polint == 9`, which does the same thing at three times the length.
 
+> **One thing about that first line, which you should not copy.** `polint <- raw$F3001` lifts the column out of the data frame and leaves it standing on its own. That is done here so the mechanics fit into two lines, and it is a bad habit. A loose vector has lost its connection to the rows it came from: filter or sort the data frame afterwards, or drop a case, and the vector no longer lines up with it. Nothing warns you, and the result is the same class of silent error as the encoding trap at the end of this chapter.
+>
+> Do it **inside the data frame**, as a new column beside the original:
+>
+> ```r
+> raw$polint <- raw$F3001
+> raw$polint[raw$polint %in% c(7, 8, 9)] <- NA
+> ```
+>
+> Writing the cleaned values back over `raw$F3001` instead is sometimes reasonable, since the missing codes are not information anyone wants to keep. It is still the riskier choice. Once the original is gone you cannot check the recode against what it came from, and if the recode turns out to be wrong the only way back is to read the file in again. A new column costs nothing.
+>
+> The next chapter does all of this with `mutate()`, which exists precisely so that a new variable lands in the data frame rather than beside it.
+
 Now the table looks sensible:
 
 ```{r}
