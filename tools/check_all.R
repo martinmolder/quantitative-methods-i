@@ -11,6 +11,7 @@ checks <- c(
   "check_firstuse.R",
   "check_numbers.R",
   "check_style.R",
+  "check_markdown.R",
   "check_scales.R",
   "check_balance.R",
   "check_encoding.R",
