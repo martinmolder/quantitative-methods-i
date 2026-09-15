@@ -8,6 +8,10 @@
 #   3. every CorrectAnswer runs without error, in order, in a clean
 #      environment seeded by initLesson.R -- this catches an answer that
 #      uses an object the lesson has not created yet;
+#   3b. every CorrectAnswer is then *accepted by its own AnswerTests*, run
+#      the way swirl runs them. An answer can run perfectly and still be
+#      rejected: swirl compares expressions, and one containing \(x) defeats
+#      both of its matchers, so even skip() fails. That reached a class.
 #   4. every mult_question's CorrectAnswer is one of its AnswerChoices;
 #   5. the lesson is roughly the right length for half an hour;
 #   6. the published zip matches the lessons on disk. Students install
@@ -152,23 +156,69 @@ for (lesson in manifest) {
     }
   }
 
+  # swirl evaluates each AnswerTests phrase with eval(parse(text = phrase))
+  # inside a function whose frame holds its state, e; omnitest() and the
+  # rest fetch e from there. The phrases resolve in an environment that has
+  # customTests.R sourced into it and swirl's own test functions behind it.
+  tests_env <- new.env(parent = asNamespace("swirl"))
+  custom <- file.path(course_dir, lesson, "customTests.R")
+  if (file.exists(custom)) {
+    sys.source(custom, envir = tests_env)
+  }
+
+  run_test <- function(phrase, e) {
+    eval(parse(text = phrase))
+  }
+  environment(run_test) <- tests_env
+
   for (i in seq_along(items)) {
     item <- items[[i]]
     if (item$Class != "cmd_question") next
     answer <- item$CorrectAnswer
+
+    # What swirl holds when it grades: the typed expression with its
+    # srcref, the value it produced, and a snapshot of the workspace.
+    e <- new.env()
+    e$snapshot <- as.list(env)
+    e$expr <- parse(text = answer, keep.source = TRUE)[[1]]
+    eval_env <- swirl:::cleanEnv(e$snapshot)
+
     result <- tryCatch(
       {
-        value <- eval(parse(text = answer), envir = env)
+        value <- eval(e$expr, envir = eval_env)
+        e$val <- value
         if (show_output) {
           cat("\n--- item ", i, ": ", answer, "\n", sep = "")
           if (!is.null(value)) print(value)
         }
         NULL
       },
-      error = function(e) conditionMessage(e)
+      error = function(err) conditionMessage(err)
     )
     if (!is.null(result)) {
       note(lesson, paste0("item ", i, ": `", answer, "` fails -- ", result))
+      next
+    }
+
+    # Carry anything the answer created forward, as swirl's snapshot does.
+    for (nm in ls(eval_env)) {
+      assign(nm, get(nm, envir = eval_env), envir = env)
+    }
+
+    phrases <- trimws(strsplit(item$AnswerTests, ";")[[1]])
+    accepted <- tryCatch(
+      all(vapply(
+        phrases,
+        function(p) isTRUE(suppressWarnings(run_test(p, e))),
+        logical(1)
+      )),
+      error = function(err) FALSE
+    )
+    if (!isTRUE(accepted)) {
+      note(lesson, paste0(
+        "item ", i, ": its own correct answer is rejected by the ",
+        "AnswerTests -- students cannot pass this question\n      ", answer
+      ))
     }
   }
 

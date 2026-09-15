@@ -106,7 +106,7 @@
 - Class: cmd_question
   Output: across() applies a function to a set of columns and goes inside mutate() or summarise(). Pipe swe into summarise() containing across(starts_with("like_"), \(x) mean(x, na.rm = TRUE)).
   CorrectAnswer: swe |> summarise(across(starts_with("like_"), \(x) mean(x, na.rm = TRUE)))
-  AnswerTests: any_of_exprs('swe |> summarise(across(starts_with("like_"), \\(x) mean(x, na.rm = TRUE)))', 'swe |> summarise(across(starts_with("like_"), \\(x) mean(x, na.rm=TRUE)))', 'swe |> summarise(across(starts_with("like_"), function(x) mean(x, na.rm = TRUE)))')
+  AnswerTests: like_means_match()
   Hint: Type swe |> summarise(across(starts_with("like_"), \(x) mean(x, na.rm = TRUE))). The backslash and (x) create a small unnamed function on the spot - read it as 'given a column, which I will call x, do this to it'.
 
 - Class: mult_question
