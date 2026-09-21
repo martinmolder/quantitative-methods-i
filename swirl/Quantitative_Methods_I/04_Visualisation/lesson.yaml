@@ -76,10 +76,10 @@
   Hint: Count the possible positions. Eleven values on each axis is how many places in total?
 
 - Class: cmd_question
-  Output: Fix it with geom_count(), which sizes each dot by how many cases sit there. Repeat the plot with geom_count() instead of geom_point().
-  CorrectAnswer: ggplot(swe, aes(x = like_s, y = like_m)) + geom_count()
-  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = like_s, y = like_m)) + geom_count()')
-  Hint: Type ggplot(swe, aes(x = like_s, y = like_m)) + geom_count().
+  Output: Fix it with geom_jitter(), which gives every dot a small random shove so that shared positions spread into clouds. Repeat the plot with geom_jitter(width = 0.25, height = 0.25, alpha = 0.3) instead of geom_point(). width and height cap the shove in each direction, and alpha makes overlapping dots darker.
+  CorrectAnswer: ggplot(swe, aes(x = like_s, y = like_m)) + geom_jitter(width = 0.25, height = 0.25, alpha = 0.3)
+  AnswerTests: omnitest(correctExpr='ggplot(swe, aes(x = like_s, y = like_m)) + geom_jitter(width = 0.25, height = 0.25, alpha = 0.3)')
+  Hint: Type ggplot(swe, aes(x = like_s, y = like_m)) + geom_jitter(width = 0.25, height = 0.25, alpha = 0.3).
 
 - Class: text
   Output: Now the important distinction. Mapping means let this variable decide, and goes inside aes(). Setting means make it this always, and goes outside aes() as an argument to the geom.

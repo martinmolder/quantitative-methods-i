@@ -331,7 +331,7 @@ Figure&nbsp;11.1
 </div>
 </div>
 </div>
-<p><code>geom_jitter()</code> is <code>geom_point()</code> with a small random displacement added, so that respondents sharing the same whole-number rating do not sit exactly on top of each other; <code>width</code> and <code>height</code> say how far to move them, and both are small enough here not to distort the picture. <code>geom_smooth(method = "lm")</code> adds a straight line fitted to the data — <code>lm</code> for linear model. <code>se = FALSE</code> turns off the shaded band around it, which we come back to in session 12.</p>
+<p><code>geom_jitter()</code>, from session 4, keeps the respondents sharing a whole-number rating from sitting exactly on top of each other; the <code>width</code> is tiny because trust is a continuous score and needs almost none. <code>geom_smooth(method = "lm")</code> adds a straight line fitted to the data — <code>lm</code> for linear model. <code>se = FALSE</code> turns off the shaded band around it, which we come back to in session 12.</p>
 <p>The line has to be <em>some</em> line. Regression picks the one that minimises the total squared vertical distance between the points and the line, which is why it is called <strong>ordinary least squares</strong>, or OLS.</p>
 <blockquote class="blockquote">
 <p><strong>Why squared?</strong> For the same reason variance squares deviations in session 6. Plain distances above and below the line would cancel. Squaring makes them all count, and it also means a point twice as far from the line counts four times as much — which is why outliers matter so much.</p>

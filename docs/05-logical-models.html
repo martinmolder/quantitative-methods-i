@@ -474,7 +474,7 @@ Figure&nbsp;5.3: Income and life expectancy. The dashed line marks the highest l
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">10</span>),</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"grey80"</span></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_count</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.15</span>) <span class="sc">+</span></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(</span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">intercept =</span> <span class="dv">0</span>,</span>
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">slope =</span> <span class="dv">1</span>,</span>
@@ -499,7 +499,7 @@ Figure&nbsp;5.4: Rating of the party voted for against the respondent’s highes
 </div>
 </div>
 </div>
-<p><code>annotate("polygon", ...)</code> fills the triangle defined by three corners. <code>geom_count()</code> is <code>geom_point()</code> with the size of each dot set by how many cases sit at that position, which matters here because both variables take only eleven whole-number values: with plain points, 2210 respondents would be stacked on 121 dots and every one would look the same.</p>
+<p><code>annotate("polygon", ...)</code> fills the triangle defined by three corners. Both variables take only eleven whole-number values, so 2210 respondents sit on at most 121 positions, and the dots are drawn transparent so that a position holding many of them comes out darker. This is the one place not to jitter. The displacement is random in every direction, so dots on the diagonal — people who rated their own party highest, which is most of them — would be scattered into the shaded region, and the plot would contradict the sentence above it. Wherever a plot carries a hard limit, the display must respect it as strictly as the data do.</p>
 <p>The shaded region is empty, as it must be. That is not a finding — a case there would mean an error in the data or in the code.</p>
 <p>What <em>is</em> a finding is how the points are distributed in the region that remains:</p>
 <div class="cell">

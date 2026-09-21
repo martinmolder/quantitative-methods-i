@@ -206,7 +206,7 @@ ggplot(voters, aes(x = best, y = own)) +
     y = c(0, 10, 10),
     fill = "grey80"
   ) +
-  geom_count(alpha = 0.7) +
+  geom_point(alpha = 0.15) +
   geom_abline(
     intercept = 0,
     slope = 1,
@@ -220,7 +220,7 @@ ggplot(voters, aes(x = best, y = own)) +
   theme_bw()
 ```
 
-`annotate("polygon", ...)` fills the triangle defined by three corners. `geom_count()` is `geom_point()` with the size of each dot set by how many cases sit at that position, which matters here because both variables take only eleven whole-number values: with plain points, `r nrow(voters)` respondents would be stacked on 121 dots and every one would look the same.
+`annotate("polygon", ...)` fills the triangle defined by three corners. Both variables take only eleven whole-number values, so `r nrow(voters)` respondents sit on at most 121 positions, and the dots are drawn transparent so that a position holding many of them comes out darker. This is the one place not to jitter. The displacement is random in every direction, so dots on the diagonal --- people who rated their own party highest, which is most of them --- would be scattered into the shaded region, and the plot would contradict the sentence above it. Wherever a plot carries a hard limit, the display must respect it as strictly as the data do.
 
 The shaded region is empty, as it must be. That is not a finding — a case there would mean an error in the data or in the code.
 

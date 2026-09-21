@@ -125,15 +125,17 @@ ggplot(swe, aes(x = like_s, y = like_m)) +
 
 `geom_point()` draws one dot per case. That plot is nearly useless, though, and the reason is worth understanding: both variables take eleven whole-number values, so `r format(nrow(swe), big.mark = ",")` respondents are stacked on 121 positions. Every dot looks the same whether one person or four hundred are underneath it.
 
-Two ways out, both from last week:
+The way out is to stop the dots from landing on exactly the same spot:
 
 ```{r}
 #| fig-height: 3.6
 ggplot(swe, aes(x = like_s, y = like_m)) +
-  geom_count(alpha = 0.7)
+  geom_jitter(width = 0.25, height = 0.25, alpha = 0.3)
 ```
 
-`geom_count()` sizes each dot by how many cases sit there. For genuinely continuous variables the usual alternative is `alpha`, which makes points transparent so that overlaps show up darker.
+`geom_jitter()` is `geom_point()` with a small random displacement added to every dot, so that the cases sharing a pair of values spread into a cloud instead of hiding behind one another. `width` and `height` say how far, at most, a dot may move in each direction, in the units of the axes --- a quarter of a point here, which keeps every cloud clearly around its own grid position. `alpha` makes the dots transparent, so that where many overlap the cloud is darker. Now the two dense corners are visible: people who like the Social Democrats dislike the Moderates, and the other way round.
+
+The displacement is noise added for display and nothing else. The data have not changed, and a reader has to be told the points are jittered, in the caption or the text, or they will read the spread as real.
 
 ### Over time: a line
 

@@ -442,10 +442,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p><code>geom_point()</code> draws one dot per case. That plot is nearly useless, though, and the reason is worth understanding: both variables take eleven whole-number values, so 2,845 respondents are stacked on 121 positions. Every dot looks the same whether one person or four hundred are underneath it.</p>
-<p>Two ways out, both from last week:</p>
+<p>The way out is to stop the dots from landing on exactly the same spot:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(swe, <span class="fu">aes</span>(<span class="at">x =</span> like_s, <span class="at">y =</span> like_m)) <span class="sc">+</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_count</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.25</span>, <span class="at">height =</span> <span class="fl">0.25</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -454,7 +454,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p><code>geom_count()</code> sizes each dot by how many cases sit there. For genuinely continuous variables the usual alternative is <code>alpha</code>, which makes points transparent so that overlaps show up darker.</p>
+<p><code>geom_jitter()</code> is <code>geom_point()</code> with a small random displacement added to every dot, so that the cases sharing a pair of values spread into a cloud instead of hiding behind one another. <code>width</code> and <code>height</code> say how far, at most, a dot may move in each direction, in the units of the axes — a quarter of a point here, which keeps every cloud clearly around its own grid position. <code>alpha</code> makes the dots transparent, so that where many overlap the cloud is darker. Now the two dense corners are visible: people who like the Social Democrats dislike the Moderates, and the other way round.</p>
+<p>The displacement is noise added for display and nothing else. The data have not changed, and a reader has to be told the points are jittered, in the caption or the text, or they will read the spread as real.</p>
 </section>
 <section id="over-time-a-line" class="level3" data-number="4.3.4">
 <h3 data-number="4.3.4" class="anchored" data-anchor-id="over-time-a-line"><span class="header-section-number">4.3.4</span> Over time: a line</h3>
