@@ -60,18 +60,18 @@
   Output: A plot, but not an honest one. The axes have shrunk to fit the data, so the bottom left corner is around 40 rather than 0, and the anchor point at 0,0 is not even on the picture.
 
 - Class: cmd_question
-  Output: Force the full square. Add + coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) to the end of the same command.
-  CorrectAnswer: ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point() + coord_cartesian(xlim = c(0, 100), ylim = c(0, 100))
-  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point() + coord_cartesian(xlim = c(0, 100), ylim = c(0, 100))')
-  Hint: Add + coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) to what you typed before.
+  Output: Force the full square. Add + coord_fixed(xlim = c(0, 100), ylim = c(0, 100)) to the end of the same command. xlim and ylim set what each axis shows, and coord_fixed() also makes one unit the same length on both axes - both are percentages, so they should be.
+  CorrectAnswer: ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point() + coord_fixed(xlim = c(0, 100), ylim = c(0, 100))
+  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point() + coord_fixed(xlim = c(0, 100), ylim = c(0, 100))')
+  Hint: Add + coord_fixed(xlim = c(0, 100), ylim = c(0, 100)) to what you typed before.
 
 - Class: text
-  Output: That is the same data, and it looks much less impressive. It is also the truthful version. Cropping axes to the range of the data is the commonest way to make a weak relationship look strong.
+  Output: That is the same data, and it looks much less impressive. It is also the truthful version. Cropping axes to the range of the data is the commonest way to make a weak relationship look strong. And the panel is now square, so the diagonal you are about to add will run at 45 degrees, which is the only angle at which it means 'equal'.
 
 - Class: cmd_question
   Output: Now the equality line. geom_abline() draws a straight line from an intercept and a slope. Add + geom_abline(intercept = 0, slope = 1, linetype = "dashed") to the end.
-  CorrectAnswer: ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point() + coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) + geom_abline(intercept = 0, slope = 1, linetype = "dashed")
-  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point() + coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) + geom_abline(intercept = 0, slope = 1, linetype = "dashed")')
+  CorrectAnswer: ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point() + coord_fixed(xlim = c(0, 100), ylim = c(0, 100)) + geom_abline(intercept = 0, slope = 1, linetype = "dashed")
+  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point() + coord_fixed(xlim = c(0, 100), ylim = c(0, 100)) + geom_abline(intercept = 0, slope = 1, linetype = "dashed")')
   Hint: Add + geom_abline(intercept = 0, slope = 1, linetype = "dashed") to the end.
 
 - Class: text

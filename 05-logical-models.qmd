@@ -22,7 +22,7 @@ world <- readr::read_csv("data/world.csv", show_col_types = FALSE)
 
 `world` holds `r nrow(world)` countries with a handful of indicators from the World Bank. We use it because its variables have real limits.
 
-The plots below use `ggplot2`, which was last week's session, so the code should be readable. Everything here is the same handful of pieces: `ggplot()` and `aes()` to say what goes where, a `geom_` to draw it, `coord_cartesian()` to fix the axes, `labs()` for the labels.
+The plots below use `ggplot2`, which was last week's session, so the code should be readable. Everything here is the same handful of pieces: `ggplot()` and `aes()` to say what goes where, a `geom_` to draw it, `coord_fixed()` or `coord_cartesian()` to fix the axes, `labs()` for the labels.
 
 ## What you know before you look
 
@@ -56,7 +56,7 @@ ggplot() +
     y = c(0, 100),
     size = 3
   ) +
-  coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) +
+  coord_fixed(xlim = c(0, 100), ylim = c(0, 100)) +
   labs(
     x = "Male literacy rate (%)",
     y = "Female literacy rate (%)"
@@ -64,7 +64,9 @@ ggplot() +
   theme_bw()
 ```
 
-`geom_abline()` draws a straight line from an intercept and a slope; intercept 0 and slope 1 is the diagonal. `annotate("point", ...)` puts markers at given coordinates without needing a data frame. `coord_cartesian()` fixes what the axes show: `xlim` and `ylim` give the range for each, which here forces the full 0-to-100 square rather than letting the plot shrink to fit.
+`geom_abline()` draws a straight line from an intercept and a slope; intercept 0 and slope 1 is the diagonal. `annotate("point", ...)` puts markers at given coordinates without needing a data frame.
+
+`coord_fixed()` does two jobs. Its `xlim` and `ylim` arguments give the range each axis shows, which here forces the full 0-to-100 square rather than letting the plot shrink to fit the data. And it makes **one unit the same physical length on both axes** — a percentage point is as long going up as it is going across. That matters whenever the two axes carry the same scale. The dashed line means "equal" only if it runs at 45 degrees; let ggplot stretch the plot to fill the page and the same line of equality can lean steep or flat, and the eye reads a gap that is not there. When the two axes carry different scales there is no such line to protect, and `coord_cartesian()`, which sets the limits without fixing the ratio, is the right tool — it appears further down.
 
 Now the data.
 
@@ -79,7 +81,7 @@ ggplot(world, aes(x = lit_m, y = lit_f)) +
     slope = 1,
     linetype = "dashed"
   ) +
-  coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) +
+  coord_fixed(xlim = c(0, 100), ylim = c(0, 100)) +
   labs(
     x = "Male literacy rate (%)",
     y = "Female literacy rate (%)"
@@ -143,7 +145,7 @@ ggplot(world, aes(x = gdp, y = life)) +
   theme_bw()
 ```
 
-`geom_hline()` draws a horizontal line at a given height on the vertical axis. `scale_x_continuous(labels = ...)` controls how the numbers on that axis are printed; `scales::label_comma()` writes them with thousands separators, and without it R writes them as `5e+04`, which is not something to put in front of a reader.
+`geom_hline()` draws a horizontal line at a given height on the vertical axis. Dollars across and years up are not the same scale, so there is no line of equality to protect and `coord_cartesian()` is the right choice here: it sets the range shown — only `ylim` this time, so that the whole 0-to-100 span of the outcome is visible — and leaves the plot free to fill the page. `scale_x_continuous(labels = ...)` controls how the numbers on that axis are printed; `scales::label_comma()` writes them with thousands separators, and without it R writes them as `5e+04`, which is not something to put in front of a reader.
 
 The shape is there: steep at the left, flat at the right. Doubling income from 2,000 to 4,000 buys a great deal of life expectancy. Doubling it from 60,000 to 120,000 buys almost none.
 
@@ -210,7 +212,7 @@ ggplot(voters, aes(x = best, y = own)) +
     slope = 1,
     linetype = "dashed"
   ) +
-  coord_cartesian(xlim = c(0, 10), ylim = c(0, 10)) +
+  coord_fixed(xlim = c(0, 10), ylim = c(0, 10)) +
   labs(
     x = "Highest rating given to any party",
     y = "Rating of the party voted for"
@@ -259,6 +261,7 @@ You have the tools for all eight from last week.
 | Rule | How |
 |---|---|
 | Show the whole of a bounded scale | `coord_cartesian(xlim = , ylim = )` |
+| Same scale on both axes: one unit the same length on each | `coord_fixed(xlim = , ylim = )` |
 | Equal intervals | the default; do not use a log axis without saying so |
 | Human-language axis labels with units | `labs(x = , y = )` |
 | Mark the anchor points | `annotate("point", x = , y = )` |
@@ -290,7 +293,7 @@ ggplot(world, aes(x = lit_m, y = lit_f)) +
     slope = 1,
     linetype = "dashed"
   ) +
-  coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) +
+  coord_fixed(xlim = c(0, 100), ylim = c(0, 100)) +
   labs(
     x = "Male literacy rate (%)",
     y = "Female literacy rate (%)",
