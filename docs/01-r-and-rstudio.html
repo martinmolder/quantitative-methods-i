@@ -788,7 +788,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>That address is long, so copy it rather than typing it. It is also on the front page of these materials, under the downloads.</p>
 <p>R will show a progress bar while it fetches about 2 MB, and then say nothing. Silence is success — you will see the lessons listed when you start <code>swirl</code> below.</p>
-<p>Run the same <code>install_course_url()</code> line again whenever a new version is posted. It overwrites what you have, and your progress through the lessons is kept separately, so you do not lose it.</p>
+<p>Run the same <code>install_course_url()</code> line again whenever a new version is posted. It overwrites the lessons, and your progress is stored separately, so you do not lose it.</p>
+<blockquote class="blockquote">
+<p><strong>After updating, start the lesson fresh rather than resuming it.</strong> When <code>swirl</code> offers to continue a lesson you had in progress, it restores the data and the questions as they were when you began — that is what “continue” means — so an updated lesson only takes effect if you start it again. Choose the option to start something new, then pick the lesson from the list.</p>
+</blockquote>
 <p>If your network blocks the download — this happens on some university and workplace connections — take the <code>.zip</code> from the front page of these materials, put it in your project folder, and use <code>install_course_zip()</code> instead. It does the same job from a file you already have, and its argument is the path to that file:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install_course_zip</span>(<span class="st">"Quantitative_Methods_I.zip"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
