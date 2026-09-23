@@ -50,9 +50,6 @@
 - Class: text
   Output: So before any data we know four things - the box is 0 to 100 on both axes, the curve passes through 0,0 and 100,100, the diagonal means equality, and the association must be positive. Now let us draw it.
 
-- Class: text
-  Output: As in session 4, a plot may print 'Removed 2 rows containing missing values'. That is not an error - it is ggplot saying two countries have no literacy figure, so it could not draw them. Read it and carry on.
-
 - Class: cmd_question
   Output: Start with the points. Type ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point().
   CorrectAnswer: ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point()
@@ -104,6 +101,9 @@
   AnswerChoices: A straight line, because it would eventually predict impossible life expectancies.; Any positive association, because the scales do not match.; Nothing - the shape is entirely an empirical question.
   AnswerTests: omnitest(correctVal='A straight line, because it would eventually predict impossible life expectancies.')
   Hint: Follow a rising straight line far enough to the right. What life expectancy does it promise for a very rich country?
+
+- Class: text
+  Output: Two of the 119 countries have no GDP figure, so the next three plots will print 'Removed 2 rows containing missing values'. That is not an error - it is ggplot telling you it could not draw them. The two are kept in world because the literacy counts you have just made depend on all 119.
 
 - Class: cmd_question
   Output: Plot it and see. Type ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)).
