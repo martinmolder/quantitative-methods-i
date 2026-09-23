@@ -18,7 +18,11 @@
 #      not prepare the student for. The chapters hide these with
 #      warning: false in _quarto.yml; a swirl lesson cannot, so the student
 #      meets them raw in the console and reads them as failure;
-#   7. the published zip matches the lessons on disk. Students install
+#   7. the published zip matches the lessons on disk, *and* the copy under
+#      docs/ matches it in turn. Students install over the web, so the file
+#      that matters is the one Pages serves out of docs/data/. Rebuilding
+#      the zip without re-rendering leaves that copy behind, and nothing
+#      else notices -- which shipped a stale lesson once. Students install
 #      straight from that zip over the web, so if it is stale they get the
 #      wrong lessons and nothing here would otherwise notice.
 
@@ -350,6 +354,32 @@ if (!file.exists(zip_path)) {
 
   if (length(missing) + length(extra) + length(differs) == 0) {
     cat("The published zip matches the lessons.\n\n")
+  }
+}
+
+# Everything under data/ is copied into docs/ at render time and served from
+# there. A file that has been rebuilt since the last render is still the old
+# one as far as a student is concerned.
+published <- list.files("data", full.names = TRUE)
+
+for (f in published) {
+  served <- file.path("docs", f)
+  if (!file.exists(served)) {
+    problems <- c(problems, paste0(
+      basename(f), " is in data/ but not in docs/data/ -- run quarto render"
+    ))
+    next
+  }
+  same <- file.size(f) == file.size(served) &&
+    identical(
+      readBin(f, "raw", file.size(f)),
+      readBin(served, "raw", file.size(served))
+    )
+  if (!same) {
+    problems <- c(problems, paste0(
+      "docs/data/", basename(f), " is behind data/", basename(f),
+      " -- the served copy is stale, run quarto render"
+    ))
   }
 }
 
