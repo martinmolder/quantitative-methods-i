@@ -46,6 +46,9 @@
 - Class: text
   Output: Now two variables. A boxplot shows the distribution of a continuous variable across the categories of a categorical one.
 
+- Class: text
+  Output: One thing to expect first. Several plots from here on will print a warning like 'Removed 397 rows containing non-finite outside the scale range'. That is not an error and nothing has gone wrong - it is ggplot telling you how many respondents it left out because they have no value for the variable being plotted. 397 people did not place themselves on the left-right scale. Read it, then carry on. In your own work it is worth knowing, because a plot drawn from half the sample should say so.
+
 - Class: cmd_question
   Output: Type ggplot(swe, aes(x = vote, y = lr_self)) + geom_boxplot().
   CorrectAnswer: ggplot(swe, aes(x = vote, y = lr_self)) + geom_boxplot()

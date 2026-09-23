@@ -50,6 +50,9 @@
 - Class: text
   Output: So before any data we know four things - the box is 0 to 100 on both axes, the curve passes through 0,0 and 100,100, the diagonal means equality, and the association must be positive. Now let us draw it.
 
+- Class: text
+  Output: As in session 4, a plot may print 'Removed 2 rows containing missing values'. That is not an error - it is ggplot saying two countries have no literacy figure, so it could not draw them. Read it and carry on.
+
 - Class: cmd_question
   Output: Start with the points. Type ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point().
   CorrectAnswer: ggplot(world, aes(x = lit_m, y = lit_f)) + geom_point()
