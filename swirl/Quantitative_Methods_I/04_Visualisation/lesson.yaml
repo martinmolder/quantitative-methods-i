@@ -19,7 +19,7 @@
   Hint: Type ggplot(swe, aes(x = vote)) + geom_bar().
 
 - Class: text
-  Output: The parties come out in left-to-right order, because that is the order of the factor levels, which was set when the data was built. Left as plain text they would be alphabetical, which would mean nothing. The last bar is everyone who did not vote or did not say.
+  Output: The parties come out in left-to-right order, because that is the order of the factor levels, which was set when the data was built. Left as plain text they would be alphabetical, which would mean nothing. Eight bars, one per party.
 
 - Class: cmd_question
   Output: Now a continuous variable. A histogram cuts the range into intervals and counts. Type ggplot(swe, aes(x = age)) + geom_histogram(binwidth = 5).
