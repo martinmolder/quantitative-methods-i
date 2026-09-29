@@ -54,6 +54,8 @@ ggplot() +
     "point",
     x = c(0, 100),
     y = c(0, 100),
+    shape = 24,
+    fill = "white",
     size = 3
   ) +
   coord_fixed(xlim = c(0, 100), ylim = c(0, 100)) +
@@ -64,7 +66,7 @@ ggplot() +
   theme_bw()
 ```
 
-`geom_abline()` draws a straight line from an intercept and a slope; intercept 0 and slope 1 is the diagonal. `annotate("point", ...)` puts markers at given coordinates without needing a data frame.
+`geom_abline()` draws a straight line from an intercept and a slope; intercept 0 and slope 1 is the diagonal. `annotate("point", ...)` puts markers at given coordinates without needing a data frame. `shape = 24` makes each marker a triangle pointing upward and `fill = "white"` leaves it hollow, so the anchor points never look like data, which are drawn as solid dots.
 
 `coord_fixed()` does two jobs. Its `xlim` and `ylim` arguments give the range each axis shows, which here forces the full 0-to-100 square rather than letting the plot shrink to fit the data. And it makes **one unit the same physical length on both axes** — a percentage point is as long going up as it is going across. That matters whenever the two axes carry the same scale. The dashed line means "equal" only if it runs at 45 degrees; let ggplot stretch the plot to fill the page and the same line of equality can lean steep or flat, and the eye reads a gap that is not there. When the two axes carry different scales there is no such line to protect, and `coord_cartesian()`, which sets the limits without fixing the ratio, is the right tool — it appears further down.
 
@@ -264,7 +266,7 @@ You have the tools for all eight from last week.
 | Same scale on both axes: one unit the same length on each | `coord_fixed(xlim = , ylim = )` |
 | Equal intervals | the default; do not use a log axis without saying so |
 | Human-language axis labels with units | `labs(x = , y = )` |
-| Mark the anchor points | `annotate("point", x = , y = )` |
+| Mark the anchor points | `annotate("point", x = , y = , shape = 24, fill = "white")` |
 | Shade the forbidden region | `annotate("polygon", x = , y = , fill = )` |
 | Draw the equality line | `geom_abline(intercept = 0, slope = 1)` |
 | One piece of information per element | do not map a variable that is already on an axis |
@@ -281,17 +283,19 @@ And all of it together:
 world <- readr::read_csv("data/world.csv", show_col_types = FALSE)
 
 ggplot(world, aes(x = lit_m, y = lit_f)) +
-  annotate(
-    "point",
-    x = c(0, 100),
-    y = c(0, 100),
-    size = 2.5
-  ) +
   geom_point(alpha = 0.5) +
   geom_abline(
     intercept = 0,
     slope = 1,
     linetype = "dashed"
+  ) +
+  annotate(
+    "point",
+    x = c(0, 100),
+    y = c(0, 100),
+    shape = 24,
+    fill = "white",
+    size = 3
   ) +
   coord_fixed(xlim = c(0, 100), ylim = c(0, 100)) +
   labs(
@@ -299,11 +303,14 @@ ggplot(world, aes(x = lit_m, y = lit_f)) +
     y = "Female literacy rate (%)",
     title = paste(
       "Women are less often literate than men,",
-      "and the gap widens as literacy falls"
+      "and the gap widens as literacy falls",
+      sep = "\n"
     )
   ) +
   theme_bw()
 ```
+
+The title is split over two lines because `coord_fixed()` makes the plot square, and so narrower than the page; on one line it would run off the edge. `paste()` joins its pieces of text, and `sep` says what goes between them — here `"\n"`, which is R's way of writing a line break.
 
 ::: {.discussion}
 **A question.** Rule 1 says to start axes at zero when zero is meaningful, and the income plot above obeys it on the vertical axis.

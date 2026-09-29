@@ -142,38 +142,4 @@
   Hint: Add + scale_x_continuous(labels = scales::label_comma()) to the end.
 
 - Class: text
-  Output: Last idea, and the one that does the most work. Sometimes a whole region of a plot is not merely empty but impossible - no case could ever appear there.
-
-- Class: cmd_question
-  Output: Here is one. Make a new column called gap, the male literacy rate minus the female one. Use world$gap on the left of the arrow.
-  CorrectAnswer: world$gap <- world$lit_m - world$lit_f
-  AnswerTests: omnitest(correctExpr='world$gap <- world$lit_m - world$lit_f')
-  Hint: Type world$gap <- world$lit_m - world$lit_f.
-
-- Class: mult_question
-  Output: Plot gap against lit_f. Both original rates are between 0 and 100. If female literacy is 90, what is the largest the gap can possibly be?
-  CorrectAnswer: 10, because male literacy cannot exceed 100.
-  AnswerChoices: 10, because male literacy cannot exceed 100.; 90, because female literacy is 90.; 100, because that is the top of the scale.
-  AnswerTests: omnitest(correctVal='10, because male literacy cannot exceed 100.')
-  Hint: The gap is male minus female. Female is fixed at 90. How big can male get?
-
-- Class: text
-  Output: So the gap is squeezed as female literacy rises - the region above the line gap equals 100 minus lit_f cannot contain any country. That boundary is not an estimate. It comes from the scales.
-
-- Class: cmd_question
-  Output: Draw it. Type ggplot(world, aes(x = lit_f, y = gap)) + geom_point() + geom_abline(intercept = 100, slope = -1, linetype = "dashed").
-  CorrectAnswer: ggplot(world, aes(x = lit_f, y = gap)) + geom_point() + geom_abline(intercept = 100, slope = -1, linetype = "dashed")
-  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = lit_f, y = gap)) + geom_point() + geom_abline(intercept = 100, slope = -1, linetype = "dashed")')
-  Hint: Type ggplot(world, aes(x = lit_f, y = gap)) + geom_point() + geom_abline(intercept = 100, slope = -1, linetype = "dashed").
-
-- Class: cmd_question
-  Output: Confirm that no country is above the line. Count how many have a gap larger than 100 minus their female literacy rate, using sum().
-  CorrectAnswer: sum(world$gap > 100 - world$lit_f)
-  AnswerTests: omnitest(correctExpr='sum(world$gap > 100 - world$lit_f)')
-  Hint: Type sum(world$gap > 100 - world$lit_f).
-
-- Class: text
-  Output: Zero, as logic requires. That is not a finding - a case up there would mean an error in the data or in your code. What is a finding is that the countries with the biggest gaps sit close to the boundary, because the boundary is what constrains them.
-
-- Class: text
-  Output: That is the whole idea. Work out the limits of both scales, mark the anchor points, shade what cannot exist, and only then look at the data. Next week we stop describing data and start asking whether what we see in a sample tells us anything about the world it came from.
+  Output: That is the whole idea. Work out the limits of both scales, mark the anchor points, draw what must be true before any data, and only then look at the data. Next week we stop describing data and start asking whether what we see in a sample tells us anything about the world it came from.
