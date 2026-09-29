@@ -14,10 +14,10 @@
 #      both of its matchers, so even skip() fails. That reached a class.
 #   4. every mult_question's CorrectAnswer is one of its AnswerChoices;
 #   5. the lesson is roughly the right length for half an hour;
-#   6. every correct answer runs without printing a warning the lesson does
-#      not prepare the student for. The chapters hide these with
-#      warning: false in _quarto.yml; a swirl lesson cannot, so the student
-#      meets them raw in the console and reads them as failure;
+#   6. no correct answer prints a warning. The chapters hide these with
+#      warning: false in _quarto.yml; a swirl lesson cannot, and because swirl
+#      prints plots inside its task callback the warning arrives as "warning
+#      messages from top-level task callback 'mini'", which reads as failure;
 #   7. the published zip matches the lessons on disk, *and* the copy under
 #      docs/ matches it in turn. Students install over the web, so the file
 #      that matters is the one Pages serves out of docs/data/. Rebuilding
@@ -179,12 +179,6 @@ for (lesson in manifest) {
   }
   environment(run_test) <- tests_env
 
-  # A lesson may warn the student in advance, in which case the warnings are
-  # part of the teaching rather than noise.
-  all_text <- paste(vapply(items, function(x) {
-    if (is.null(x$Output)) "" else as.character(x$Output)
-  }, character(1)), collapse = " ")
-  prepared <- grepl("Removed", all_text, fixed = TRUE)
 
   for (i in seq_along(items)) {
     item <- items[[i]]
@@ -234,9 +228,10 @@ for (lesson in manifest) {
         invokeRestart("muffleWarning")
       }
     )
-    if (length(warned) > 0 && !prepared) {
+    if (length(warned) > 0) {
       note(lesson, paste0(
-        "item ", i, ": prints a warning the lesson never mentions -- ",
+        "item ", i, ": prints a warning -- in swirl it arrives through the task ",
+        "callback and reads as a failure -- ",
         gsub("\n", " ", warned[1])
       ))
     }

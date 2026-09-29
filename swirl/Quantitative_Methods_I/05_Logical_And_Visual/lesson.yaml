@@ -103,13 +103,19 @@
   Hint: Follow a rising straight line far enough to the right. What life expectancy does it promise for a very rich country?
 
 - Class: text
-  Output: Two of the 119 countries have no GDP figure, so the next three plots will print 'Removed 2 rows containing missing values'. That is not an error - it is ggplot telling you it could not draw them. The two are kept in world because the literacy counts you have just made depend on all 119.
+  Output: Two of the 119 countries have no GDP figure, so a plot of GDP could not draw them. Keep world as it is - the literacy counts above depend on all 119 - and make a separate copy for the GDP plots instead.
 
 - Class: cmd_question
-  Output: Plot it and see. Type ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)).
-  CorrectAnswer: ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100))
-  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100))')
-  Hint: Type ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)).
+  Output: Make that copy with filter(), keeping the countries where gdp is not missing, and call it world_gdp. Type world_gdp <- filter(world, !is.na(gdp)).
+  CorrectAnswer: world_gdp <- filter(world, !is.na(gdp))
+  AnswerTests: any_of_exprs('world_gdp <- filter(world, !is.na(gdp))', 'world_gdp <- world |> filter(!is.na(gdp))')
+  Hint: Type world_gdp <- filter(world, !is.na(gdp)). The !is.na(gdp) part is TRUE wherever gdp has a value.
+
+- Class: cmd_question
+  Output: Plot it and see. Type ggplot(world_gdp, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)).
+  CorrectAnswer: ggplot(world_gdp, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100))
+  AnswerTests: omnitest(correctExpr='ggplot(world_gdp, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100))')
+  Hint: Type ggplot(world_gdp, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)).
 
 - Class: text
   Output: Steep on the left, flat on the right. Going from two thousand dollars to four thousand buys a lot of life expectancy. Going from sixty thousand to a hundred and twenty thousand buys almost none. The curve is bending towards a ceiling, which is what the limits of the scales said it had to do.
@@ -122,8 +128,8 @@
 
 - Class: cmd_question
   Output: Add it to the plot as a horizontal line, with geom_hline(yintercept = ceiling_now, linetype = "dashed") on the end of the previous plot command.
-  CorrectAnswer: ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)) + geom_hline(yintercept = ceiling_now, linetype = "dashed")
-  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)) + geom_hline(yintercept = ceiling_now, linetype = "dashed")')
+  CorrectAnswer: ggplot(world_gdp, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)) + geom_hline(yintercept = ceiling_now, linetype = "dashed")
+  AnswerTests: omnitest(correctExpr='ggplot(world_gdp, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)) + geom_hline(yintercept = ceiling_now, linetype = "dashed")')
   Hint: Add + geom_hline(yintercept = ceiling_now, linetype = "dashed") to the previous plot.
 
 - Class: text
@@ -131,8 +137,8 @@
 
 - Class: cmd_question
   Output: Add + scale_x_continuous(labels = scales::label_comma()) to the end of that plot.
-  CorrectAnswer: ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)) + geom_hline(yintercept = ceiling_now, linetype = "dashed") + scale_x_continuous(labels = scales::label_comma())
-  AnswerTests: omnitest(correctExpr='ggplot(world, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)) + geom_hline(yintercept = ceiling_now, linetype = "dashed") + scale_x_continuous(labels = scales::label_comma())')
+  CorrectAnswer: ggplot(world_gdp, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)) + geom_hline(yintercept = ceiling_now, linetype = "dashed") + scale_x_continuous(labels = scales::label_comma())
+  AnswerTests: omnitest(correctExpr='ggplot(world_gdp, aes(x = gdp, y = life)) + geom_point() + coord_cartesian(ylim = c(0, 100)) + geom_hline(yintercept = ceiling_now, linetype = "dashed") + scale_x_continuous(labels = scales::label_comma())')
   Hint: Add + scale_x_continuous(labels = scales::label_comma()) to the end.
 
 - Class: text
