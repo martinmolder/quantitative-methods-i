@@ -199,7 +199,7 @@ Everything above the diagonal is forbidden. Not unlikely — impossible.
 
 ```{r}
 #| label: fig-forbidden
-#| fig-cap: "Rating of the party voted for against the respondent's highest rating of any party. The shaded region cannot contain any case."
+#| fig-cap: "Rating of the party voted for against the respondent's highest rating of any party. The shaded region cannot contain any case; the triangles mark the anchor points."
 #| fig-height: 4.2
 ggplot(voters, aes(x = best, y = own)) +
   annotate(
@@ -213,6 +213,14 @@ ggplot(voters, aes(x = best, y = own)) +
     intercept = 0,
     slope = 1,
     linetype = "dashed"
+  ) +
+  annotate(
+    "point",
+    x = c(0, 10),
+    y = c(0, 10),
+    shape = 24,
+    fill = "white",
+    size = 3
   ) +
   coord_fixed(xlim = c(0, 10), ylim = c(0, 10)) +
   labs(
