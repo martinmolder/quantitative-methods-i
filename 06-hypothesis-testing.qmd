@@ -44,8 +44,11 @@ Now the important part. That could be bad luck — this particular sample happen
 #| label: fig-turnout
 #| fig-height: 4.4
 turnout |>
-  mutate(country = reorder(country, gap)) |>
-  ggplot(aes(x = gap, y = country)) +
+  mutate(
+    label = paste(country, year),
+    label = reorder(label, gap)
+  ) |>
+  ggplot(aes(x = gap, y = label)) +
   geom_col(fill = "grey60") +
   geom_vline(xintercept = 0) +
   labs(
@@ -55,7 +58,7 @@ turnout |>
   theme_bw()
 ```
 
-`geom_col()` draws bars whose length is a value in the data, as against `geom_bar()`, which counts rows. `reorder()` sorts one variable by another, so the countries come out in order of the size of the gap rather than alphabetically. `geom_vline()` draws a vertical line, with `xintercept` saying where on the horizontal axis it sits. `y = NULL` removes the axis title, because "country" over a list of country names is a label that carries nothing.
+`geom_col()` draws bars whose length is a value in the data, as against `geom_bar()`, which counts rows. Each bar is one study, labelled with `paste()` as country and year: Portugal has two, and labelled by country alone its two bars would be stacked into one, as long as both gaps added together. `reorder()` sorts one variable by another, so the studies come out in order of the size of the gap rather than alphabetically. `geom_vline()` draws a vertical line, with `xintercept` saying where on the horizontal axis it sits. `y = NULL` removes the axis title, because "label" over a list of countries and years carries nothing.
 
 Every single one is positive.
 
