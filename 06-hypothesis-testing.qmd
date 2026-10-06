@@ -139,7 +139,7 @@ The reason is that we are not describing these `r length(swe$lr_self[!is.na(swe$
 
 So the obvious calculation would be biased downwards, every time. Dividing by $n-1$ instead of $n$ makes the result slightly larger and corrects it. With thousands of cases the difference is invisible; with twelve it matters.
 
-## What happens when you sample repeatedly
+## What happens when you sample repeatedly {#sec-repeated}
 
 Here is the central idea, and R lets us watch it happen rather than take it on trust.
 
@@ -226,7 +226,7 @@ Two consequences follow from the $\sqrt{n}$ on the bottom.
 Work out the standard error of the mean for the full sample. Then ask what would have to be true for that number to be a good description of how far our estimate is from the truth about Sweden — and whether the turnout table at the top of this chapter gives you any confidence that it is.
 :::
 
-## The 95% rule
+## The 95% rule {#sec-95}
 
 Because sampling distributions come out bell-shaped, one fact about the normal distribution does most of the practical work.
 
@@ -273,33 +273,159 @@ The last piece. Most research questions are not "what is the value" but "is ther
 
 Such questions get turned into a pair of hypotheses:
 
-- The **null hypothesis**: there is nothing there. No difference, no association. Usually written as zero.
-- The **alternative hypothesis**: there is something there.
+- The **null hypothesis**: there is nothing there. No difference, no association — the population value is the one that "nothing" would give.
+- The **alternative hypothesis**: there is something there. The population value is not that.
 
-The test is always the same shape:
+A test asks one thing: **how far is the sample from what the null hypothesis says, and is that further than sampling noise would carry it?** The rest of this section builds that up one step at a time, using a question worth asking.
 
-$$\text{test statistic} = \frac{\text{what we found}}{\text{how much it could vary by chance}} = \frac{\text{signal}}{\text{noise}}$$
+### A null hypothesis worth testing
 
-A large ratio means the finding is big relative to the uncertainty around it. A small one means it is the sort of thing sampling noise produces routinely.
+The left-right scale runs from 0 to 10, and 5 is its middle. A claim you will hear is that Swedish voters are, on average, exactly in the centre. That gives a pair of hypotheses:
 
-That ratio gets converted into a **p-value**: the probability of seeing a result at least this large **if the null hypothesis were true** — if there were really nothing there.
+- Null: the mean left-right position of Swedish voters is **5**.
+- Alternative: it is **not 5** — it is somewhere else, in either direction.
 
-A small p-value means the data would be surprising in a world with no effect, so the no-effect story is a poor explanation. The conventional threshold is 0.05.
+The sample mean is `r round(estimate, 2)`, not 5. But a sample mean is never exactly the population value; @sec-repeated showed sample means scattering around the truth. The question is whether `r round(estimate, 2)` is the kind of miss a sample makes by chance when the truth is 5.
+
+### Step 1: how far is the sample from the null?
+
+```{r}
+null_value <- 5
+distance <- estimate - null_value
+distance
+```
+
+The sample is `r round(distance, 2)` points from where the null hypothesis puts the population. On its own that number cannot answer the question. Is `r round(distance, 2)` points a lot? It depends on how much a sample mean moves about from sample to sample — and that is exactly what the standard error measures.
+
+### Step 2: measure the distance in standard errors
+
+The standard error is the yardstick. @sec-repeated showed what it is: the spread of the means you would get from sample after sample. So divide the distance by it:
+
+```{r}
+z <- distance / se
+z
+```
+
+The sample mean sits `r round(z, 2)` **standard errors** from the null value. That is the **test statistic**:
+
+$$z = \frac{\text{estimate} - \text{null value}}{\text{standard error}}$$
+
+This is the signal-to-noise ratio from the start of the section, made concrete. The signal is the distance between what we found and what the null predicts. The noise is the standard error — how far a sample mean typically wanders by chance alone.
+
+### Step 3: where does that land if the null is true?
+
+Now suppose the null hypothesis were true. Then the population mean would be 5, and the means of repeated samples would pile up around 5 in the bell shape you saw in @sec-repeated, with a spread of one standard error. Measured in standard errors, that is a normal distribution centred on 0.
+
+The test statistic is **a location in that distribution**: how far out our sample sits among all the samples a world with no effect would produce.
+
+```{r}
+#| label: fig-null
+#| echo: false
+#| fig-cap: "Where sample means would fall if the null hypothesis were true. The bottom axis measures the distance from the null value in standard errors; the top axis gives the same positions as mean left-right placements, with the null value of 5 at the centre. The shaded tails are the 5% of samples furthest from it, beyond ±1.96. The vertical line is our sample."
+#| fig-height: 3.2
+curve_df <- data.frame(x = seq(-5, 5, by = 0.01))
+curve_df$y <- dnorm(curve_df$x)
+ggplot(curve_df, aes(x = x, y = y)) +
+  geom_area(data = subset(curve_df, x <= -1.96), fill = "grey75") +
+  geom_area(data = subset(curve_df, x >= 1.96), fill = "grey75") +
+  geom_line() +
+  geom_vline(xintercept = z, linewidth = 1) +
+  annotate("text", x = z, y = 0.3, label = "our sample",
+           hjust = 1.1, size = 4) +
+  scale_x_continuous(
+    sec.axis = sec_axis(\(x) null_value + x * se,
+                        name = "Mean left-right position",
+                        breaks = seq(4.8, 5.3, by = 0.1))
+  ) +
+  labs(
+    x = "Distance from the null value, in standard errors",
+    y = NULL
+  ) +
+  theme_bw() +
+  theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
+```
+
+At `r round(z, 1)` standard errors, our sample is past the point where the curve has practically run out. Samples that far from 5 almost never happen when the truth is 5.
+
+### Step 4: from a location to a probability
+
+The **p-value** turns that location into a number: the share of the null distribution that lies **at least as far from the null value as our sample**, in either direction.
+
+```{r}
+z_size <- abs(z)
+beyond <- pnorm(z_size, lower.tail = FALSE)
+p <- 2 * beyond
+p
+```
+
+`abs()` gives the size of a number without its sign, because a sample `r round(z, 1)` standard errors *below* 5 would be just as much evidence against the null as one `r round(z, 1)` above. `pnorm()` with `lower.tail = FALSE`, from @sec-95, gives the share of the normal distribution beyond that point in one tail. The alternative was "not 5, in either direction", so both tails count, and the share is doubled.
+
+The printed `2.78e-05` is how R writes `r format(p, scientific = FALSE, digits = 3)`: the number after `e-` says how many places to move the decimal point to the left. If the average Swede really sat at exactly 5, a sample as far from it as ours would turn up about once in `r format(round(1 / p, -3), big.mark = ",")` samples. That is the p-value: **the probability of a result at least this far from the null, if the null were true.**
+
+So the no-effect story is a poor explanation of these data. The conventional threshold is 0.05, and this is far below it.
 
 > **Read that definition again**, because the direction catches people out. The p-value is the probability of the *data* given no effect. It is **not** the probability that there is no effect, and it is not the probability that you are wrong. It cannot be, because it assumes the null hypothesis to compute the number, and you cannot use an assumption as evidence about itself.
 
-Confidence intervals and p-values are two views of the same thing. If the 95% confidence interval excludes zero, the p-value is below 0.05, and the other way round. Our interval for the mean runs from `r round(mean(lr) - 1.96 * sd(lr)/sqrt(length(lr)), 2)` to `r round(mean(lr) + 1.96 * sd(lr)/sqrt(length(lr)), 2)` and does not come near zero — although here that comparison is meaningless, because there was never any reason to think the average Swede sits at 0 on a left-right scale.
+### The same distance, different evidence
 
-That last point is worth keeping. **A test is only interesting if the null hypothesis was worth entertaining.** Much published research reports p-values for comparisons nobody doubted.
+Here is why the standard error matters so much. Suppose the same mean, `r round(estimate, 2)`, had come from only 100 respondents rather than `r format(length(lr), big.mark = ",")`. The distance from 5 is identical. The standard error is not.
 
-The next three sessions are all applications of this one idea. Session 7 tests whether two categorical variables are related, session 8 whether two means differ, session 9 whether two continuous variables move together. In each case the shape is what you have just seen: something we found, divided by how much it could have varied by chance.
+```{r}
+se_100 <- sd(lr) / sqrt(100)
+z_100 <- distance / se_100
+p_100 <- 2 * pnorm(abs(z_100), lower.tail = FALSE)
+round(c(se_100, z_100, p_100), 3)
+```
+
+With 100 respondents the standard error is `r round(se_100, 2)` rather than `r round(se, 3)`, the same `r round(distance, 2)` points is only `r round(z_100, 2)` standard errors, and the p-value is `r fmt(p_100)`.
+
+```{r}
+#| label: fig-null-100
+#| echo: false
+#| fig-cap: "The same distance from 5 in a sample of 100. The top axis is wider than before because the standard error is larger. The shaded area is the p-value: the share of samples at least this far from the null, in either direction, if the null were true."
+#| fig-height: 3.2
+ggplot(curve_df, aes(x = x, y = y)) +
+  geom_area(data = subset(curve_df, x <= -z_100), fill = "grey75") +
+  geom_area(data = subset(curve_df, x >= z_100), fill = "grey75") +
+  geom_line() +
+  geom_vline(xintercept = z_100, linewidth = 1) +
+  scale_x_continuous(
+    sec.axis = sec_axis(\(x) null_value + x * se_100,
+                        name = "Mean left-right position",
+                        breaks = seq(3.75, 6.25, by = 0.25))
+  ) +
+  labs(
+    x = "Distance from the null value, in standard errors",
+    y = NULL
+  ) +
+  theme_bw() +
+  theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
+```
+
+Now the p-value is visible as an area: `r round(100 * p_100)`% of samples would land at least that far from 5 even if 5 were the truth. A sample like that is entirely ordinary in a world with no effect, so it is no evidence against the null.
+
+The distance was the same both times. **What changed was the standard error**, and with it the location of the sample in the null distribution. That is how the size of a sample enters a test: through the square root of *n* in the standard error.
+
+### The rule of 1.96, again
+
+@sec-95 showed that 95% of a normal distribution lies within 1.96 standard deviations of its centre. So a sample more than 1.96 standard errors from the null value lands in the outer 5% — and that is exactly when the p-value falls below 0.05.
+
+It is also exactly when the 95% confidence interval leaves out the null value, because the interval is the estimate plus and minus 1.96 standard errors. Confidence intervals and p-values are two views of the same calculation. Our interval runs from `r round(estimate - 1.96 * se, 2)` to `r round(estimate + 1.96 * se, 2)`: it does not include 5, and the p-value is below 0.05.
+
+### A test is only as interesting as its null
+
+The null hypothesis of 5 was worth testing: it is a claim people make. Testing whether the mean differs from 0 would give an even smaller p-value and mean nothing at all, because there was never any reason to think the average Swede sits at the far left of the scale. **A test is only interesting if the null hypothesis was worth entertaining.** Much published research reports p-values for comparisons nobody doubted.
+
+The next three sessions are all applications of this one idea. Session 7 tests whether two categorical variables are related, session 8 whether two means differ, session 9 whether two continuous variables move together. Each has its own estimate and its own standard error, and R does the steps above in one function call, but the logic is always these four steps: a distance from the null, measured in standard errors, located in the distribution the null predicts, and read off as a probability.
+
+> With small samples the functions you will meet, such as `t.test()` in session 8, use the *t* distribution instead of the normal — a slightly wider bell that allows for the standard error itself being estimated from a small sample. With thousands of cases the two are indistinguishable, and `t.test()` gives the same answer as the steps above.
 
 ::: {.reporting}
 **How to write it up.**
 
-> Swedish respondents place themselves close to the centre of the left-right scale (mean = `r round(mean(lr), 2)`, 95% CI [`r round(mean(lr) - 1.96 * sd(lr)/sqrt(length(lr)), 2)`, `r round(mean(lr) + 1.96 * sd(lr)/sqrt(length(lr)), 2)`], *n* = `r length(lr)`).
+> Swedish respondents place themselves close to the centre of the left-right scale (mean = `r round(estimate, 2)`, 95% CI [`r round(estimate - 1.96 * se, 2)`, `r round(estimate + 1.96 * se, 2)`], *n* = `r format(length(lr), big.mark = ",")`), but slightly to the right of its midpoint of 5 (*z* = `r round(z, 2)`, *p* < 0.001).
 
-Report the estimate, the interval, and the number of cases the estimate rests on. Mistakes to avoid:
+Report the estimate, the interval, and the number of cases the estimate rests on. For a test, add the test statistic and the p-value — and say what the null value was. Mistakes to avoid:
 
 - **Reporting a p-value without the estimate.** "The difference was significant (p < .05)" does not say how big it was, which is what the reader needs.
 - **Reporting more decimal places than the data supports.** A left-right scale with eleven whole-number points does not measure anything to three decimals.
