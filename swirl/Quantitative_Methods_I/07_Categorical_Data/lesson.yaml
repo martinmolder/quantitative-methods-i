@@ -53,7 +53,7 @@
   Output: 18.9 per cent against 10.3 per cent. That looks like a difference. But we have a sample, so the question from last week applies - could a gap this size come from a population where men and women vote alike?
 
 - Class: text
-  Output: The test compares what we observed with what we would expect if the two variables were unrelated. If sex made no difference, the SD share would be the same in both rows and equal to the overall share.
+  Output: The test compares what we observed with what we would expect if the two variables were unrelated. If sex made no difference, the SD share would be the same in both rows and equal to the overall share. So each expected count is its row total times its column total, divided by the number of respondents.
 
 - Class: cmd_question
   Output: Get the row totals with rowSums(counts), and put them in an object called row_totals.
@@ -62,16 +62,43 @@
   Hint: Type row_totals <- rowSums(counts).
 
 - Class: cmd_question
-  Output: Now the overall column shares - colSums(counts) divided by sum(counts), in an object called col_shares.
-  CorrectAnswer: col_shares <- colSums(counts) / sum(counts)
-  AnswerTests: any_of_exprs('col_shares <- colSums(counts) / sum(counts)', 'col_shares <- colSums(counts)/sum(counts)')
-  Hint: Type col_shares <- colSums(counts) / sum(counts).
+  Output: Now the column totals with colSums(counts), in an object called col_totals.
+  CorrectAnswer: col_totals <- colSums(counts)
+  AnswerTests: omnitest(correctExpr='col_totals <- colSums(counts)')
+  Hint: Type col_totals <- colSums(counts).
 
 - Class: cmd_question
-  Output: Multiply every row total by every column share to get the expected table. outer() does exactly that. Type expected <- outer(row_totals, col_shares).
-  CorrectAnswer: expected <- outer(row_totals, col_shares)
-  AnswerTests: omnitest(correctExpr='expected <- outer(row_totals, col_shares)')
-  Hint: Type expected <- outer(row_totals, col_shares).
+  Output: And the number of respondents, sum(counts), in an object called n.
+  CorrectAnswer: n <- sum(counts)
+  AnswerTests: omnitest(correctExpr='n <- sum(counts)')
+  Hint: Type n <- sum(counts).
+
+- Class: cmd_question
+  Output: One cell by hand first - men who voted for the Sweden Democrats. Multiply the men's row total by the SD column total and divide by n. Type row_totals["Men"] * col_totals["Sweden Democrats"] / n.
+  CorrectAnswer: row_totals["Men"] * col_totals["Sweden Democrats"] / n
+  AnswerTests: any_of_exprs('row_totals["Men"] * col_totals["Sweden Democrats"] / n', 'row_totals["Men"]*col_totals["Sweden Democrats"]/n')
+  Hint: Type row_totals["Men"] * col_totals["Sweden Democrats"] / n.
+
+- Class: text
+  Output: About 159 SD-voting men if sex made no difference. The table says 209.
+
+- Class: cmd_question
+  Output: Every other cell works the same way. Multiply the men's row total by both column totals at once and you get the whole row for men. Type expected_men <- row_totals["Men"] * col_totals / n.
+  CorrectAnswer: expected_men <- row_totals["Men"] * col_totals / n
+  AnswerTests: any_of_exprs('expected_men <- row_totals["Men"] * col_totals / n', 'expected_men <- row_totals["Men"]*col_totals/n')
+  Hint: Type expected_men <- row_totals["Men"] * col_totals / n.
+
+- Class: cmd_question
+  Output: Now the same for women, in an object called expected_women.
+  CorrectAnswer: expected_women <- row_totals["Women"] * col_totals / n
+  AnswerTests: any_of_exprs('expected_women <- row_totals["Women"] * col_totals / n', 'expected_women <- row_totals["Women"]*col_totals/n')
+  Hint: Type expected_women <- row_totals["Women"] * col_totals / n.
+
+- Class: cmd_question
+  Output: rbind() - row bind - stacks rows on top of each other into a table. Type expected <- rbind(Men = expected_men, Women = expected_women). The Men = and Women = parts name the rows.
+  CorrectAnswer: expected <- rbind(Men = expected_men, Women = expected_women)
+  AnswerTests: omnitest(correctExpr='expected <- rbind(Men = expected_men, Women = expected_women)')
+  Hint: Type expected <- rbind(Men = expected_men, Women = expected_women).
 
 - Class: cmd_question
   Output: Compare the two. Print round(expected, 1) and put it beside the counts in your head.
@@ -80,7 +107,10 @@
   Hint: Type round(expected, 1).
 
 - Class: text
-  Output: More SD-voting men than expected, fewer SD-voting women. The chi-squared statistic turns that comparison into one number - for each cell, observed minus expected, squared, divided by expected, all added up.
+  Output: These are the two hypotheses, as tables. The expected counts are the null hypothesis written out - the table if sex and SD voting were unrelated. The observed counts stand for the alternative - the table as it actually is, association and all.
+
+- Class: text
+  Output: More SD-voting men than expected, fewer SD-voting women. The chi-squared statistic is the distance between the two tables, as last week's test statistic was the distance from the null value. For each cell, observed minus expected, squared, divided by expected, all added up.
 
 - Class: cmd_question
   Output: Write that straight into R. Type sum((counts - expected)^2 / expected).
@@ -95,7 +125,7 @@
   Hint: Type chisq.test(counts, correct = FALSE). The correct argument switches off a small adjustment, so the number matches what you just calculated by hand.
 
 - Class: text
-  Output: Same statistic, 34.97, and a p-value far below 0.05. A gap this size would be very unusual if men and women voted alike.
+  Output: Same statistic, 34.97. The p-value is the share of the distances the null hypothesis would produce by chance that are at least this large, and it is far below 0.05. A gap this size would be very unusual if men and women voted alike.
 
 - Class: text
   Output: But a test only says whether something is there. It says nothing about size - and with a large enough sample, a trivial difference will pass. For categorical data the standard measure of size is the odds ratio.
@@ -124,6 +154,15 @@
   AnswerChoices: The odds of SD voting were about twice as high for men, while the probability was about 1.8 times as high.; Men were about twice as likely as women to vote SD.; Men were 2.03 percentage points more likely to vote SD.
   AnswerTests: omnitest(correctVal='The odds of SD voting were about twice as high for men, while the probability was about 1.8 times as high.')
   Hint: Odds are not probabilities. Divide 18.9 by 10.3 and compare with 2.03.
+
+- Class: cmd_question
+  Output: The confidence interval for an odds ratio can be calculated by hand, but the effectsize package does it in one line. Its oddsratio() function takes the odds of the first column, which here is Other party, so reorder the columns to put the Sweden Democrats first. Type oddsratio(counts[, 2:1]).
+  CorrectAnswer: oddsratio(counts[, 2:1])
+  AnswerTests: any_of_exprs('oddsratio(counts[, 2:1])', 'oddsratio(counts[,2:1])', 'effectsize::oddsratio(counts[, 2:1])')
+  Hint: Type oddsratio(counts[, 2:1]). The empty space before the comma keeps every row, and 2:1 takes column 2 then column 1.
+
+- Class: text
+  Output: An odds ratio of 2.03, with a 95 per cent confidence interval from 1.60 to 2.57. Leave out the reordering and you get 0.49 - the odds of voting for another party, men against women. The same association turned upside down, since 0.49 is one divided by 2.03.
 
 - Class: text
   Output: An odds ratio of 1 means no association, so 1 plays the role that 0 plays elsewhere. A confidence interval that excludes 1 says the same thing as a p-value below 0.05.

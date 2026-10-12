@@ -11,9 +11,6 @@ fmt <- function(x, digits = 2) formatC(x, format = "f", digits = digits)
 The first application of last week's reasoning. Two categorical variables: are they related, and how strongly?
 
 ```{r}
-library(ggplot2)
-library(dplyr)
-
 swe <- readRDS("data/swe.rds")
 ```
 
@@ -60,42 +57,47 @@ round(100 * prop.table(counts, 2), 1)
 
 > **Percentage of what?** Pick the direction that matches your question. Almost always you want the percentage **within the explanatory variable** — here, within each sex — because the question is whether being a man makes SD voting more likely, not whether being an SD voter makes maleness more likely.
 
-A bar chart of the same thing:
-
-```{r}
-#| fig-height: 3.2
-swe |>
-  filter(!is.na(sex), !is.na(sd_vote)) |>
-  ggplot(aes(x = sex, fill = sd_vote)) +
-  geom_bar(position = "fill") +
-  scale_fill_viridis_d(end = 0.8) +
-  labs(
-    x = NULL,
-    y = "Share of respondents",
-    fill = NULL
-  ) +
-  theme_bw()
-```
-
-`position = "fill"` makes every bar the full height and shows composition — the visual equivalent of `prop.table(counts, 1)`.
-
 ## Is the difference real?
 
 `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[1, 2], 1)`% against `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[2, 2], 1)`% looks like a difference. But we have a sample, so the question from last week applies: could a gap this size come out of a population where men and women vote the same way?
 
 The test works by comparing what we **observed** with what we would **expect** if the two variables were unrelated.
 
-If sex made no difference, then the SD share among men and among women would both be the overall SD share. So the expected count in a cell is its row total times the overall proportion for that column.
+If sex made no difference, then the SD share among men and among women would both be the overall SD share. So the expected count in a cell is **its row total times its column total, divided by the total number of respondents**.
+
+Start with the three totals that formula needs:
 
 ```{r}
+n <- sum(counts)
 row_totals <- rowSums(counts)
-col_shares <- colSums(counts) / sum(counts)
+col_totals <- colSums(counts)
 
-expected <- outer(row_totals, col_shares)
+row_totals
+col_totals
+n
+```
+
+`rowSums()` and `colSums()` add up the rows and the columns of a table.
+
+Now one cell by hand: men who voted for the Sweden Democrats. There are `r row_totals[["Men"]]` men, `r col_totals[["Sweden Democrats"]]` SD voters, and `r n` people in all.
+
+```{r}
+row_totals["Men"] * col_totals["Sweden Democrats"] / n
+```
+
+If sex made no difference, we would expect about `r round(row_totals[["Men"]] * col_totals[["Sweden Democrats"]] / n)` SD-voting men. We observed `r counts["Men", "Sweden Democrats"]`.
+
+Every other cell works the same way. Multiplying a row total by **both** column totals at once does a whole row:
+
+```{r}
+expected_men <- row_totals["Men"] * col_totals / n
+expected_women <- row_totals["Women"] * col_totals / n
+
+expected <- rbind(Men = expected_men, Women = expected_women)
 round(expected, 1)
 ```
 
-`rowSums()` and `colSums()` add up rows and columns. `outer()` multiplies every element of the first vector by every element of the second, giving a table of the same shape — each row total spread across the columns in the overall proportions.
+`row_totals["Men"] * col_totals` multiplies the one number for men by each of the two column totals in turn, giving the two expected counts for men. `rbind()` — "row bind" — stacks rows on top of each other into a table, and `Men =` and `Women =` name the rows.
 
 Compare the two:
 
@@ -104,7 +106,9 @@ counts
 round(expected, 1)
 ```
 
-More SD-voting men than expected, fewer SD-voting women. The **chi-squared statistic** turns that comparison into one number: for every cell, the difference between observed and expected, squared, divided by the expected count, all added up.
+These are the two hypotheses, as tables. **The expected counts are the null hypothesis written out**: what the table would look like if sex and Sweden Democrat voting were unrelated. **The observed counts stand for the alternative**: the table as it actually is, with whatever association the data contain.
+
+More SD-voting men than expected, fewer SD-voting women. The question is how far apart the two tables are. The **chi-squared statistic** is that distance — **a measurement of how far the observed table is from the one the null hypothesis predicts**, just as last week's test statistic measured how far a sample mean was from the null value. It works cell by cell: the difference between observed and expected, squared, divided by the expected count, all added up.
 
 $$\chi^2 = \sum \frac{(O_{ij} - E_{ij})^2}{E_{ij}}$$
 
@@ -113,6 +117,8 @@ Squaring stops the positive and negative differences cancelling. Dividing by the
 ```{r}
 sum((counts - expected)^2 / expected)
 ```
+
+The p-value then comes exactly as last week. If the null hypothesis were true, samples would still produce tables a little different from the expected one, and so chi-squared values a little above zero; those values follow a known distribution, the chi-squared distribution. The p-value is the share of that distribution at least as far out as our `r fmt(sum((counts - expected)^2 / expected))`.
 
 R does the whole thing, including the p-value, with `chisq.test()`.
 
@@ -179,11 +185,21 @@ upper <- exp(log(odds_ratio) + 1.96 * se_log_or)
 round(c(odds_ratio, lower, upper), 3)
 ```
 
-`sum(1 / counts)` adds the reciprocals of the four cell counts, which is the standard error of the log odds ratio. `exp()` undoes `log()`, putting the interval back on the odds-ratio scale.
+`sum(1 / counts)` adds the reciprocals of the four cell counts, which gives the variance of the log odds ratio; its square root is the standard error. `exp()` undoes `log()`, putting the interval back on the odds-ratio scale.
 
 From `r fmt(exp(log(odds_men/odds_women) - 1.96*sqrt(sum(1/counts))))` to `r fmt(exp(log(odds_men/odds_women) + 1.96*sqrt(sum(1/counts))))`. It excludes 1, which is the same conclusion the chi-squared test reached — as it must be.
 
 Note that the interval is not symmetric around the estimate. That is the log scale showing through, and it is correct.
+
+You will rarely do this by hand. The `effectsize` package, which you will also use in session 8, has `oddsratio()`:
+
+```{r}
+library(effectsize)
+
+oddsratio(counts[, 2:1])
+```
+
+The same odds ratio and the same interval. `oddsratio()` takes the odds of the **first** column, which here is "Other party", so `counts[, 2:1]` reorders the columns to put the Sweden Democrats first: the empty space before the comma keeps every row, and `2:1` takes column 2, then column 1. Without it you get `r fmt(1 / (odds_men / odds_women))` — the odds of voting for another party, men against women. That is the same association turned upside down, `r fmt(1 / (odds_men / odds_women))` being one divided by `r fmt(odds_men / odds_women)`.
 
 ## Bigger tables
 
