@@ -53,7 +53,7 @@
   Output: 18.9 per cent against 10.3 per cent. That looks like a difference. But we have a sample, so the question from last week applies - could a gap this size come from a population where men and women vote alike?
 
 - Class: text
-  Output: The test compares what we observed with what we would expect if the two variables were unrelated. If sex made no difference, the SD share would be the same in both rows and equal to the overall share. So each expected count is its row total times its column total, divided by the number of respondents.
+  Output: The test compares what we observed with what we would expect if the two variables were unrelated. If sex made no difference, the SD share would be the same in both rows and equal to the overall share. So each expected count is its row total times its column's share of all respondents - the column total divided by the number of respondents.
 
 - Class: cmd_question
   Output: Get the row totals with rowSums(counts), and put them in an object called row_totals.
@@ -74,25 +74,25 @@
   Hint: Type n <- sum(counts).
 
 - Class: cmd_question
-  Output: One cell by hand first - men who voted for the Sweden Democrats. Multiply the men's row total by the SD column total and divide by n. Type row_totals["Men"] * col_totals["Sweden Democrats"] / n.
-  CorrectAnswer: row_totals["Men"] * col_totals["Sweden Democrats"] / n
-  AnswerTests: any_of_exprs('row_totals["Men"] * col_totals["Sweden Democrats"] / n', 'row_totals["Men"]*col_totals["Sweden Democrats"]/n')
-  Hint: Type row_totals["Men"] * col_totals["Sweden Democrats"] / n.
+  Output: One cell by hand first - men who voted for the Sweden Democrats. Divide the SD column total by n to get the SD share, and multiply the men's row total by it. Type row_totals["Men"] * (col_totals["Sweden Democrats"] / n).
+  CorrectAnswer: row_totals["Men"] * (col_totals["Sweden Democrats"] / n)
+  AnswerTests: any_of_exprs('row_totals["Men"] * (col_totals["Sweden Democrats"] / n)', 'row_totals["Men"]*col_totals["Sweden Democrats"]/n', 'row_totals["Men"] * col_totals["Sweden Democrats"] / n')
+  Hint: Type row_totals["Men"] * (col_totals["Sweden Democrats"] / n).
 
 - Class: text
   Output: About 159 SD-voting men if sex made no difference. The table says 209.
 
 - Class: cmd_question
-  Output: Every other cell works the same way. Multiply the men's row total by both column totals at once and you get the whole row for men. Type expected_men <- row_totals["Men"] * col_totals / n.
-  CorrectAnswer: expected_men <- row_totals["Men"] * col_totals / n
-  AnswerTests: any_of_exprs('expected_men <- row_totals["Men"] * col_totals / n', 'expected_men <- row_totals["Men"]*col_totals/n')
-  Hint: Type expected_men <- row_totals["Men"] * col_totals / n.
+  Output: Every other cell works the same way. Multiply the men's row total by both column totals at once and you get the whole row for men. Type expected_men <- row_totals["Men"] * (col_totals / n).
+  CorrectAnswer: expected_men <- row_totals["Men"] * (col_totals / n)
+  AnswerTests: any_of_exprs('expected_men <- row_totals["Men"] * (col_totals / n)', 'expected_men <- row_totals["Men"]*col_totals/n', 'expected_men <- row_totals["Men"] * col_totals / n')
+  Hint: Type expected_men <- row_totals["Men"] * (col_totals / n).
 
 - Class: cmd_question
   Output: Now the same for women, in an object called expected_women.
-  CorrectAnswer: expected_women <- row_totals["Women"] * col_totals / n
-  AnswerTests: any_of_exprs('expected_women <- row_totals["Women"] * col_totals / n', 'expected_women <- row_totals["Women"]*col_totals/n')
-  Hint: Type expected_women <- row_totals["Women"] * col_totals / n.
+  CorrectAnswer: expected_women <- row_totals["Women"] * (col_totals / n)
+  AnswerTests: any_of_exprs('expected_women <- row_totals["Women"] * (col_totals / n)', 'expected_women <- row_totals["Women"]*col_totals/n', 'expected_women <- row_totals["Women"] * col_totals / n')
+  Hint: Type expected_women <- row_totals["Women"] * (col_totals / n).
 
 - Class: cmd_question
   Output: rbind() - row bind - stacks rows on top of each other into a table. Type expected <- rbind(Men = expected_men, Women = expected_women). The Men = and Women = parts name the rows.

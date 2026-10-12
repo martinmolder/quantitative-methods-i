@@ -373,7 +373,7 @@ window.Quarto = {
 <h2 data-number="7.2" class="anchored" data-anchor-id="is-the-difference-real"><span class="header-section-number">7.2</span> Is the difference real?</h2>
 <p>18.9% against 10.3% looks like a difference. But we have a sample, so the question from last week applies: could a gap this size come out of a population where men and women vote the same way?</p>
 <p>The test works by comparing what we <strong>observed</strong> with what we would <strong>expect</strong> if the two variables were unrelated.</p>
-<p>If sex made no difference, then the SD share among men and among women would both be the overall SD share. So the expected count in a cell is <strong>its row total times its column total, divided by the total number of respondents</strong>.</p>
+<p>If sex made no difference, then the SD share among men and among women would both be the overall SD share. So the expected count in a cell is <strong>its row total times its column’s share of all respondents</strong> — the column total divided by the number of respondents.</p>
 <p>Start with the three totals that formula needs:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">sum</span>(counts)</span>
@@ -398,17 +398,17 @@ window.Quarto = {
 <p><code>rowSums()</code> and <code>colSums()</code> add up the rows and the columns of a table.</p>
 <p>Now one cell by hand: men who voted for the Sweden Democrats. There are 1104 men, 336 SD voters, and 2334 people in all.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>row_totals[<span class="st">"Men"</span>] <span class="sc">*</span> col_totals[<span class="st">"Sweden Democrats"</span>] <span class="sc">/</span> n</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>row_totals[<span class="st">"Men"</span>] <span class="sc">*</span> (col_totals[<span class="st">"Sweden Democrats"</span>] <span class="sc">/</span> n)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##      Men 
 ## 158.9306</code></pre>
 </div>
 </div>
 <p>If sex made no difference, we would expect about 159 SD-voting men. We observed 209.</p>
-<p>Every other cell works the same way. Multiplying a row total by <strong>both</strong> column totals at once does a whole row:</p>
+<p>Every other cell works the same way. Multiplying a row total by <strong>both</strong> column shares at once does a whole row:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>expected_men <span class="ot">&lt;-</span> row_totals[<span class="st">"Men"</span>] <span class="sc">*</span> col_totals <span class="sc">/</span> n</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>expected_women <span class="ot">&lt;-</span> row_totals[<span class="st">"Women"</span>] <span class="sc">*</span> col_totals <span class="sc">/</span> n</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>expected_men <span class="ot">&lt;-</span> row_totals[<span class="st">"Men"</span>] <span class="sc">*</span> (col_totals <span class="sc">/</span> n)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>expected_women <span class="ot">&lt;-</span> row_totals[<span class="st">"Women"</span>] <span class="sc">*</span> (col_totals <span class="sc">/</span> n)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>expected <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="at">Men =</span> expected_men, <span class="at">Women =</span> expected_women)</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(expected, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -418,7 +418,7 @@ window.Quarto = {
 ## Women      1052.9            177.1</code></pre>
 </div>
 </div>
-<p><code>row_totals["Men"] * col_totals</code> multiplies the one number for men by each of the two column totals in turn, giving the two expected counts for men. <code>rbind()</code> — “row bind” — stacks rows on top of each other into a table, and <code>Men =</code> and <code>Women =</code> name the rows.</p>
+<p><code>col_totals / n</code> gives the two column shares, and multiplying by <code>row_totals["Men"]</code> applies them to the number of men, giving the two expected counts for men. <code>rbind()</code> — “row bind” — stacks rows on top of each other into a table, and <code>Men =</code> and <code>Women =</code> name the rows.</p>
 <p>Compare the two:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>counts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>

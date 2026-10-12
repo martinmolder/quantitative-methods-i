@@ -63,7 +63,7 @@ round(100 * prop.table(counts, 2), 1)
 
 The test works by comparing what we **observed** with what we would **expect** if the two variables were unrelated.
 
-If sex made no difference, then the SD share among men and among women would both be the overall SD share. So the expected count in a cell is **its row total times its column total, divided by the total number of respondents**.
+If sex made no difference, then the SD share among men and among women would both be the overall SD share. So the expected count in a cell is **its row total times its column's share of all respondents** — the column total divided by the number of respondents.
 
 Start with the three totals that formula needs:
 
@@ -82,22 +82,22 @@ n
 Now one cell by hand: men who voted for the Sweden Democrats. There are `r row_totals[["Men"]]` men, `r col_totals[["Sweden Democrats"]]` SD voters, and `r n` people in all.
 
 ```{r}
-row_totals["Men"] * col_totals["Sweden Democrats"] / n
+row_totals["Men"] * (col_totals["Sweden Democrats"] / n)
 ```
 
 If sex made no difference, we would expect about `r round(row_totals[["Men"]] * col_totals[["Sweden Democrats"]] / n)` SD-voting men. We observed `r counts["Men", "Sweden Democrats"]`.
 
-Every other cell works the same way. Multiplying a row total by **both** column totals at once does a whole row:
+Every other cell works the same way. Multiplying a row total by **both** column shares at once does a whole row:
 
 ```{r}
-expected_men <- row_totals["Men"] * col_totals / n
-expected_women <- row_totals["Women"] * col_totals / n
+expected_men <- row_totals["Men"] * (col_totals / n)
+expected_women <- row_totals["Women"] * (col_totals / n)
 
 expected <- rbind(Men = expected_men, Women = expected_women)
 round(expected, 1)
 ```
 
-`row_totals["Men"] * col_totals` multiplies the one number for men by each of the two column totals in turn, giving the two expected counts for men. `rbind()` — "row bind" — stacks rows on top of each other into a table, and `Men =` and `Women =` name the rows.
+`col_totals / n` gives the two column shares, and multiplying by `row_totals["Men"]` applies them to the number of men, giving the two expected counts for men. `rbind()` — "row bind" — stacks rows on top of each other into a table, and `Men =` and `Women =` name the rows.
 
 Compare the two:
 
