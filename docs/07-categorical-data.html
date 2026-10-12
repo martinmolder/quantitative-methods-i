@@ -555,9 +555,25 @@ window.Quarto = {
 </div>
 </div>
 <p>Highly significant. But with 24 cells, “there is an association” is not much of a finding. <strong>Where</strong> is it?</p>
-<p>The answer is in the same observed-minus-expected comparison, scaled so that cells are comparable. <code>chisq.test()</code> keeps these as <code>residuals</code>.</p>
+<p>The answer is in the same observed-minus-expected comparison, done cell by cell — but scaled, so that cells of very different sizes can be compared.</p>
+<p>A raw difference means different things in different cells. Twenty more cases than expected is a great deal where 10 were expected, and almost nothing where 500 were. The reason is that counts wander by chance, and <strong>the bigger the count, the more it wanders</strong>: roughly by the square root of the count. A cell expecting 100 cases will typically land within about 10 of that by chance alone; a cell expecting 10,000 within about 100.</p>
+<p>So each difference is divided by the square root of its expected count:</p>
+<p><span class="math display">\[\text{residual} = \frac{O - E}{\sqrt{E}}\]</span></p>
+<p>That measures every cell’s difference in units of the chance variation you would expect <strong>in that cell</strong> — the same move as dividing a distance by the standard error last week. A residual of 3 means three times as far from the null as chance would typically carry that cell, whether the cell is large or small.</p>
+<p>Take Sweden Democrat voters with no degree. <code>chisq.test()</code> keeps the expected table as <code>expected</code>, so the residual can be worked out by hand:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(test<span class="sc">$</span>residuals, <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>observed_cell <span class="ot">&lt;-</span> educ_vote[<span class="st">"No degree"</span>, <span class="st">"SD"</span>]</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>expected_cell <span class="ot">&lt;-</span> test<span class="sc">$</span>expected[<span class="st">"No degree"</span>, <span class="st">"SD"</span>]</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>(observed_cell <span class="sc">-</span> expected_cell) <span class="sc">/</span> <span class="fu">sqrt</span>(expected_cell)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 4.741095</code></pre>
+</div>
+</div>
+<p>276 observed against 208 expected: about 68 more SD voters without a degree than no-association predicts, which is 4.74 times the chance variation of a cell that size.</p>
+<p><code>chisq.test()</code> does this for every cell and keeps the result as <code>residuals</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(test<span class="sc">$</span>residuals, <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##               
 ##                    V    MP     S     C     L    KD     M    SD
@@ -566,7 +582,15 @@ window.Quarto = {
 ##   Postgraduate  1.25  7.85 -2.09  2.94  2.67  0.17 -1.16 -5.50</code></pre>
 </div>
 </div>
-<p>Each number says how far that cell is from what no-association would predict, in standard-error-like units. Positive means more cases than expected, negative means fewer. Anything beyond about ±2 is worth looking at.</p>
+<p>Positive means more cases than expected, negative means fewer. Anything beyond about ±2 is worth looking at.</p>
+<p>And these are the pieces the test was built from. Squared and added up, the residuals are exactly the chi-squared statistic:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(test<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 192.318</code></pre>
+</div>
+</div>
+<p>The same 192.32 as above. The chi-squared statistic is the total distance between the observed and the expected table; the residuals show <strong>which cells that distance comes from</strong>.</p>
 <p>Read the two ends of the education scale:</p>
 <ul>
 <li><strong>Sweden Democrats</strong>: 4.74 among those with no degree, -5.50 among postgraduates. Strongly over-represented at one end, strongly under-represented at the other.</li>
@@ -598,7 +622,7 @@ window.Quarto = {
 <p><strong>The observations must be independent</strong> — one row per person, each person counted once. A table of “answers” where the same respondent contributes several is not valid input.</p>
 <p><strong>The expected counts must not be too small.</strong> The usual rule is that no expected count should be below 5. Below that the chi-squared approximation breaks down, and R will warn you. Look at the expected table when the warning appears:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">chisq.test</span>(swe<span class="sc">$</span>ses, swe<span class="sc">$</span>bloc)<span class="sc">$</span>expected, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">chisq.test</span>(swe<span class="sc">$</span>ses, swe<span class="sc">$</span>bloc)<span class="sc">$</span>expected, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##                swe$bloc
 ## swe$ses          Left Right

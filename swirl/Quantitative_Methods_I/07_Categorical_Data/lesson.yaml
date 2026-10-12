@@ -191,8 +191,11 @@
 - Class: text
   Output: Highly significant. But with 24 cells, 'there is an association' is not much of a finding. Where is it?
 
+- Class: text
+  Output: The answer is in observed minus expected again, cell by cell - but scaled. A raw difference means different things in different cells, because counts wander by chance and the bigger the count the more it wanders, roughly by its square root. So each difference is divided by the square root of the expected count. That puts every cell in units of its own chance variation, the same move as dividing by the standard error last week.
+
 - Class: cmd_question
-  Output: The test object keeps the standardised residuals - how far each cell is from what no-association would predict. Type round(test$residuals, 2).
+  Output: The test object keeps these scaled differences as residuals. Type round(test$residuals, 2).
   CorrectAnswer: round(test$residuals, 2)
   AnswerTests: omnitest(correctExpr='round(test$residuals, 2)')
   Hint: Type round(test$residuals, 2).
@@ -206,6 +209,15 @@
 
 - Class: text
   Output: SD strongly over-represented among those with no degree and under-represented among postgraduates. The Greens the same in reverse, and even sharper. That is the education divide in Swedish politics, from one table.
+
+- Class: cmd_question
+  Output: One last link. Square the residuals and add them up - type sum(test$residuals^2) - and compare the result with the X-squared that test printed.
+  CorrectAnswer: sum(test$residuals^2)
+  AnswerTests: any_of_exprs('sum(test$residuals^2)', 'sum(test$residuals ^ 2)')
+  Hint: Type sum(test$residuals^2).
+
+- Class: text
+  Output: The same number. The chi-squared statistic is the total distance between the observed and the expected table, and the residuals show which cells that distance comes from.
 
 - Class: text
   Output: One warning before we finish. The chi-squared approximation needs expected counts of at least about 5 in every cell. When R warns you about that, look at the expected table - small categories should be merged, dropped and reported, or handled with fisher.test() instead.
