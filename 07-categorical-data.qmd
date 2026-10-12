@@ -170,7 +170,7 @@ The odds of voting SD are about `r fmt(odds_men/odds_women)` times higher for me
 
 **An odds ratio of 1 means no association** — the odds are the same in both groups. So 1 plays the role that 0 plays elsewhere.
 
-> **Odds are not probabilities**, and the two get confused constantly. `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[1, 2], 1)`% of men voted SD — that is a probability. The odds are `r fmt(counts["Men","Sweden Democrats"]/counts["Men","Other party"], 3)`. An odds ratio of `r fmt(odds_men/odds_women)` does **not** mean men were `r fmt(odds_men/odds_women)` times as likely to vote SD; the probabilities are `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[1, 2], 1)`% and `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[2, 2], 1)`%, a ratio closer to `r fmt(prop.table(table(swe$sex, swe$vote_sd), 1)[1, 2] / prop.table(table(swe$sex, swe$vote_sd), 1)[2, 2])`. Odds ratios overstate the relative risk, and the more common the outcome the worse it gets. Say "the odds are" and mean it.
+> **Odds are not probabilities**, and the two get confused constantly. `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[1, 2], 1)`% of men voted SD — that is a probability. The odds are `r fmt(counts["Men","Sweden Democrats"]/counts["Men","Other party"], 3)`. An odds ratio of `r fmt(odds_men/odds_women)` does **not** mean men were `r fmt(odds_men/odds_women)` times as likely to vote SD; the probabilities are `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[1, 2], 1)`% and `r fmt(100 * prop.table(table(swe$sex, swe$vote_sd), 1)[2, 2], 1)`%, a ratio closer to `r fmt(prop.table(table(swe$sex, swe$vote_sd), 1)[1, 2] / prop.table(table(swe$sex, swe$vote_sd), 1)[2, 2])`.
 
 ### A confidence interval for the odds ratio
 
