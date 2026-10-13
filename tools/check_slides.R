@@ -108,9 +108,11 @@ for (deck in decks) {
     ))
   }
 
-  if (frames < 12 || frames > 28) {
+  # The range assumed a closing "This week" frame in every deck. Those were
+  # removed in October 2026, so the lower bound is one frame lower.
+  if (frames < 11 || frames > 28) {
     problems <- c(problems, sprintf(
-      "%s has %d frames -- aim for 12 to 28 in a 45-60 minute lecture",
+      "%s has %d frames -- aim for 11 to 28 in a 45-60 minute lecture",
       deck, frames
     ))
   }
