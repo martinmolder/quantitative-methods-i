@@ -26,3 +26,10 @@ swe$sex <- factor(
   levels = c(0, 1),
   labels = c("Men", "Women")
 )
+
+# The same people measured twice: hypothetical anxiety scores from Field,
+# Miles and Field (2012), Discovering Statistics Using R, chapter 9.
+spider <- data.frame(
+  picture = c(30, 35, 45, 40, 50, 35, 55, 25, 30, 45, 40, 50),
+  real = c(40, 35, 50, 55, 65, 55, 50, 35, 30, 50, 60, 39)
+)

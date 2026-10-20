@@ -283,14 +283,10 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#significant-is-not-the-same-as-important" id="toc-significant-is-not-the-same-as-important" class="nav-link" data-scroll-target="#significant-is-not-the-same-as-important"><span class="header-section-number">8.1.1</span> Significant is not the same as important</a></li>
   </ul></li>
-  <li><a href="#two-independent-groups" id="toc-two-independent-groups" class="nav-link" data-scroll-target="#two-independent-groups"><span class="header-section-number">8.2</span> Two independent groups</a>
-  <ul class="collapse">
-  <li><a href="#welch-and-why-r-chose-it" id="toc-welch-and-why-r-chose-it" class="nav-link" data-scroll-target="#welch-and-why-r-chose-it"><span class="header-section-number">8.2.1</span> Welch, and why R chose it</a></li>
-  </ul></li>
+  <li><a href="#two-independent-groups" id="toc-two-independent-groups" class="nav-link" data-scroll-target="#two-independent-groups"><span class="header-section-number">8.2</span> Two independent groups</a></li>
   <li><a href="#the-same-people-measured-twice" id="toc-the-same-people-measured-twice" class="nav-link" data-scroll-target="#the-same-people-measured-twice"><span class="header-section-number">8.3</span> The same people measured twice</a>
   <ul class="collapse">
   <li><a href="#why-pairing-matters" id="toc-why-pairing-matters" class="nav-link" data-scroll-target="#why-pairing-matters"><span class="header-section-number">8.3.1</span> Why pairing matters</a></li>
-  <li><a href="#all-eight-parties" id="toc-all-eight-parties" class="nav-link" data-scroll-target="#all-eight-parties"><span class="header-section-number">8.3.2</span> All eight parties</a></li>
   </ul></li>
   <li><a href="#more-than-two-groups" id="toc-more-than-two-groups" class="nav-link" data-scroll-target="#more-than-two-groups"><span class="header-section-number">8.4</span> More than two groups</a></li>
   <li><a href="#what-the-t-test-assumes" id="toc-what-the-t-test-assumes" class="nav-link" data-scroll-target="#what-the-t-test-assumes"><span class="header-section-number">8.5</span> What the t-test assumes</a></li>
@@ -401,8 +397,9 @@ window.Quarto = {
 <pre><code>## [1] 0.08469769</code></pre>
 </div>
 </div>
-<p>0.085 standard deviations. The rough convention is that 0.2 is small, 0.5 is medium and 0.8 is large, so this is well below small.</p>
-<p>The <code>effectsize</code> package computes it with a confidence interval.</p>
+<p>0.085 standard deviations. Because it divides by the spread of the people rather than by the standard error, it does not grow as the sample does: it says how far apart the means are compared with how much people vary.</p>
+<p>The rough convention is that 0.2 is small, 0.5 is medium and 0.8 is large, so this is well below small. Those three numbers come from the psychologist Jacob Cohen, who proposed them in his book on statistical power (first edition 1969, second 1988). He anchored them in differences in height between American girls of different ages: 0.2 is roughly the gap between 15- and 16-year-olds, real but invisible without a tape measure; 0.5 the gap between 14- and 18-year-olds, which he called visible to the naked eye of a careful observer; 0.8 the gap between 13- and 18-year-olds. He offered them as a fallback for when nothing better is available, not as rules. What counts as large depends on the field, and the better comparison is with the differences usually found in it.</p>
+<p><code>cohens_d()</code>, from the <code>effectsize</code> package, computes it with a confidence interval. <code>mu</code> is the comparison value, as in <code>t.test()</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(effectsize)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -416,7 +413,7 @@ window.Quarto = {
 </div>
 </div>
 <blockquote class="blockquote">
-<p><strong>Report both, always.</strong> A p-value tells you whether an effect is distinguishable from zero. An effect size tells you whether it is worth caring about. In a large sample the first is easy and the second is not, and a paper that reports only the first is telling you the less interesting half.</p>
+<p><strong>Ask both questions.</strong> A p-value tells you whether an effect is distinguishable from zero. An effect size tells you whether it is worth caring about. In a large sample the first is easy and the second is not, and a paper that answers only the first is telling you the less interesting half.</p>
 </blockquote>
 </section>
 </section>
@@ -424,32 +421,16 @@ window.Quarto = {
 <h2 data-number="8.2" class="anchored" data-anchor-id="two-independent-groups"><span class="header-section-number">8.2</span> Two independent groups</h2>
 <p>Now two separate sets of people. Do men and women place themselves differently?</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>swe <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sex)) <span class="sc">|&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> sex, <span class="at">y =</span> lr_self)) <span class="sc">+</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Left-right self-placement"</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="08-comparing-means_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="1050"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>swe <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sex), <span class="sc">!</span><span class="fu">is.na</span>(lr_self)) <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(lr_self),</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(lr_self)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sex_means <span class="ot">&lt;-</span> swe <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sex), <span class="sc">!</span><span class="fu">is.na</span>(lr_self)) <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(lr_self),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(lr_self)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>sex_means</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## # A tibble: 2 × 4
 ##   sex       n  mean    sd
@@ -458,6 +439,30 @@ window.Quarto = {
 ## 2 Women  1249  4.85  2.83</code></pre>
 </div>
 </div>
+<p>The test is about means, so the plot should show the means — and the people around them, so that the spread is visible too.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>swe <span class="sc">|&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sex), <span class="sc">!</span><span class="fu">is.na</span>(lr_self)) <span class="sc">|&gt;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> sex, <span class="at">y =</span> lr_self)) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.25</span>, <span class="at">height =</span> <span class="fl">0.25</span>, <span class="at">alpha =</span> <span class="fl">0.06</span>) <span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> sex_means, <span class="fu">aes</span>(<span class="at">y =</span> mean), <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Left-right self-placement"</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08-comparing-means_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="1050"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The grey points are the respondents, jittered as in session 4. The second layer takes its own <code>data</code>: <code>geom_point(data = sex_means, ...)</code> draws from the table of means rather than from <code>swe</code>, and <code>aes(y = mean)</code> puts each group’s mean on the vertical axis. <code>set.seed()</code> fixes the random jitter, so the picture is the same every time.</p>
+<p>A boxplot would be the obvious alternative, but the line in the middle of a box is the <strong>median</strong>, not the mean, and the t-test is about means.</p>
 <p>The <strong>independent samples t-test</strong> uses R’s formula notation: the continuous variable, then <code>~</code>, then the grouping variable. Read <code>~</code> as “by”.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(lr_self <span class="sc">~</span> sex, <span class="at">data =</span> swe)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -478,10 +483,8 @@ window.Quarto = {
 <p><code>data = swe</code> says where to find the variables named in the formula, which is why they appear without <code>swe$</code>.</p>
 <p>The confidence interval now refers to the <strong>difference between the two means</strong>: from 0.57 to 1.01. It does not contain zero, so the difference is distinguishable from none.</p>
 <p>The order matters for the sign. R subtracts the second group’s mean from the first, following the factor levels — here Men minus Women, so the positive interval means men place themselves further right.</p>
-<section id="welch-and-why-r-chose-it" class="level3" data-number="8.2.1">
-<h3 data-number="8.2.1" class="anchored" data-anchor-id="welch-and-why-r-chose-it"><span class="header-section-number">8.2.1</span> Welch, and why R chose it</h3>
-<p>Notice R called it a <strong>Welch</strong> test and gave a fractional <code>df</code>. The older Student’s t-test assumes both groups have the same variance; Welch’s does not.</p>
-<p>R uses Welch by default, which is the right default: when the variances are equal it gives essentially the same answer, and when they are not it gives the correct one. You can force the older version with <code>var.equal = TRUE</code>, and there is rarely a reason to.</p>
+<p>Where does the standard error come from this time? There are now two sources of chance: the men’s mean could be off, and so could the women’s. Each mean’s uncertainty depends on how spread out that group is and how many people are in it, and the standard error of the difference combines the two, so it is larger than either alone. Here it is 0.112: draw new samples of men and women and the difference between their means would typically move by about a tenth of a point. The <code>t</code> in the output is the difference divided by that.</p>
+<p>And the size of the difference:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cohens_d</span>(lr_self <span class="sc">~</span> sex, <span class="at">data =</span> swe)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -494,106 +497,130 @@ window.Quarto = {
 </div>
 <p>0.28 — small, and this time not negligible. A difference you would notice in aggregate but could not use to guess any individual’s politics.</p>
 </section>
-</section>
 <section id="the-same-people-measured-twice" class="level2" data-number="8.3">
 <h2 data-number="8.3" class="anchored" data-anchor-id="the-same-people-measured-twice"><span class="header-section-number">8.3</span> The same people measured twice</h2>
 <p>The third case, and the one that most often gets done wrong.</p>
-<p>Sometimes the two numbers come from <strong>the same respondents</strong>. Our survey asked people to rate every party from 0 to 10, and separately to rate every party leader. So for each respondent we have both a party score and a leader score.</p>
-<p>Do people rate leaders differently from their parties?</p>
+<p>Sometimes the two numbers come from <strong>the same people</strong>, measured twice, with something happening in between. A small example, invented for teaching by Field, Miles and Field (2012, <em>Discovering Statistics Using R</em>, chapter 9): twelve people with a fear of spiders. Their anxiety is measured while they look at a picture of a tarantula, and again later when they are in front of the real one.</p>
+<p>The data are small enough to type in.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>swe <span class="sc">|&gt;</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">party =</span> <span class="fu">mean</span>(like_s, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">leader =</span> <span class="fu">mean</span>(lead_andersson, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>spider <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">picture =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">35</span>, <span class="dv">45</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">35</span>, <span class="dv">55</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">45</span>, <span class="dv">40</span>, <span class="dv">50</span>),</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">real =</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">35</span>, <span class="dv">50</span>, <span class="dv">55</span>, <span class="dv">65</span>, <span class="dv">55</span>, <span class="dv">50</span>, <span class="dv">35</span>, <span class="dv">30</span>, <span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">39</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>spider</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>## # A tibble: 1 × 2
-##   party leader
-##   &lt;dbl&gt;  &lt;dbl&gt;
-## 1  6.33   6.97</code></pre>
+<pre><code>##    picture real
+## 1       30   40
+## 2       35   35
+## 3       45   50
+## 4       40   55
+## 5       50   65
+## 6       35   55
+## 7       55   50
+## 8       25   35
+## 9       30   30
+## 10      45   50
+## 11      40   60
+## 12      50   39</code></pre>
 </div>
 </div>
-<p>The Social Democrats score 6.33; Magdalena Andersson scores 6.97.</p>
-<p>The <strong>paired t-test</strong> uses <code>paired = TRUE</code>, and it works on the <em>differences</em> — one difference per respondent — rather than on the two sets of scores separately.</p>
+<p>One row per person: <code>picture</code> is their anxiety with the picture, <code>real</code> their anxiety with the real spider. Keeping both scores in the same row is what records that they belong to the same person.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(swe<span class="sc">$</span>like_s, swe<span class="sc">$</span>lead_andersson, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(spider<span class="sc">$</span>picture)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 40</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(spider<span class="sc">$</span>real)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 47</code></pre>
+</div>
+</div>
+<p>Anxiety rises from 40 to 47 on average. Plot it so that each person stays visible.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spider) <span class="sc">+</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Picture"</span>, <span class="at">xend =</span> <span class="st">"Real spider"</span>,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> picture, <span class="at">yend =</span> real</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Anxiety score"</span>) <span class="sc">+</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08-comparing-means_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="675"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><code>geom_segment()</code> draws a straight line from one point to another: <code>x</code> and <code>y</code> give the start, <code>xend</code> and <code>yend</code> the end. Every line starts at a person’s picture score and ends at their real-spider score, so each line is one person. Most go up, two are flat, and two go down.</p>
+<p>The <strong>paired t-test</strong> uses <code>paired = TRUE</code>, and it works on the <em>differences</em> — one difference per person — rather than on the two sets of scores separately.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(spider<span class="sc">$</span>real, spider<span class="sc">$</span>picture, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## 
 ##  Paired t-test
 ## 
-## data:  swe$like_s and swe$lead_andersson
-## t = -19.273, df = 2537, p-value &lt; 2.2e-16
+## data:  spider$real and spider$picture
+## t = 2.4725, df = 11, p-value = 0.03098
 ## alternative hypothesis: true mean difference is not equal to 0
 ## 95 percent confidence interval:
-##  -0.7344944 -0.5988389
+##   0.7687815 13.2312185
 ## sample estimates:
 ## mean difference 
-##      -0.6666667</code></pre>
+##               7</code></pre>
 </div>
 </div>
-<p><code>mean difference</code> is now a single number: -0.67. Andersson is rated about two thirds of a point higher than her party.</p>
+<p><code>mean difference</code> is now a single number: 7 points. With only twelve people there are 11 degrees of freedom, which is where the fatter tails of the t distribution start to matter.</p>
+<p>That test is nothing new. Work out each person’s difference and run the one-sample test from the start of this chapter on it, against zero:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>spider<span class="sc">$</span>difference <span class="ot">&lt;-</span> spider<span class="sc">$</span>real <span class="sc">-</span> spider<span class="sc">$</span>picture</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(spider<span class="sc">$</span>difference, <span class="at">mu =</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  spider$difference
+## t = 2.4725, df = 11, p-value = 0.03098
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##   0.7687815 13.2312185
+## sample estimates:
+## mean of x 
+##         7</code></pre>
+</div>
+</div>
+<p>The same <code>t</code>, the same <code>df</code>, the same p-value. <strong>A paired t-test is a one-sample t-test of the differences against zero.</strong></p>
 <section id="why-pairing-matters" class="level3" data-number="8.3.1">
 <h3 data-number="8.3.1" class="anchored" data-anchor-id="why-pairing-matters"><span class="header-section-number">8.3.1</span> Why pairing matters</h3>
 <p>It is tempting to think the paired test is just a convenience. It is not — it answers a different question and it is far more sensitive.</p>
-<p>An independent test would compare the spread of party scores against the spread of leader scores, and both are wide: some people love the Social Democrats and some detest them. The paired test throws all of that away. It only asks, for each person, <strong>which of their two scores is higher</strong>. The between-person variation that dominates the unpaired comparison cancels out entirely.</p>
+<p>Run the independent test on exactly the same twenty-four numbers, as if they came from two different groups of twelve people:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(spider<span class="sc">$</span>real, spider<span class="sc">$</span>picture)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  spider$real and spider$picture
+## t = 1.6813, df = 21.385, p-value = 0.1072
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -1.648641 15.648641
+## sample estimates:
+## mean of x mean of y 
+##        47        40</code></pre>
+</div>
+</div>
+<p>The difference is still 7 points, but the p-value is now 0.107. Not significant.</p>
+<p>The reason is in the standard error: 4.16 as two groups against 2.83 as pairs. People differ in how anxious they are in general, and the anxious are anxious in both situations — the two scores correlate at 0.55. The independent test counts those differences between people as noise. The paired test removes them, because it only looks at the change within each person.</p>
 <p>Use the paired version whenever the two numbers come from the same unit. Using an independent test on paired data throws away the pairing and usually hides a real effect.</p>
 <blockquote class="blockquote">
 <p>The opposite mistake matters just as much. Using a paired test on data that is <em>not</em> paired — two different sets of people who happen to be the same size — is simply invalid. The pairing has to be real.</p>
 </blockquote>
-</section>
-<section id="all-eight-parties" class="level3" data-number="8.3.2">
-<h3 data-number="8.3.2" class="anchored" data-anchor-id="all-eight-parties"><span class="header-section-number">8.3.2</span> All eight parties</h3>
-<p>The multiparty data makes this more interesting than one comparison.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pairs <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">party =</span> <span class="fu">c</span>(<span class="st">"V"</span>, <span class="st">"MP"</span>, <span class="st">"S"</span>, <span class="st">"C"</span>, <span class="st">"L"</span>, <span class="st">"KD"</span>, <span class="st">"M"</span>, <span class="st">"SD"</span>),</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">party_var =</span> <span class="fu">c</span>(<span class="st">"like_v"</span>, <span class="st">"like_mp"</span>, <span class="st">"like_s"</span>, <span class="st">"like_c"</span>,</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">"like_l"</span>, <span class="st">"like_kd"</span>, <span class="st">"like_m"</span>, <span class="st">"like_sd"</span>),</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">leader_var =</span> <span class="fu">c</span>(<span class="st">"lead_dadgostar"</span>, <span class="st">"lead_stenevi"</span>, <span class="st">"lead_andersson"</span>,</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"lead_loof"</span>, <span class="st">"lead_pehrson"</span>, <span class="st">"lead_busch"</span>,</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"lead_kristersson"</span>, <span class="st">"lead_akesson"</span>)</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> pairs</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(pairs))) {</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  party_score <span class="ot">&lt;-</span> swe[[pairs<span class="sc">$</span>party_var[i]]]</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  leader_score <span class="ot">&lt;-</span> swe[[pairs<span class="sc">$</span>leader_var[i]]]</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  rated_both <span class="ot">&lt;-</span> <span class="sc">!</span><span class="fu">is.na</span>(party_score) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(leader_score)</span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> <span class="fu">t.test</span>(leader_score, party_score, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>  results<span class="sc">$</span>party_mean[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(party_score[rated_both])</span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  results<span class="sc">$</span>leader_mean[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(leader_score[rated_both])</span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>  results<span class="sc">$</span>difference[i] <span class="ot">&lt;-</span> test<span class="sc">$</span>estimate</span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>  results<span class="sc">$</span>p[i] <span class="ot">&lt;-</span> test<span class="sc">$</span>p.value</span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>results <span class="sc">|&gt;</span></span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(party, party_mean, leader_mean, difference, p) <span class="sc">|&gt;</span></span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(party_mean, leader_mean, difference), \(x) <span class="fu">round</span>(x, <span class="dv">2</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p =</span> <span class="fu">round</span>(p, <span class="dv">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>## # A tibble: 8 × 5
-##   party party_mean leader_mean difference      p
-##   &lt;chr&gt;      &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;
-## 1 V           4.01        4.41       0.4  0     
-## 2 MP          3.97        3.66      -0.31 0     
-## 3 S           6.3         6.97       0.67 0     
-## 4 C           4.89        5.07       0.19 0     
-## 5 L           4.72        4.78       0.06 0.0881
-## 6 KD          4.16        4.15       0    0.877 
-## 7 M           5.53        5.19      -0.34 0     
-## 8 SD          3.44        4.11       0.67 0</code></pre>
-</div>
-</div>
-<p><code>rated_both</code> is <code>TRUE</code> for the respondents who rated both the party and its leader. The paired test can only use those people, so the two means are taken over them too; that way the difference column is exactly the leader mean minus the party mean.</p>
-<p><code>tibble()</code> builds a data frame; it is the tidyverse version of <code>data.frame()</code> and prints more helpfully. <code>seq_len(nrow(pairs))</code> makes the sequence 1, 2, 3, … up to the number of rows, which is the safe way to write a loop — unlike <code>1:nrow(pairs)</code>, it does the right thing if the data frame is ever empty.</p>
-<p>Six of the eight leaders are rated differently from their parties, and the direction is not the same for all of them. Andersson and Åkesson both run ahead of their parties; Kristersson and Stenevi run behind. For the Christian Democrats and the Liberals there is no detectable gap at all.</p>
 <div class="discussion">
-<p><strong>A question.</strong> The Sweden Democrats are the least liked party in the data at 3.41, and Jimmie Åkesson is rated 4.13 — clearly higher than his own party.</p>
-<p>Give two different explanations for that gap that the data here cannot distinguish between. What would you need in order to tell them apart?</p>
+<p><strong>A question.</strong> Everyone saw the picture first and the real spider second.</p>
+<p>Suppose anxiety simply rises the longer people spend in a room where spiders are involved, whatever they are shown. What would that do to the result — and how could the study have been designed to rule it out?</p>
 </div>
 </section>
 </section>
@@ -602,8 +629,8 @@ window.Quarto = {
 <p>With three or more groups, running a t-test on every pair is the wrong move: each test has its own chance of a false positive, and with enough pairs one of them will fire.</p>
 <p>The tool is <strong>analysis of variance</strong>, and the question it asks is whether <em>any</em> of the group means differ.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">aov</span>(lr_self <span class="sc">~</span> ses, <span class="at">data =</span> swe)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">aov</span>(lr_self <span class="sc">~</span> ses, <span class="at">data =</span> swe)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##               Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## ses            3    514  171.24   22.58 2.13e-14 ***
@@ -621,7 +648,7 @@ window.Quarto = {
 <h2 data-number="8.5" class="anchored" data-anchor-id="what-the-t-test-assumes"><span class="header-section-number">8.5</span> What the t-test assumes</h2>
 <p>Three things.</p>
 <p><strong>Independent observations</strong>, within each group. One row per person.</p>
-<p><strong>Roughly normal data</strong> — or a large enough sample. The test is about the sampling distribution of the mean, and from session 6 you know that comes out bell-shaped almost regardless of the shape of the variable, provided there are enough cases. With thousands of respondents this assumption is not worth worrying about. With twenty it is.</p>
+<p><strong>Roughly normal data</strong> — or a large enough sample. The test is about the sampling distribution of the mean, and from session 6 you know that comes out bell-shaped almost regardless of the shape of the variable, provided there are enough cases. With thousands of respondents this assumption is not worth worrying about. With twelve spider-phobes it is, and for a paired test the thing to look at is the differences.</p>
 <p><strong>A continuous outcome.</strong> <code>lr_self</code> has eleven ordered categories, which by the rule from session 2 is enough to treat as continuous. <code>satdem</code>, with four, is not — and a mean of a four-point scale should be treated with suspicion whatever R is willing to compute.</p>
 <div class="discussion">
 <p><strong>A question.</strong> This chapter has taken the mean of <code>lr_self</code>, an eleven-point scale, without comment.</p>
@@ -631,16 +658,20 @@ window.Quarto = {
 <p><strong>How to write it up.</strong></p>
 <p>One sample:</p>
 <blockquote class="blockquote">
-<p>Swedish respondents placed themselves slightly to the right of the scale midpoint (M = 5.24, SD = 2.79), t(2447) = 4.19, <em>p</em> &lt; .001. The difference from the midpoint was negligible in size (d = 0.08).</p>
+<p>Swedish respondents placed themselves slightly to the right of the scale midpoint (M = 5.24, SD = 2.79), t(2447) = 4.19, <em>p</em> &lt; .001, although the difference of a quarter of a point is negligible on an eleven-point scale.</p>
 </blockquote>
 <p>Two groups:</p>
 <blockquote class="blockquote">
-<p>Men placed themselves further right (M = 5.64) than women (M = 4.85), a difference of 0.79 points, 95% CI [0.57, 1.01], t(2446.0) = 7.05, <em>p</em> &lt; .001, d = 0.28.</p>
+<p>Men placed themselves further right (M = 5.64) than women (M = 4.85), a difference of 0.79 points, 95% CI [0.57, 1.01], t(2446) = 7.05, <em>p</em> &lt; .001.</p>
 </blockquote>
-<p>Give the means, the difference with its confidence interval, the test, and an effect size. Mistakes to avoid:</p>
+<p>The same people twice:</p>
+<blockquote class="blockquote">
+<p>Anxiety was higher in front of the real spider (M = 47) than with the picture (M = 40), a mean difference of 7 points, 95% CI [0.8, 13.2], paired t(11) = 2.47, <em>p</em> = 0.031.</p>
+</blockquote>
+<p>Give the means, the difference with its confidence interval, and the test. It is also worth a sentence on whether the difference is large enough to matter — Cohen’s d can help — especially in a large sample, where almost everything is significant. Mistakes to avoid:</p>
 <ul>
 <li><strong>Reporting p without the means.</strong> The reader cannot tell which group was higher, or by how much.</li>
-<li><strong>Omitting the effect size.</strong> In a sample this size everything is significant.</li>
+<li><strong>Saying nothing about size.</strong> In a sample this size everything is significant; say whether the difference is big enough to care about.</li>
 <li><strong>Using an independent test on paired data.</strong> It discards the pairing and usually hides the effect.</li>
 <li><strong>Using a paired test on unpaired data.</strong> Invalid, whatever R prints.</li>
 <li><strong>Reporting <code>p = 0</code>.</strong> R prints <code>2.2e-16</code> because that is its smallest representable value, not because the probability is zero. Write <em>p</em> &lt; .001.</li>

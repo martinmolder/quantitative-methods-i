@@ -50,7 +50,13 @@
   Hint: Type (mean(swe$lr_self, na.rm = TRUE) - 5) / sd(swe$lr_self, na.rm = TRUE).
 
 - Class: text
-  Output: 0.085 standard deviations. The rough convention is 0.2 small, 0.5 medium, 0.8 large - so this is well below small. Always report both. The p-value says whether an effect is distinguishable from zero; the effect size says whether it is worth caring about.
+  Output: 0.085 standard deviations. Because it divides by the spread of the people, not by the standard error, it does not grow with the sample.
+
+- Class: text
+  Output: The rough convention is 0.2 small, 0.5 medium, 0.8 large - so this is well below small. The numbers come from the psychologist Jacob Cohen, who anchored them in heights of American girls - 0.2 is roughly 15- against 16-year-olds, 0.5 is 14 against 18, 0.8 is 13 against 18. He meant them as a fallback when nothing better is available, not as rules.
+
+- Class: text
+  Output: So ask both questions. The p-value says whether an effect is distinguishable from zero; the effect size says whether it is worth caring about.
 
 - Class: text
   Output: Second case - two separate groups of people. Do men and women place themselves differently?
@@ -61,6 +67,9 @@
   AnswerTests: omnitest(correctExpr='boxplot(lr_self ~ sex, data = swe)')
   Hint: Type boxplot(lr_self ~ sex, data = swe). The tilde means 'by'.
 
+- Class: text
+  Output: A boxplot shows the spread well, but the thick line in each box is the median, not the mean. The t-test compares means, and its output prints them.
+
 - Class: cmd_question
   Output: Now the test, in the same formula notation. Type t.test(lr_self ~ sex, data = swe).
   CorrectAnswer: t.test(lr_self ~ sex, data = swe)
@@ -70,64 +79,66 @@
 - Class: text
   Output: The confidence interval now refers to the difference between the two means, and it does not contain zero. R subtracts the second group from the first, following the factor levels - Men minus Women - so a positive interval means men place themselves further right.
 
-- Class: mult_question
-  Output: R called it a Welch test and gave a fractional degrees of freedom. What is Welch's test doing differently?
-  CorrectAnswer: It does not assume the two groups have equal variance.
-  AnswerChoices: It does not assume the two groups have equal variance.; It corrects for the groups being different sizes.; It uses ranks instead of the raw values.
-  AnswerTests: omnitest(correctVal='It does not assume the two groups have equal variance.')
-  Hint: The older Student's t-test makes an assumption about the spread of the two groups that Welch's does not.
+- Class: text
+  Output: Third case, and the one most often got wrong - the same people measured twice, with something happening in between. Twelve people with a fear of spiders have their anxiety measured while looking at a picture of a tarantula, and again later in front of the real one. The numbers are hypothetical, from Field, Miles and Field (2012), Discovering Statistics Using R.
+
+- Class: cmd_question
+  Output: The data are loaded as spider, one row per person. Type spider to look at them.
+  CorrectAnswer: spider
+  AnswerTests: omnitest(correctExpr='spider')
+  Hint: Type spider.
+
+- Class: cmd_question
+  Output: picture is each person's anxiety with the picture, real with the real spider. Keeping both in one row is what records that they belong to the same person. First the mean of spider$picture.
+  CorrectAnswer: mean(spider$picture)
+  AnswerTests: omnitest(correctExpr='mean(spider$picture)')
+  Hint: Type mean(spider$picture).
+
+- Class: cmd_question
+  Output: Now the mean of spider$real.
+  CorrectAnswer: mean(spider$real)
+  AnswerTests: omnitest(correctExpr='mean(spider$real)')
+  Hint: Type mean(spider$real).
+
+- Class: cmd_question
+  Output: 40 with the picture, 47 with the real spider. Test it with paired = TRUE, which works on the differences - one per person. Type t.test(spider$real, spider$picture, paired = TRUE).
+  CorrectAnswer: t.test(spider$real, spider$picture, paired = TRUE)
+  AnswerTests: any_of_exprs('t.test(spider$real, spider$picture, paired = TRUE)', 't.test(spider$real, spider$picture, paired=TRUE)')
+  Hint: Type t.test(spider$real, spider$picture, paired = TRUE).
 
 - Class: text
-  Output: Welch is the right default. When the variances are equal it gives essentially the same answer, and when they are not it gives the correct one. There is rarely a reason to switch it off.
+  Output: A mean difference of 7 points, t = 2.47 on 11 degrees of freedom, p = 0.031. With only twelve people the fatter tails of the t distribution matter.
+
+- Class: cmd_question
+  Output: That test is nothing new. Make each person's difference - type spider$difference <- spider$real - spider$picture.
+  CorrectAnswer: spider$difference <- spider$real - spider$picture
+  AnswerTests: omnitest(correctExpr='spider$difference <- spider$real - spider$picture')
+  Hint: Type spider$difference <- spider$real - spider$picture.
+
+- Class: cmd_question
+  Output: Now run the one-sample test from the start of this lesson on the differences, against zero. Type t.test(spider$difference, mu = 0).
+  CorrectAnswer: t.test(spider$difference, mu = 0)
+  AnswerTests: any_of_exprs('t.test(spider$difference, mu = 0)', 't.test(spider$difference, mu=0)')
+  Hint: Type t.test(spider$difference, mu = 0).
 
 - Class: text
-  Output: Third case, and the one most often got wrong. Sometimes the two numbers come from the same respondents. Everyone rated every party from 0 to 10, and separately rated every party leader.
+  Output: The same t, the same degrees of freedom, the same p-value. A paired t-test is a one-sample t-test of the differences against zero.
 
 - Class: cmd_question
-  Output: Compare the Social Democrats with their leader. First the party - mean of swe$like_s, dropping missing values.
-  CorrectAnswer: mean(swe$like_s, na.rm = TRUE)
-  AnswerTests: any_of_exprs('mean(swe$like_s, na.rm = TRUE)', 'mean(swe$like_s, na.rm=TRUE)')
-  Hint: Type mean(swe$like_s, na.rm = TRUE).
-
-- Class: cmd_question
-  Output: Now Magdalena Andersson - the mean of swe$lead_andersson.
-  CorrectAnswer: mean(swe$lead_andersson, na.rm = TRUE)
-  AnswerTests: any_of_exprs('mean(swe$lead_andersson, na.rm = TRUE)', 'mean(swe$lead_andersson, na.rm=TRUE)')
-  Hint: Type mean(swe$lead_andersson, na.rm = TRUE).
-
-- Class: cmd_question
-  Output: 6.33 for the party and 6.97 for the leader. Test it with paired = TRUE, which works on the differences - one per respondent. Type t.test(swe$like_s, swe$lead_andersson, paired = TRUE).
-  CorrectAnswer: t.test(swe$like_s, swe$lead_andersson, paired = TRUE)
-  AnswerTests: any_of_exprs('t.test(swe$like_s, swe$lead_andersson, paired = TRUE)', 't.test(swe$like_s, swe$lead_andersson, paired=TRUE)')
-  Hint: Type t.test(swe$like_s, swe$lead_andersson, paired = TRUE).
+  Output: Now pretend the same 24 numbers came from two different groups of twelve people. Type t.test(spider$real, spider$picture), without paired.
+  CorrectAnswer: t.test(spider$real, spider$picture)
+  AnswerTests: omnitest(correctExpr='t.test(spider$real, spider$picture)')
+  Hint: Type t.test(spider$real, spider$picture).
 
 - Class: mult_question
-  Output: Why is the paired test the right one here, rather than a convenience?
-  CorrectAnswer: It removes the variation between people, which would otherwise swamp the comparison.
-  AnswerChoices: It removes the variation between people, which would otherwise swamp the comparison.; It corrects for the two variables having different sample sizes.; It is more conservative, so the p-value is safer.
-  AnswerTests: omnitest(correctVal='It removes the variation between people, which would otherwise swamp the comparison.')
-  Hint: Some people love the Social Democrats and some detest them. Does that variation matter when you only ask which of a person's own two scores is higher?
+  Output: The same difference of 7, but now p = 0.107 - not significant. Why did the paired test find the difference when this one did not?
+  CorrectAnswer: It removes the differences between people, which the independent test counts as noise.
+  AnswerChoices: It removes the differences between people, which the independent test counts as noise.; It has more cases to work with.; It is less strict about the p-value.
+  AnswerTests: omnitest(correctVal='It removes the differences between people, which the independent test counts as noise.')
+  Hint: Some people are anxious in both situations, some calm in both. Does that matter when you only look at the change within each person?
 
 - Class: text
   Output: Use the paired version whenever the two numbers come from the same unit. Using an independent test on paired data throws the pairing away and usually hides a real effect. Using a paired test on data that is not paired is simply invalid, whatever R prints.
-
-- Class: cmd_question
-  Output: Try another pair. Compare the Moderates with Ulf Kristersson - t.test on swe$like_m and swe$lead_kristersson, paired.
-  CorrectAnswer: t.test(swe$like_m, swe$lead_kristersson, paired = TRUE)
-  AnswerTests: any_of_exprs('t.test(swe$like_m, swe$lead_kristersson, paired = TRUE)', 't.test(swe$like_m, swe$lead_kristersson, paired=TRUE)')
-  Hint: Type t.test(swe$like_m, swe$lead_kristersson, paired = TRUE).
-
-- Class: text
-  Output: This time the difference runs the other way - Kristersson is rated lower than his party, where Andersson was rated higher than hers. Six of the eight leaders differ from their parties, and not all in the same direction.
-
-- Class: cmd_question
-  Output: One where there is nothing to find. Try the Christian Democrats and Ebba Busch - swe$like_kd and swe$lead_busch, paired.
-  CorrectAnswer: t.test(swe$like_kd, swe$lead_busch, paired = TRUE)
-  AnswerTests: any_of_exprs('t.test(swe$like_kd, swe$lead_busch, paired = TRUE)', 't.test(swe$like_kd, swe$lead_busch, paired=TRUE)')
-  Hint: Type t.test(swe$like_kd, swe$lead_busch, paired = TRUE).
-
-- Class: text
-  Output: A p-value of 0.88 and a confidence interval straddling zero. That is what no difference looks like - and it is a result, not a failure.
 
 - Class: text
   Output: Last thing. With three or more groups, running a t-test on every pair is wrong - each test has its own chance of a false positive, and with enough pairs one will fire.
