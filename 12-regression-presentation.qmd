@@ -140,7 +140,7 @@ model_std <- lm(
 round(coef(model_std), 3)
 ```
 
-`scale()` subtracts the mean and divides by the standard deviation. Now every continuous coefficient is in the same units and the sizes can be compared directly — trust does about twenty times the work of education. The cost is that the coefficients no longer mean anything in the units of the data, which is why this is a supplement rather than a replacement.
+`scale()` subtracts the mean and divides by the standard deviation. Now every continuous coefficient is in the same units and the sizes can be compared directly — trust does about ten times the work of education. The cost is that the coefficients no longer mean anything in the units of the data, which is why this is a supplement rather than a replacement.
 
 ## Predicted values
 

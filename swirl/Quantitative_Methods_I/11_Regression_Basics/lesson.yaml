@@ -142,11 +142,11 @@
   Hint: Type plot(model4, which = 1).
 
 - Class: mult_question
-  Output: The residuals should be a shapeless band around zero, but there is a clean diagonal edge along the bottom right. What is that?
-  CorrectAnswer: A floor effect - the outcome cannot go below 0, so residuals cannot be very negative where predictions are high.
-  AnswerChoices: A floor effect - the outcome cannot go below 0, so residuals cannot be very negative where predictions are high.; Evidence that a variable is missing from the model.; A sign that the errors are not independent.
-  AnswerTests: omnitest(correctVal='A floor effect - the outcome cannot go below 0, so residuals cannot be very negative where predictions are high.')
-  Hint: The outcome is a 0 to 10 scale. What is the smallest residual possible for someone predicted to be at 9?
+  Output: The residuals should be a shapeless band around zero, but there is a clean diagonal edge along the top right. What is that?
+  CorrectAnswer: A ceiling effect - the outcome cannot go above 10, so residuals cannot be very positive where predictions are high.
+  AnswerChoices: A ceiling effect - the outcome cannot go above 10, so residuals cannot be very positive where predictions are high.; Evidence that a variable is missing from the model.; A sign that the errors are not independent.
+  AnswerTests: omnitest(correctVal='A ceiling effect - the outcome cannot go above 10, so residuals cannot be very positive where predictions are high.')
+  Hint: The outcome is a 0 to 10 scale. What is the largest residual possible for someone predicted to be at 9?
 
 - Class: text
   Output: That is session 5 turning up in the middle of a regression. The limits of the scale constrain what the model can do, and OLS does not know they exist. Next week - presenting all this to somebody else.

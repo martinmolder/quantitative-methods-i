@@ -99,7 +99,7 @@
   Hint: Type round(coef(lm(scale(demlevel) ~ scale(trust) + bloc + scale(age) + scale(educ), data = swe)), 3). scale() subtracts the mean and divides by the standard deviation.
 
 - Class: text
-  Output: Now the sizes are comparable - trust does about twenty times the work of education. The cost is that the coefficients no longer mean anything in the units of the data, so this is a supplement, not a replacement.
+  Output: Now the sizes are comparable - trust does about ten times the work of education. The cost is that the coefficients no longer mean anything in the units of the data, so this is a supplement, not a replacement.
 
 - Class: text
   Output: The most useful thing you can show a reader is what the model expects to happen.

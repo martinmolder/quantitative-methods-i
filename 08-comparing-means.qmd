@@ -202,10 +202,12 @@ for (i in seq_len(nrow(pairs))) {
   party_score <- swe[[pairs$party_var[i]]]
   leader_score <- swe[[pairs$leader_var[i]]]
 
+  rated_both <- !is.na(party_score) & !is.na(leader_score)
+
   test <- t.test(leader_score, party_score, paired = TRUE)
 
-  results$party_mean[i] <- mean(party_score, na.rm = TRUE)
-  results$leader_mean[i] <- mean(leader_score, na.rm = TRUE)
+  results$party_mean[i] <- mean(party_score[rated_both])
+  results$leader_mean[i] <- mean(leader_score[rated_both])
   results$difference[i] <- test$estimate
   results$p[i] <- test$p.value
 }
@@ -215,6 +217,8 @@ results |>
   mutate(across(c(party_mean, leader_mean, difference), \(x) round(x, 2))) |>
   mutate(p = round(p, 4))
 ```
+
+`rated_both` is `TRUE` for the respondents who rated both the party and its leader. The paired test can only use those people, so the two means are taken over them too; that way the difference column is exactly the leader mean minus the party mean.
 
 `tibble()` builds a data frame; it is the tidyverse version of `data.frame()` and prints more helpfully. `seq_len(nrow(pairs))` makes the sequence 1, 2, 3, … up to the number of rows, which is the safe way to write a loop — unlike `1:nrow(pairs)`, it does the right thing if the data frame is ever empty.
 

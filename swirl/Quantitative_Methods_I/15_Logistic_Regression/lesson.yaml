@@ -7,7 +7,7 @@
   Version: 1.0.0
 
 - Class: text
-  Output: The last lesson, and it closes a thread that has run through the whole course. Sessions 4, 12 and 14 all ran into the same thing - a straight line does not know a scale has ends. This week the outcome is nothing but ends.
+  Output: The last lesson, and it closes a thread that has run through the whole course. Sessions 5, 11, 12 and 14 all ran into the same thing - a straight line does not know a scale has ends. This week the outcome is nothing but ends.
 
 - Class: cmd_question
   Output: The question is who voted for the Sweden Democrats. Look at the outcome first - table(swe$vote_sd, useNA = "ifany").

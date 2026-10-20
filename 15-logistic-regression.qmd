@@ -10,7 +10,7 @@ fmt <- function(x, digits = 2) formatC(x, format = "f", digits = digits)
 
 The last session, and it closes a thread that has run through the whole course.
 
-Sessions 4, 12 and 14 all ran into the same thing: a straight line does not know that a scale has ends, so it will happily predict values that cannot exist. Every time, the answer was "be careful near the edges". This week the outcome is nothing *but* edges, and being careful is no longer enough.
+Sessions 5, 11, 12 and 14 all ran into the same thing: a straight line does not know that a scale has ends, so it will happily predict values that cannot exist. Every time, the answer was "be careful near the edges". This week the outcome is nothing *but* edges, and being careful is no longer enough.
 
 ```{r}
 library(ggplot2)

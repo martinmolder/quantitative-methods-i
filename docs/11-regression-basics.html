@@ -534,8 +534,8 @@ Figure&nbsp;11.2
 </div>
 <p><code>par(mfrow = c(1, 2))</code> puts two base-R plots side by side, in one row and two columns. <code>which</code> picks which diagnostic to draw.</p>
 <p><strong>Residuals vs Fitted</strong> checks two things at once. The residuals should form a shapeless band around zero. A curve means the relationship is not straight — session 14. A funnel, widening or narrowing, means the errors are larger at some predicted values than others.</p>
-<p>Ours shows a diagonal edge along the bottom right. That is not a modelling failure but a <strong>floor effect</strong>: the outcome cannot go below 0, so for high predicted values the residual cannot be very negative. This is session 5 reappearing — the limits of the scale constrain what the model can do.</p>
-<p><strong>Q-Q plot</strong> checks whether the residuals are normally distributed. Points on the diagonal means yes. Ours bends away at the bottom left, the same floor effect seen from another angle.</p>
+<p>Ours shows a hard diagonal edge along the top right. That is not a modelling failure but a <strong>ceiling effect</strong>: the outcome cannot go above 10, so for high predicted values the residual cannot be very positive. This is session 5 reappearing — the limits of the scale constrain what the model can do.</p>
+<p><strong>Q-Q plot</strong> checks whether the residuals are normally distributed. Points on the diagonal means yes. Ours bends away at the bottom left: the residuals have a long negative tail, because most people rate Sweden near the top of the scale and the few who rate it low sit far below their predictions. The same ceiling seen from another angle.</p>
 <p>The other assumptions are not things a plot will tell you:</p>
 <ul>
 <li><strong>The right variables are in the model.</strong> No diagnostic detects a missing variable. This is the assumption most often violated and the only defence is knowing the literature.</li>
