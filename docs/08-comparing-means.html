@@ -284,10 +284,7 @@ window.Quarto = {
   <li><a href="#significant-is-not-the-same-as-important" id="toc-significant-is-not-the-same-as-important" class="nav-link" data-scroll-target="#significant-is-not-the-same-as-important"><span class="header-section-number">8.1.1</span> Significant is not the same as important</a></li>
   </ul></li>
   <li><a href="#two-independent-groups" id="toc-two-independent-groups" class="nav-link" data-scroll-target="#two-independent-groups"><span class="header-section-number">8.2</span> Two independent groups</a></li>
-  <li><a href="#the-same-people-measured-twice" id="toc-the-same-people-measured-twice" class="nav-link" data-scroll-target="#the-same-people-measured-twice"><span class="header-section-number">8.3</span> The same people measured twice</a>
-  <ul class="collapse">
-  <li><a href="#why-pairing-matters" id="toc-why-pairing-matters" class="nav-link" data-scroll-target="#why-pairing-matters"><span class="header-section-number">8.3.1</span> Why pairing matters</a></li>
-  </ul></li>
+  <li><a href="#the-same-people-measured-twice" id="toc-the-same-people-measured-twice" class="nav-link" data-scroll-target="#the-same-people-measured-twice"><span class="header-section-number">8.3</span> The same people measured twice</a></li>
   <li><a href="#more-than-two-groups" id="toc-more-than-two-groups" class="nav-link" data-scroll-target="#more-than-two-groups"><span class="header-section-number">8.4</span> More than two groups</a></li>
   <li><a href="#what-the-t-test-assumes" id="toc-what-the-t-test-assumes" class="nav-link" data-scroll-target="#what-the-t-test-assumes"><span class="header-section-number">8.5</span> What the t-test assumes</a></li>
   </ul>
@@ -592,28 +589,6 @@ window.Quarto = {
 </div>
 </div>
 <p>The same <code>t</code>, the same <code>df</code>, the same p-value. <strong>A paired t-test is a one-sample t-test of the differences against zero.</strong></p>
-<section id="why-pairing-matters" class="level3" data-number="8.3.1">
-<h3 data-number="8.3.1" class="anchored" data-anchor-id="why-pairing-matters"><span class="header-section-number">8.3.1</span> Why pairing matters</h3>
-<p>It is tempting to think the paired test is just a convenience. It is not — it answers a different question and it is far more sensitive.</p>
-<p>Run the independent test on exactly the same twenty-four numbers, as if they came from two different groups of twelve people:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(spider<span class="sc">$</span>real, spider<span class="sc">$</span>picture)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  spider$real and spider$picture
-## t = 1.6813, df = 21.385, p-value = 0.1072
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -1.648641 15.648641
-## sample estimates:
-## mean of x mean of y 
-##        47        40</code></pre>
-</div>
-</div>
-<p>The difference is still 7 points, but the p-value is now 0.107. Not significant.</p>
-<p>The reason is in the standard error: 4.16 as two groups against 2.83 as pairs. People differ in how anxious they are in general, and the anxious are anxious in both situations — the two scores correlate at 0.55. The independent test counts those differences between people as noise. The paired test removes them, because it only looks at the change within each person.</p>
 <p>Use the paired version whenever the two numbers come from the same unit. Using an independent test on paired data throws away the pairing and usually hides a real effect.</p>
 <blockquote class="blockquote">
 <p>The opposite mistake matters just as much. Using a paired test on data that is <em>not</em> paired — two different sets of people who happen to be the same size — is simply invalid. The pairing has to be real.</p>
@@ -623,14 +598,13 @@ window.Quarto = {
 <p>Suppose anxiety simply rises the longer people spend in a room where spiders are involved, whatever they are shown. What would that do to the result — and how could the study have been designed to rule it out?</p>
 </div>
 </section>
-</section>
 <section id="more-than-two-groups" class="level2" data-number="8.4">
 <h2 data-number="8.4" class="anchored" data-anchor-id="more-than-two-groups"><span class="header-section-number">8.4</span> More than two groups</h2>
 <p>With three or more groups, running a t-test on every pair is the wrong move: each test has its own chance of a false positive, and with enough pairs one of them will fire.</p>
 <p>The tool is <strong>analysis of variance</strong>, and the question it asks is whether <em>any</em> of the group means differ.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">aov</span>(lr_self <span class="sc">~</span> ses, <span class="at">data =</span> swe)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">aov</span>(lr_self <span class="sc">~</span> ses, <span class="at">data =</span> swe)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##               Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## ses            3    514  171.24   22.58 2.13e-14 ***

@@ -124,19 +124,6 @@
 - Class: text
   Output: The same t, the same degrees of freedom, the same p-value. A paired t-test is a one-sample t-test of the differences against zero.
 
-- Class: cmd_question
-  Output: Now pretend the same 24 numbers came from two different groups of twelve people. Type t.test(spider$real, spider$picture), without paired.
-  CorrectAnswer: t.test(spider$real, spider$picture)
-  AnswerTests: omnitest(correctExpr='t.test(spider$real, spider$picture)')
-  Hint: Type t.test(spider$real, spider$picture).
-
-- Class: mult_question
-  Output: The same difference of 7, but now p = 0.107 - not significant. Why did the paired test find the difference when this one did not?
-  CorrectAnswer: It removes the differences between people, which the independent test counts as noise.
-  AnswerChoices: It removes the differences between people, which the independent test counts as noise.; It has more cases to work with.; It is less strict about the p-value.
-  AnswerTests: omnitest(correctVal='It removes the differences between people, which the independent test counts as noise.')
-  Hint: Some people are anxious in both situations, some calm in both. Does that matter when you only look at the change within each person?
-
 - Class: text
   Output: Use the paired version whenever the two numbers come from the same unit. Using an independent test on paired data throws the pairing away and usually hides a real effect. Using a paired test on data that is not paired is simply invalid, whatever R prints.
 

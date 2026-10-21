@@ -215,20 +215,6 @@ t.test(spider$difference, mu = 0)
 
 The same `t`, the same `df`, the same p-value. **A paired t-test is a one-sample t-test of the differences against zero.**
 
-### Why pairing matters
-
-It is tempting to think the paired test is just a convenience. It is not — it answers a different question and it is far more sensitive.
-
-Run the independent test on exactly the same twenty-four numbers, as if they came from two different groups of twelve people:
-
-```{r}
-t.test(spider$real, spider$picture)
-```
-
-The difference is still `r fmt(mean(spider$real) - mean(spider$picture), 0)` points, but the p-value is now `r fmt(t.test(spider$real, spider$picture)$p.value, 3)`. Not significant.
-
-The reason is in the standard error: `r fmt(t.test(spider$real, spider$picture)$stderr)` as two groups against `r fmt(t.test(spider$real, spider$picture, paired = TRUE)$stderr)` as pairs. People differ in how anxious they are in general, and the anxious are anxious in both situations — the two scores correlate at `r fmt(cor(spider$picture, spider$real))`. The independent test counts those differences between people as noise. The paired test removes them, because it only looks at the change within each person.
-
 Use the paired version whenever the two numbers come from the same unit. Using an independent test on paired data throws away the pairing and usually hides a real effect.
 
 > The opposite mistake matters just as much. Using a paired test on data that is *not* paired — two different sets of people who happen to be the same size — is simply invalid. The pairing has to be real.
