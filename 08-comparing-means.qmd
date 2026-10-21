@@ -263,15 +263,15 @@ What has to be true about the distances between 3 and 4, and between 7 and 8, fo
 
 One sample:
 
-> Swedish respondents placed themselves slightly to the right of the scale midpoint (M = `r fmt(mean(swe$lr_self, na.rm = TRUE))`, SD = `r fmt(sd(swe$lr_self, na.rm = TRUE))`), t(`r t.test(swe$lr_self, mu = 5)$parameter`) = `r fmt(t.test(swe$lr_self, mu = 5)$statistic)`, *p* < .001, although the difference of a quarter of a point is negligible on an eleven-point scale.
+> Swedish respondents placed themselves slightly to the right of the scale midpoint (mean = `r fmt(mean(swe$lr_self, na.rm = TRUE))`, SD = `r fmt(sd(swe$lr_self, na.rm = TRUE))`), t(`r t.test(swe$lr_self, mu = 5)$parameter`) = `r fmt(t.test(swe$lr_self, mu = 5)$statistic)`, *p* < .001, although the difference of a quarter of a point is negligible on an eleven-point scale.
 
 Two groups:
 
-> Men placed themselves further right (M = `r fmt(mean(swe$lr_self[swe$sex == "Men"], na.rm = TRUE))`) than women (M = `r fmt(mean(swe$lr_self[swe$sex == "Women"], na.rm = TRUE))`), a difference of `r fmt(diff(rev(t.test(lr_self ~ sex, data = swe)$estimate)))` points, 95% CI [`r fmt(t.test(lr_self ~ sex, data = swe)$conf.int[1])`, `r fmt(t.test(lr_self ~ sex, data = swe)$conf.int[2])`], t(`r fmt(t.test(lr_self ~ sex, data = swe)$parameter, 0)`) = `r fmt(t.test(lr_self ~ sex, data = swe)$statistic)`, *p* < .001.
+> Men placed themselves further right (mean = `r fmt(mean(swe$lr_self[swe$sex == "Men"], na.rm = TRUE))`) than women (mean = `r fmt(mean(swe$lr_self[swe$sex == "Women"], na.rm = TRUE))`), a difference of `r fmt(diff(rev(t.test(lr_self ~ sex, data = swe)$estimate)))` points, 95% CI [`r fmt(t.test(lr_self ~ sex, data = swe)$conf.int[1])`, `r fmt(t.test(lr_self ~ sex, data = swe)$conf.int[2])`], t(`r fmt(t.test(lr_self ~ sex, data = swe)$parameter, 0)`) = `r fmt(t.test(lr_self ~ sex, data = swe)$statistic)`, *p* < .001.
 
 The same people twice:
 
-> Anxiety was higher in front of the real spider (M = `r fmt(mean(spider$real), 0)`) than with the picture (M = `r fmt(mean(spider$picture), 0)`), a mean difference of `r fmt(t.test(spider$real, spider$picture, paired = TRUE)$estimate, 0)` points, 95% CI [`r fmt(t.test(spider$real, spider$picture, paired = TRUE)$conf.int[1], 1)`, `r fmt(t.test(spider$real, spider$picture, paired = TRUE)$conf.int[2], 1)`], paired t(`r t.test(spider$real, spider$picture, paired = TRUE)$parameter`) = `r fmt(t.test(spider$real, spider$picture, paired = TRUE)$statistic)`, *p* = `r fmt(t.test(spider$real, spider$picture, paired = TRUE)$p.value, 3)`.
+> Anxiety was higher in front of the real spider (mean = `r fmt(mean(spider$real), 0)`) than with the picture (mean = `r fmt(mean(spider$picture), 0)`), a mean difference of `r fmt(t.test(spider$real, spider$picture, paired = TRUE)$estimate, 0)` points, 95% CI [`r fmt(t.test(spider$real, spider$picture, paired = TRUE)$conf.int[1], 1)`, `r fmt(t.test(spider$real, spider$picture, paired = TRUE)$conf.int[2], 1)`], paired t(`r t.test(spider$real, spider$picture, paired = TRUE)$parameter`) = `r fmt(t.test(spider$real, spider$picture, paired = TRUE)$statistic)`, *p* = `r fmt(t.test(spider$real, spider$picture, paired = TRUE)$p.value, 3)`.
 
 Give the means, the difference with its confidence interval, and the test. It is also worth a sentence on whether the difference is large enough to matter — Cohen's d can help — especially in a large sample, where almost everything is significant. Mistakes to avoid:
 

@@ -240,7 +240,7 @@ Note how few cases some parties have — `r min(party_means$n)` for the smallest
 ::: {.reporting}
 **How to write it up.**
 
-> Left-right self-placement differed sharply by party (F(`r anova(model_vote)$Df[1]`, `r anova(model_vote)$Df[2]`) = `r fmt(anova(model_vote)$"F value"[1], 1)`, *p* < .001, R² = `r fmt(summary(model_vote)$r.squared, 2)`). Taking Social Democrat voters as the reference (M = `r fmt(coef(model_vote_s)[1])`), Left Party voters placed themselves `r fmt(abs(coef(model_vote_s)[2]))` points further left, while Sweden Democrat voters placed themselves `r fmt(coef(model_vote_s)[8])` points further right (*n* = `r nobs(model_vote)`).
+> Left-right self-placement differed sharply by party (F(`r anova(model_vote)$Df[1]`, `r anova(model_vote)$Df[2]`) = `r fmt(anova(model_vote)$"F value"[1], 1)`, *p* < .001, R² = `r fmt(summary(model_vote)$r.squared, 2)`). Taking Social Democrat voters as the reference (mean = `r fmt(coef(model_vote_s)[1])`), Left Party voters placed themselves `r fmt(abs(coef(model_vote_s)[2]))` points further left, while Sweden Democrat voters placed themselves `r fmt(coef(model_vote_s)[8])` points further right (*n* = `r nobs(model_vote)`).
 
 Say which category is the reference — without it the table cannot be read. Mistakes to avoid:
 
