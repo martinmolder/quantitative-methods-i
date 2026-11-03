@@ -6,11 +6,6 @@
 Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
 options(width = 78)
 fmt <- function(x, digits = 2) formatC(x, format = "f", digits = digits)
-
-# Parallel analysis compares the data against randomly generated data, so its
-# answer moves a little from run to run. Fixing the seed keeps this chapter
-# reproducible -- and it is worth knowing that the number is not fixed.
-set.seed(2026)
 ```
 
 Last week ended with an 8×8 correlation matrix that had an obvious structure in it. This week is about what to do with a structure like that.
@@ -71,39 +66,6 @@ A **loading** is the correlation between a measured variable and the factor. It 
 
 > **Factor analysis is not causal discovery.** It finds that some variables move together and summarises that. Whether the common thing is a real psychological disposition, an artefact of how the questions were worded, or a tendency to agree with anything, the arithmetic cannot tell you. That judgement is yours.
 
-## Is it worth doing?
-
-Two standard checks, both quick.
-
-**Bartlett's test**, run by `cortest.bartlett()`, asks whether the correlation matrix differs from one with no correlations at all. If it does not, there is nothing to factor.
-
-```{r}
-cortest.bartlett(
-  cor(trust_items, use = "pairwise.complete.obs"),
-  n = sum(complete.cases(trust_items))
-)
-```
-
-`n` has to be supplied because the function is given a correlation matrix rather than the raw data, and a correlation matrix does not know how many people it came from.
-
-The p-value is essentially zero, so the variables are correlated. With this much data that test almost always passes, and it is a floor rather than a recommendation.
-
-**The KMO measure** is more useful. It asks how much of the correlation between variables is shared rather than specific to pairs.
-
-```{r}
-KMO(trust_items)$MSA
-```
-
-`MSA` stands for measure of sampling adequacy. Above 0.8 is good, above 0.6 acceptable, below 0.5 means do not bother. `r fmt(KMO(trust_items)$MSA)` is fine.
-
-`KMO()` also reports a value per item, which is worth a look when one item is suspect:
-
-```{r}
-round(KMO(trust_items)$MSAi, 2)
-```
-
-Social media again, at the bottom.
-
 ## How many factors?
 
 The awkward question, and the honest answer is that the standard criteria disagree with each other.
@@ -118,7 +80,7 @@ round(eigen_values, 3)
 
 The first is `r fmt(eigen_values[1])` — worth more than three items on its own. The second is `r fmt(eigen_values[2])`, and everything after that is below 1.
 
-Three ways to read that.
+Two ways to read that.
 
 **The Kaiser criterion**: keep factors with an eigenvalue above 1, on the logic that a factor should at least explain more than one item does. That gives `r sum(eigen_values > 1)` here. It is the crudest rule and it tends to keep too many.
 
@@ -146,21 +108,7 @@ ggplot(scree_data, aes(x = factor, y = eigenvalue)) +
 
 The drop from the first to the second is large, and after the second the line is nearly flat. The elbow is at two, which suggests keeping one — the factors *before* the elbow.
 
-**Parallel analysis**, run by `fa.parallel()`, is the best of the three. It generates random data of the same size and shape, factors that, and keeps only the factors that do better than random noise would.
-
-```{r}
-#| results: hide
-#| fig-show: hide
-parallel <- fa.parallel(trust_items, fa = "fa", plot = FALSE)
-```
-
-```{r}
-parallel$nfact
-```
-
-`r parallel$nfact` factors by that criterion.
-
-So: Kaiser says `r sum(eigen_values > 1)`, the scree plot suggests one, parallel analysis says `r parallel$nfact`. This is normal.
+So: Kaiser says `r sum(eigen_values > 1)`, the scree plot suggests one. This is normal.
 
 > **The criteria are advice, not answers.** The real test is whether a solution is *interpretable* — whether the groups of items that hang together correspond to something you can name and defend. A statistically defensible solution you cannot explain is worse than a simpler one you can.
 
@@ -269,25 +217,18 @@ From here `trust` is an ordinary continuous variable. It goes into a regression 
 
 So far we have asked the six items to be one thing, and they were willing. But "willing" is not the same as "best described that way".
 
-The criteria are split again. Look at the eigenvalues of the six-item set, and at what parallel analysis makes of them.
-
-```{r}
-#| results: hide
-#| fig-show: hide
-parallel_six <- fa.parallel(trust_six, fa = "fa", plot = FALSE)
-```
+Look at the eigenvalues of the six-item set.
 
 ```{r}
 six_cor <- cor(trust_six, use = "pairwise.complete.obs")
 six_eigen <- eigen(six_cor)$values
 
 round(six_eigen, 2)
-parallel_six$nfact
 ```
 
-The Kaiser rule says one, since the second eigenvalue is `r fmt(six_eigen[2])` and so below the threshold. Parallel analysis says `r parallel_six$nfact`.
+The Kaiser rule says one, since the second eigenvalue is `r fmt(six_eigen[2])` and so below the threshold, and the drop after the first is as steep as before. On the criteria alone, one factor.
 
-There is also a reason to look beyond the criteria. Research on political trust distinguishes trust in the institutions of *party politics* — parliament, government, parties — from trust in institutions that hold authority without standing for election. If that distinction is present in these answers, one factor would be hiding it.
+But there is a reason to look beyond the criteria. Research on political trust distinguishes trust in the institutions of *party politics* — parliament, government, parties — from trust in institutions that hold authority without standing for election. If that distinction is present in these answers, one factor would be hiding it.
 
 So try two, and see whether the split falls where theory says it should.
 
@@ -295,18 +236,20 @@ So try two, and see whether the split falls where theory says it should.
 two_factors <- fa(
   trust_six,
   nfactors = 2,
-  rotate = "oblimin",
+  rotate = "varimax",
   fm = "ml"
 )
 
 print(two_factors$loadings, cutoff = 0.3)
 ```
 
-`cutoff = 0.3` hides the small loadings so that the pattern is visible. `rotate = "oblimin"` needs explaining, and does so below.
+`cutoff = 0.3` hides the small loadings so that the pattern is visible. `rotate = "varimax"` needs explaining, and does so below.
 
 The split is not arbitrary. The first factor is **parliament, government and parties** — the institutions of party politics, the ones you vote for and against. The second is **scientists and the media** — institutions with authority but no electoral role.
 
 That distinction is a real one in the research on political trust, and it did not have to appear here. It is the sort of result that makes a two-factor solution worth taking seriously.
+
+Not every item belongs to one factor alone. Parliament has a small second loading of `r fmt(two_factors$loadings["Parliament", 2])`, and the media `r fmt(two_factors$loadings["Media", 1])` on the first factor: trust in the two kinds of institution is not entirely separate.
 
 The judiciary is the interesting case: `r fmt(two_factors$loadings["Judiciary", 1])` on one factor and `r fmt(two_factors$loadings["Judiciary", 2])` on the other. An item that loads about equally on two factors is called a **cross-loading**, and it is telling you something — the courts are political and non-political at once, which is more or less what a constitutional court is for.
 
@@ -314,48 +257,22 @@ The judiciary is the interesting case: `r fmt(two_factors$loadings["Judiciary", 
 
 When you extract more than one factor, the solution is not unique. Several different sets of axes describe the same data equally well, in the way that a set of points can be described from more than one angle. **Rotation** picks the angle that is easiest to interpret, by trying to make each item load strongly on one factor and weakly on the rest.
 
-The choice that matters is whether the factors are allowed to correlate.
+`varimax` is the most common rotation. It is **orthogonal**: it keeps the factors uncorrelated with each other, so that each one is a separate dimension and the loadings can be read one factor at a time.
 
-- **Orthogonal** rotations, of which `varimax` is the common one, force the factors to be uncorrelated.
-- **Oblique** rotations, such as `oblimin`, allow them to correlate.
-
-Look at what our factors actually do.
-
-```{r}
-round(two_factors$Phi, 3)
-```
-
-`Phi` holds the correlations between the factors: `r fmt(two_factors$Phi[1,2])`. People who trust parliament also tend to trust scientists. That is not a nuisance, it is the finding — there is a general trusting disposition, and two more specific ones on top of it.
-
-Now force them apart and see what it costs.
-
-```{r}
-orthogonal <- fa(
-  trust_six,
-  nfactors = 2,
-  rotate = "varimax",
-  fm = "ml"
-)
-
-round(unclass(orthogonal$loadings), 3)
-```
-
-`unclass()` strips the special printing that `psych` attaches to a loadings table, so that every number shows rather than only the large ones. And the clean structure has gone. Under `varimax` the judiciary loads `r fmt(orthogonal$loadings["Judiciary", 1])` and `r fmt(orthogonal$loadings["Judiciary", 2])`, parliament picks up a loading of `r fmt(orthogonal$loadings["Parliament", 2])` on the second factor, and almost everything loads moderately on both. Because the rotation is not allowed to put the correlation between the factors, it has to put it into the loadings instead — and the result describes the data less well while looking more complicated.
-
-> **For social science, oblique is nearly always the right default.** Real underlying dimensions are seldom independent of each other, and `varimax` produces a tidy-looking solution by asserting something about the world that is usually false. If the factors genuinely are uncorrelated, an oblique rotation will report a correlation near zero and you have lost nothing.
+> Keeping the factors uncorrelated is a simplification. People who trust parliament probably also tend to trust scientists, and **oblique** rotations, which allow the factors to correlate, are arguably the more correct choice for most social-science data. They are also harder to read, because the loadings then have to be interpreted together with the correlation between the factors. This course stays with orthogonal factors.
 
 ### One factor or two?
 
 Both solutions are defensible fits to the same six items.
 
-The one-factor solution says there is a general disposition to trust institutions, and it explains `r fmt(100 * six_factor$Vaccounted[2,1], 1)`% of the variance. The two-factor solution says that disposition has two related parts, political and non-political, correlated at `r fmt(two_factors$Phi[1,2])`.
+The one-factor solution says there is a general disposition to trust institutions, and it explains `r fmt(100 * six_factor$Vaccounted[2,1], 1)`% of the variance. The two-factor solution says there are two dimensions, political and non-political, and together they explain `r fmt(100 * two_factors$Vaccounted[3,2], 1)`% — more, as two factors always will.
 
-Which you take depends on what you are going to do with it. If you want one variable for a regression, take one factor — the two are correlated at `r fmt(two_factors$Phi[1,2])` anyway, and separating them buys little. If your argument is specifically about the difference between trust in politicians and trust in expertise, take two, and say why.
+Which you take depends on what you are going to do with it. If you want one variable for a regression, take one factor: the criteria point that way, and it is simpler. If your argument is specifically about the difference between trust in politicians and trust in expertise, take two, and say why.
 
 ::: {.discussion}
-**A question.** The criteria gave three different answers about the number of factors, and both solutions are interpretable.
+**A question.** For the six items, both criteria said one factor, and the two-factor solution was fitted on theoretical grounds.
 
-Suppose you fitted one factor, and a reviewer says you should have fitted two. What evidence could you offer in reply — and is "parallel analysis suggested three" a point in your favour or against you?
+Suppose you report the two-factor solution, and a reviewer objects that the criteria said one. What could you offer in reply — and what would make the reviewer right?
 :::
 
 ## What it assumes
@@ -369,11 +286,11 @@ Suppose you fitted one factor, and a reviewer says you should have fitted two. W
 ::: {.reporting}
 **How to write it up.**
 
-> The six institutional trust items were subjected to maximum likelihood factor analysis. Sampling adequacy was good (KMO = `r fmt(KMO(trust_six)$MSA)`) and Bartlett's test was significant (*p* < .001). A single factor was retained, accounting for `r fmt(100 * six_factor$Vaccounted[2,1], 1)`% of the variance, with loadings from `r fmt(min(six_factor$loadings[,1]))` (scientists) to `r fmt(max(six_factor$loadings[,1]))` (parliament). Internal consistency was good (α = `r fmt(alpha_result$total$raw_alpha, 2)`). A seventh item, trust in social media, loaded at `r fmt(one_factor$loadings[7,1])` and was excluded. Factor scores were saved for use in the models below.
+> The six institutional trust items were subjected to maximum likelihood factor analysis. A single factor was retained, accounting for `r fmt(100 * six_factor$Vaccounted[2,1], 1)`% of the variance, with loadings from `r fmt(min(six_factor$loadings[,1]))` (scientists) to `r fmt(max(six_factor$loadings[,1]))` (parliament). Internal consistency was good (α = `r fmt(alpha_result$total$raw_alpha, 2)`). A seventh item, trust in social media, loaded at `r fmt(one_factor$loadings[7,1])` and was excluded. Factor scores were saved for use in the models below.
 
 Say which items, which method, how many factors and why, the loadings, the variance explained, and what you did with the result. Mistakes to avoid:
 
-- **Not saying which rotation you used**, or using an orthogonal one without justifying it.
+- **Not saying which rotation you used** when there is more than one factor.
 - **Reporting the number of factors without the reasoning.** The criteria disagree; say which you followed.
 - **Hiding a dropped item.** Report it and say why it went.
 - **Reporting alpha instead of a factor analysis.** Alpha assumes one dimension; it does not test for it.
