@@ -89,8 +89,6 @@ The units of the slope are always *outcome units per predictor unit*. This is wh
 
 At the bottom:
 
-**`Residual standard error`** is roughly the typical size of the model's mistakes, in outcome units. Here about `r fmt(summary(model1)$sigma)` points on a 0-to-10 scale.
-
 **`Multiple R-squared`** is the share of the variance in the outcome the model accounts for. Here `r fmt(summary(model1)$r.squared, 3)`, so about `r fmt(100 * summary(model1)$r.squared, 1)`%.
 
 With one predictor, R-squared is exactly the correlation squared:
