@@ -173,10 +173,6 @@ A coefficient in a multiple regression is the association between that predictor
 
 Here the answer is: hardly. Once you compare left and right voters at the same level of trust, the gap nearly disappears.
 
-> **What this does not tell you.** The arithmetic is agnostic about which variable is doing what. Exactly the same output is compatible with *trust causes both bloc and rating* and with *bloc causes trust, which causes rating* — and in the second case, controlling for trust would be a mistake, because you would be removing part of the effect you were trying to measure.
->
-> Regression cannot tell those apart. Only an argument about how the world works can, and that argument has to be made before the model is fitted, not after.
-
 A fuller model:
 
 ```{r}

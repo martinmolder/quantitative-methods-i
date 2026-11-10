@@ -112,7 +112,7 @@
   Hint: That is what 'holding the other predictors constant' means.
 
 - Class: text
-  Output: The apparent bloc difference was largely trust wearing a bloc costume. But be careful - the arithmetic is agnostic about which variable is doing what. The same output fits 'trust causes both' and 'bloc causes trust, which causes the rating'. In the second case controlling for trust would be a mistake. Only an argument about the world can tell them apart.
+  Output: The apparent bloc difference was largely trust wearing a bloc costume.
 
 - Class: cmd_question
   Output: Fit a fuller model. Type model4 <- lm(demlevel ~ trust + bloc + age + educ, data = swe).

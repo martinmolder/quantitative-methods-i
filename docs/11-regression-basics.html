@@ -473,10 +473,6 @@ Figure&nbsp;11.1
 <p>This is the whole point of multiple regression, and it is worth stating carefully.</p>
 <p>A coefficient in a multiple regression is the association between that predictor and the outcome <strong>holding the other predictors constant</strong> — the answer to “among people with the same level of trust, does bloc still make a difference?”</p>
 <p>Here the answer is: hardly. Once you compare left and right voters at the same level of trust, the gap nearly disappears.</p>
-<blockquote class="blockquote">
-<p><strong>What this does not tell you.</strong> The arithmetic is agnostic about which variable is doing what. Exactly the same output is compatible with <em>trust causes both bloc and rating</em> and with <em>bloc causes trust, which causes rating</em> — and in the second case, controlling for trust would be a mistake, because you would be removing part of the effect you were trying to measure.</p>
-<p>Regression cannot tell those apart. Only an argument about how the world works can, and that argument has to be made before the model is fitted, not after.</p>
-</blockquote>
 <p>A fuller model:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>model4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(demlevel <span class="sc">~</span> trust <span class="sc">+</span> bloc <span class="sc">+</span> age <span class="sc">+</span> educ, <span class="at">data =</span> swe)</span>
