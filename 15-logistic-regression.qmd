@@ -122,7 +122,7 @@ round(odds_ratios, 3)
 Reading them:
 
 - **`lr_self` = `r fmt(exp(coef(model)[3]), 2)`.** Each one-point move to the right on the 0-10 scale multiplies the odds of voting SD by about `r fmt(exp(coef(model)[3]), 2)` — a `r fmt(100 * (exp(coef(model)[3]) - 1), 0)`% increase in the odds.
-- **`trust` = `r fmt(exp(coef(model)[2]), 2)`.** One standard deviation more trust multiplies the odds by `r fmt(exp(coef(model)[2]), 2)`, roughly halving them.
+- **`trust` = `r fmt(exp(coef(model)[2]), 2)`.** One unit more trust multiplies the odds by `r fmt(exp(coef(model)[2]), 2)`, roughly halving them.
 - **`sexWomen` = `r fmt(exp(coef(model)[4]), 2)`.** Women's odds are about `r fmt(exp(coef(model)[4]), 2)` times men's.
 
 **An odds ratio of 1 means no effect**, so an interval containing 1 is the equivalent of a coefficient whose interval contains zero.

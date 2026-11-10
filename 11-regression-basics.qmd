@@ -75,7 +75,7 @@ The `Estimate` column holds the equation of the line.
 
 Whether an intercept means anything depends entirely on whether zero is a real value of the predictor. Here it is. For a predictor like age it would be the predicted rating for a newborn, which is not useful.
 
-**`trust` = `r fmt(coef(model1)[2])`.** The slope. **A one-unit increase in the predictor is associated with a change of this much in the outcome.** Trust is standardised, so one unit is one standard deviation: someone one standard deviation above average on trust rates Sweden about `r fmt(coef(model1)[2])` points higher on the 0-to-10 scale.
+**`trust` = `r fmt(coef(model1)[2])`.** The slope. **A one-unit increase in the predictor is associated with a change of this much in the outcome.** Trust is last week's factor score, so one unit is a little more than one standard deviation: someone one unit above average on trust rates Sweden about `r fmt(coef(model1)[2])` points higher on the 0-to-10 scale.
 
 The units of the slope are always *outcome units per predictor unit*. This is why variables measured on arbitrary scales produce coefficients that are hard to talk about, and why it pays to know what a one-unit change actually is.
 
@@ -224,7 +224,7 @@ Is that a good model? What would you need to know to answer, and is there a numb
 ::: {.reporting}
 **How to write it up.**
 
-> Trust in institutions was strongly associated with evaluations of Swedish democracy (b = `r fmt(coef(model4)[2])`, SE = `r fmt(coef(summary(model4))[2, 2])`, *p* < .001): a one standard deviation increase in trust corresponded to a `r fmt(coef(model4)[2])`-point higher rating on the 0-10 scale. Voting for the right-wing bloc was associated with a `r fmt(abs(coef(model4)[3]))`-point lower rating (*p* = `r fmt(coef(summary(model4))[3, 4], 3)`) once trust was accounted for. The model explained `r fmt(100 * summary(model4)$r.squared, 1)`% of the variance (*n* = `r nobs(model4)`).
+> Trust in institutions was strongly associated with evaluations of Swedish democracy (b = `r fmt(coef(model4)[2])`, SE = `r fmt(coef(summary(model4))[2, 2])`, *p* < .001): a one-unit increase in the trust score corresponded to a `r fmt(coef(model4)[2])`-point higher rating on the 0-10 scale. Voting for the right-wing bloc was associated with a `r fmt(abs(coef(model4)[3]))`-point lower rating (*p* = `r fmt(coef(summary(model4))[3, 4], 3)`) once trust was accounted for. The model explained `r fmt(100 * summary(model4)$r.squared, 1)`% of the variance (*n* = `r nobs(model4)`).
 
 Give the coefficient, its standard error, the p-value, and — most importantly — **what a one-unit change means in the units of the data**. Mistakes to avoid:
 

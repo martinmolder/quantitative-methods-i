@@ -334,9 +334,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong><code>trust:blocRight</code> = 0.21</strong> — how much the trust slope <em>changes</em> for right-bloc voters. So their slope is 0.95 + 0.21 = 1.17.</p>
 <blockquote class="blockquote">
 <p><strong>Once you add an interaction, the other two coefficients change meaning.</strong> They are no longer average effects. They are the effect of one variable <em>when the other is zero</em>, which is why it matters enormously whether zero is a meaningful value.</p>
-<p>Here it happens to be fine, because <code>trust</code> is standardised so zero is the average. Had we used raw age, <code>blocRight</code> would have been the bloc difference among newborns.</p>
+<p>Here it happens to be fine, because <code>trust</code> is a factor score, so zero is the average. Had we used raw age, <code>blocRight</code> would have been the bloc difference among newborns.</p>
 </blockquote>
-<p>The interaction is significant (<em>p</em> = 0.003), so trust does more work for right-bloc voters than for left-bloc voters: 1.17 points per standard deviation against 0.95.</p>
+<p>The interaction is significant (<em>p</em> = 0.003), so trust does more work for right-bloc voters than for left-bloc voters: 1.17 points per unit of trust against 0.95.</p>
 </section>
 <section id="plot-it-always" class="level3" data-number="14.1.2">
 <h3 data-number="14.1.2" class="anchored" data-anchor-id="plot-it-always"><span class="header-section-number">14.1.2</span> Plot it, always</h3>
@@ -351,7 +351,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_viridis_d</span>(<span class="at">end =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">end =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Trust in institutions (standard deviations)"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Trust in institutions (factor score)"</span>,</span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Predicted rating of Swedish democracy"</span>,</span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Bloc"</span>,</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Bloc"</span>,</span>
@@ -372,7 +372,7 @@ Figure&nbsp;14.1
 </div>
 </div>
 <p>Giving <code>terms</code> two variables produces one line per group of the second, and <code>scale_colour_viridis_d()</code> and <code>scale_fill_viridis_d()</code> put the two lines on the colourblind-safe palette from session 4. Now the interaction is obvious: two lines that are not parallel, and that <strong>cross</strong>.</p>
-<p>Read what it says. Among people who distrust institutions, left-bloc voters rate Swedish democracy <em>higher</em> than right-bloc voters. Among people who trust institutions, it is the other way round. The lines meet at about 0.63 standard deviations of trust.</p>
+<p>Read what it says. Among people who distrust institutions, left-bloc voters rate Swedish democracy <em>higher</em> than right-bloc voters. Among people who trust institutions, it is the other way round. The lines meet at a trust score of about 0.63.</p>
 <p>So the answer to “is there a winner–loser gap?” is: it depends who you ask. That is what an interaction means, and no single coefficient could have said it.</p>
 <p><strong>Non-parallel lines are what an interaction is.</strong> If you cannot see it on this plot, it is not there in any meaningful sense, whatever the p-value says.</p>
 <p>Note also the top right corner: the model predicts 10.13 for the most trusting right-bloc voters, on a scale that stops at 10. Session 12 again, and one more reason not to read predictions at the edges too literally.</p>
@@ -562,7 +562,7 @@ Figure&nbsp;14.3
 <p><strong>How to write it up.</strong></p>
 <p>An interaction:</p>
 <blockquote class="blockquote">
-<p>The association between trust and evaluations of democracy differed by bloc (b = 0.21, SE = 0.07, <em>p</em> = 0.003). Among left-bloc voters a one standard deviation increase in trust corresponded to a 0.95-point higher rating; among right-bloc voters, 1.17 points (Figure 1).</p>
+<p>The association between trust and evaluations of democracy differed by bloc (b = 0.21, SE = 0.07, <em>p</em> = 0.003). Among left-bloc voters a one-unit increase in the trust score corresponded to a 0.95-point higher rating; among right-bloc voters, 1.17 points (Figure 1).</p>
 </blockquote>
 <p>A transformation:</p>
 <blockquote class="blockquote">

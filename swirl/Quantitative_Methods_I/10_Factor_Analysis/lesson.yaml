@@ -111,7 +111,16 @@
   Hint: Type summary(swe$trust).
 
 - Class: text
-  Output: Mean about zero, standard deviation about one, and 297 missing - the respondents who skipped at least one item. fa() returns one row per respondent with NA where it could not compute, which is why that assignment works directly.
+  Output: Mean about zero, and 297 missing - the respondents who skipped at least one item. fa() returns one row per respondent with NA where it could not compute, which is why that assignment works directly.
+
+- Class: cmd_question
+  Output: Now its spread. Type sd(swe$trust, na.rm = TRUE).
+  CorrectAnswer: sd(swe$trust, na.rm = TRUE)
+  AnswerTests: any_of_exprs('sd(swe$trust, na.rm = TRUE)', 'sd(swe$trust, na.rm=TRUE)')
+  Hint: Type sd(swe$trust, na.rm = TRUE).
+
+- Class: text
+  Output: About 0.93 - close to 1, but not quite. A factor score is an estimate, and an estimate is pulled towards the average when someone's answers say little about them. So one unit of the trust score is a little more than one standard deviation. Remember that when you read regression coefficients for trust in later lessons.
 
 - Class: text
   Output: Never assign scores into only the complete rows by hand. The lengths will not match, R will recycle, and everybody gets somebody else's score. The broken version does not look broken - when this lesson was written it produced differences between parties of a few hundredths, which reads as a perfectly plausible finding of no difference.

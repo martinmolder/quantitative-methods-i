@@ -90,7 +90,7 @@
   Hint: Zero is the value that means no association. What does it mean if the interval includes it?
 
 - Class: text
-  Output: But be careful comparing bar lengths on that plot. The coefficients are in different units - one standard deviation of trust, one year of age, one ISCED level - so their sizes are not comparable as drawn.
+  Output: But be careful comparing bar lengths on that plot. The coefficients are in different units - one unit of the trust score, one year of age, one ISCED level - so their sizes are not comparable as drawn.
 
 - Class: cmd_question
   Output: One fix is to standardise everything so that each coefficient is per standard deviation. Type round(coef(lm(scale(demlevel) ~ scale(trust) + bloc + scale(age) + scale(educ), data = swe)), 3).

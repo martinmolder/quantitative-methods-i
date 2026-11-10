@@ -129,7 +129,7 @@ The dashed line at zero is doing real work. **Any interval crossing it is a coef
 A reader might conclude that trust matters and age does not. What else would you need to know before agreeing — and what does the fact that the two variables are on completely different scales do to the comparison?
 :::
 
-That question points at a real limitation. The coefficients are in different units — one standard deviation of trust, one year of age, one ISCED level — so their lengths on this plot are not comparable. One fix is to standardise the predictors so that every coefficient is "per standard deviation":
+That question points at a real limitation. The coefficients are in different units — one unit of the trust score, one year of age, one ISCED level — so their lengths on this plot are not comparable. One fix is to standardise the predictors so that every coefficient is "per standard deviation":
 
 ```{r}
 model_std <- lm(
@@ -159,7 +159,7 @@ predictions
 #| fig-height: 3.4
 plot(predictions) +
   labs(
-    x = "Trust in institutions (standard deviations from the mean)",
+    x = "Trust in institutions (factor score)",
     y = "Predicted rating of Swedish democracy",
     title = NULL
   ) +
@@ -168,7 +168,7 @@ plot(predictions) +
 
 The shaded band is the 95% confidence interval around the prediction.
 
-This says the same thing as the coefficient `r fmt(coef(model3)[2])`, but in a form a reader can use: someone two standard deviations below average on trust is predicted to rate Swedish democracy around `r fmt(predictions$predicted[predictions$x == -2])`, and someone two above at around `r fmt(predictions$predicted[predictions$x == 2])`.
+This says the same thing as the coefficient `r fmt(coef(model3)[2])`, but in a form a reader can use: someone with a trust score of −2, well below average, is predicted to rate Swedish democracy around `r fmt(predictions$predicted[predictions$x == -2])`, and someone at +2 at around `r fmt(predictions$predicted[predictions$x == 2])`.
 
 ### A warning the model will not give you
 
@@ -209,7 +209,7 @@ The rules from session 4 apply, plus a few specific to model output.
 ::: {.reporting}
 **How to write it up.**
 
-> Table 1 reports OLS models of how democratic respondents consider Sweden to be, on a 0-10 scale. Trust in institutions is the dominant predictor: a one standard deviation increase corresponds to a `r fmt(coef(model3)[2])`-point higher rating (95% CI [`r fmt(confint(model3)[2, 1])`, `r fmt(confint(model3)[2, 2])`]). Having voted for the right-wing bloc is associated with a `r fmt(abs(coef(model3)[3]))`-point lower rating, an estimate that is only marginally distinguishable from zero once trust is accounted for (*p* = `r fmt(coef(summary(model3))[3, 4], 3)`). Education has a small positive association and age none. The full model accounts for `r fmt(100 * summary(model3)$r.squared, 1)`% of the variance (*n* = `r nobs(model3)`).
+> Table 1 reports OLS models of how democratic respondents consider Sweden to be, on a 0-10 scale. Trust in institutions is the dominant predictor: a one-unit increase in the trust score corresponds to a `r fmt(coef(model3)[2])`-point higher rating (95% CI [`r fmt(confint(model3)[2, 1])`, `r fmt(confint(model3)[2, 2])`]). Having voted for the right-wing bloc is associated with a `r fmt(abs(coef(model3)[3]))`-point lower rating, an estimate that is only marginally distinguishable from zero once trust is accounted for (*p* = `r fmt(coef(summary(model3))[3, 4], 3)`). Education has a small positive association and age none. The full model accounts for `r fmt(100 * summary(model3)$r.squared, 1)`% of the variance (*n* = `r nobs(model3)`).
 
 Walk the reader through the table rather than repeating it. Mistakes to avoid:
 

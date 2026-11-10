@@ -182,7 +182,13 @@ swe$trust <- six_factor$scores[, 1]
 summary(swe$trust)
 ```
 
-`scores` holds one **factor score** per respondent — an estimate of where each person sits on the underlying dimension. It comes out standardised, so a mean of about 0 and a standard deviation of about 1. Negative means less trusting than average.
+`scores` holds one **factor score** per respondent — an estimate of where each person sits on the underlying dimension. Its mean is about 0, so negative means less trusting than average. Its standard deviation is close to 1, but not quite:
+
+```{r}
+sd(swe$trust, na.rm = TRUE)
+```
+
+A factor score is an estimate, and an estimate is pulled towards the average when someone's answers say little about them. So the scores spread out a little less than a fully standardised variable would, and one unit of the trust score is a little more than one standard deviation. Keep that in mind when reading regression coefficients for trust in the sessions that follow.
 
 > **Check the alignment.** `fa()` returns as many rows as you gave it, with `NA` where a respondent was missing on any item. That means `swe$trust <- six_factor$scores[, 1]` is correct. What is *not* correct is trying to be clever and assigning only into the complete rows — the lengths then do not match, R recycles, and everybody gets somebody else's score.
 >

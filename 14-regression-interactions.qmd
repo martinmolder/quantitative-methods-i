@@ -61,9 +61,9 @@ Four numbers, and the trap is in the middle two.
 
 > **Once you add an interaction, the other two coefficients change meaning.** They are no longer average effects. They are the effect of one variable *when the other is zero*, which is why it matters enormously whether zero is a meaningful value.
 >
-> Here it happens to be fine, because `trust` is standardised so zero is the average. Had we used raw age, `blocRight` would have been the bloc difference among newborns.
+> Here it happens to be fine, because `trust` is a factor score, so zero is the average. Had we used raw age, `blocRight` would have been the bloc difference among newborns.
 
-The interaction is significant (*p* = `r fmt(coef(summary(model_int))[4, 4], 3)`), so trust does more work for right-bloc voters than for left-bloc voters: `r fmt(coef(model_int)[2] + coef(model_int)[4])` points per standard deviation against `r fmt(coef(model_int)[2])`.
+The interaction is significant (*p* = `r fmt(coef(summary(model_int))[4, 4], 3)`), so trust does more work for right-bloc voters than for left-bloc voters: `r fmt(coef(model_int)[2] + coef(model_int)[4])` points per unit of trust against `r fmt(coef(model_int)[2])`.
 
 ### Plot it, always
 
@@ -81,7 +81,7 @@ plot(predictions) +
   scale_colour_viridis_d(end = 0.7) +
   scale_fill_viridis_d(end = 0.7) +
   labs(
-    x = "Trust in institutions (standard deviations)",
+    x = "Trust in institutions (factor score)",
     y = "Predicted rating of Swedish democracy",
     colour = "Bloc",
     fill = "Bloc",
@@ -92,7 +92,7 @@ plot(predictions) +
 
 Giving `terms` two variables produces one line per group of the second, and `scale_colour_viridis_d()` and `scale_fill_viridis_d()` put the two lines on the colourblind-safe palette from session 4. Now the interaction is obvious: two lines that are not parallel, and that **cross**.
 
-Read what it says. Among people who distrust institutions, left-bloc voters rate Swedish democracy *higher* than right-bloc voters. Among people who trust institutions, it is the other way round. The lines meet at about `r fmt(-coef(model_int)[3] / coef(model_int)[4])` standard deviations of trust.
+Read what it says. Among people who distrust institutions, left-bloc voters rate Swedish democracy *higher* than right-bloc voters. Among people who trust institutions, it is the other way round. The lines meet at a trust score of about `r fmt(-coef(model_int)[3] / coef(model_int)[4])`.
 
 So the answer to "is there a winner–loser gap?" is: it depends who you ask. That is what an interaction means, and no single coefficient could have said it.
 
@@ -259,7 +259,7 @@ It still predicts a life expectancy of `r fmt(predict(logged, newdata = data.fra
 
 An interaction:
 
-> The association between trust and evaluations of democracy differed by bloc (b = `r fmt(coef(model_int)[4])`, SE = `r fmt(coef(summary(model_int))[4, 2])`, *p* = `r fmt(coef(summary(model_int))[4, 4], 3)`). Among left-bloc voters a one standard deviation increase in trust corresponded to a `r fmt(coef(model_int)[2])`-point higher rating; among right-bloc voters, `r fmt(coef(model_int)[2] + coef(model_int)[4])` points (Figure 1).
+> The association between trust and evaluations of democracy differed by bloc (b = `r fmt(coef(model_int)[4])`, SE = `r fmt(coef(summary(model_int))[4, 2])`, *p* = `r fmt(coef(summary(model_int))[4, 4], 3)`). Among left-bloc voters a one-unit increase in the trust score corresponded to a `r fmt(coef(model_int)[2])`-point higher rating; among right-bloc voters, `r fmt(coef(model_int)[2] + coef(model_int)[4])` points (Figure 1).
 
 A transformation:
 

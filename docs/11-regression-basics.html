@@ -372,7 +372,7 @@ Figure&nbsp;11.1
 <p>The <code>Estimate</code> column holds the equation of the line.</p>
 <p><strong><code>(Intercept)</code> = 7.81.</strong> The predicted value of the outcome when every predictor is zero. Trust is a factor score with a mean of about zero, so this is roughly the predicted rating for a person with average trust.</p>
 <p>Whether an intercept means anything depends entirely on whether zero is a real value of the predictor. Here it is. For a predictor like age it would be the predicted rating for a newborn, which is not useful.</p>
-<p><strong><code>trust</code> = 1.08.</strong> The slope. <strong>A one-unit increase in the predictor is associated with a change of this much in the outcome.</strong> Trust is standardised, so one unit is one standard deviation: someone one standard deviation above average on trust rates Sweden about 1.08 points higher on the 0-to-10 scale.</p>
+<p><strong><code>trust</code> = 1.08.</strong> The slope. <strong>A one-unit increase in the predictor is associated with a change of this much in the outcome.</strong> Trust is last week’s factor score, so one unit is a little more than one standard deviation: someone one unit above average on trust rates Sweden about 1.08 points higher on the 0-to-10 scale.</p>
 <p>The units of the slope are always <em>outcome units per predictor unit</em>. This is why variables measured on arbitrary scales produce coefficients that are hard to talk about, and why it pays to know what a one-unit change actually is.</p>
 <p><strong><code>Std. Error</code></strong> is the standard error of the coefficient — exactly the idea from session 6, applied to a slope. Draw another sample and you would get a different slope; this is how much it would vary.</p>
 <p><strong><code>t value</code></strong> is the estimate divided by its standard error. Signal over noise, again.</p>
@@ -548,7 +548,7 @@ Figure&nbsp;11.2
 <div class="reporting">
 <p><strong>How to write it up.</strong></p>
 <blockquote class="blockquote">
-<p>Trust in institutions was strongly associated with evaluations of Swedish democracy (b = 1.04, SE = 0.04, <em>p</em> &lt; .001): a one standard deviation increase in trust corresponded to a 1.04-point higher rating on the 0-10 scale. Voting for the right-wing bloc was associated with a 0.13-point lower rating (<em>p</em> = 0.049) once trust was accounted for. The model explained 31.0% of the variance (<em>n</em> = 2097).</p>
+<p>Trust in institutions was strongly associated with evaluations of Swedish democracy (b = 1.04, SE = 0.04, <em>p</em> &lt; .001): a one-unit increase in the trust score corresponded to a 1.04-point higher rating on the 0-10 scale. Voting for the right-wing bloc was associated with a 0.13-point lower rating (<em>p</em> = 0.049) once trust was accounted for. The model explained 31.0% of the variance (<em>n</em> = 2097).</p>
 </blockquote>
 <p>Give the coefficient, its standard error, the p-value, and — most importantly — <strong>what a one-unit change means in the units of the data</strong>. Mistakes to avoid:</p>
 <ul>

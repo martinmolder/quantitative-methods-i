@@ -34,11 +34,11 @@
   Output: Regression picks the line that minimises the total squared vertical distance between the points and the line. Squaring means the distances cannot cancel, and it also means a point twice as far away counts four times as much - which is why outliers matter.
 
 - Class: mult_question
-  Output: The slope on trust is 1.08. Trust is a factor score, standardised to a mean of 0 and a standard deviation of 1. What does 1.08 mean?
-  CorrectAnswer: One standard deviation more trust goes with a 1.08-point higher rating on the 0-10 scale.
-  AnswerChoices: One standard deviation more trust goes with a 1.08-point higher rating on the 0-10 scale.; Trust explains 108 per cent of the rating.; The rating is 1.08 times higher for trusting people.
-  AnswerTests: omnitest(correctVal='One standard deviation more trust goes with a 1.08-point higher rating on the 0-10 scale.')
-  Hint: The units of a slope are always outcome units per predictor unit. What is one unit of a standardised score?
+  Output: The slope on trust is 1.08. Trust is the factor score from the last lesson, with a mean of about 0. What does 1.08 mean?
+  CorrectAnswer: One unit more on the trust score goes with a 1.08-point higher rating on the 0-10 scale.
+  AnswerChoices: One unit more on the trust score goes with a 1.08-point higher rating on the 0-10 scale.; Trust explains 108 per cent of the rating.; The rating is 1.08 times higher for trusting people.
+  AnswerTests: omnitest(correctVal='One unit more on the trust score goes with a 1.08-point higher rating on the 0-10 scale.')
+  Hint: The units of a slope are always outcome units per predictor unit. Here the predictor unit is one unit of the trust score.
 
 - Class: text
   Output: The intercept, 7.81, is the predicted rating when every predictor is zero. Trust averages zero, so that is the prediction for a person with average trust. An intercept only means something when zero is a real value of the predictor.

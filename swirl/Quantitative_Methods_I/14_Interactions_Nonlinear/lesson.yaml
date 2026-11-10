@@ -32,7 +32,7 @@
   Hint: Once an interaction is in the model, the other coefficients are effects when the other variable is zero - and blocRight is zero for left voters.
 
 - Class: text
-  Output: So the slope for right-bloc voters is 0.955 plus the interaction term 0.211, which is 1.166. And blocRight, minus 0.134, is the bloc difference at trust equals zero - not overall. Here that is fine because trust is standardised so zero is the average. Had we used raw age, blocRight would have been the bloc difference among newborns.
+  Output: So the slope for right-bloc voters is 0.955 plus the interaction term 0.211, which is 1.166. And blocRight, minus 0.134, is the bloc difference at trust equals zero - not overall. Here that is fine because trust is a factor score, so zero is the average. Had we used raw age, blocRight would have been the bloc difference among newborns.
 
 - Class: text
   Output: Interaction coefficients are close to unreadable in a table. Nobody should do that arithmetic in their head.
@@ -50,7 +50,7 @@
   Hint: Type plot(predictions).
 
 - Class: mult_question
-  Output: Two lines that are not parallel, and they cross at about 0.63 standard deviations of trust. What does that mean substantively?
+  Output: Two lines that are not parallel, and they cross at a trust score of about 0.63. What does that mean substantively?
   CorrectAnswer: Among distrusting people left voters rate democracy higher, and among trusting people right voters do.
   AnswerChoices: Among distrusting people left voters rate democracy higher, and among trusting people right voters do.; Right-bloc voters always rate democracy higher.; The two blocs do not differ at all.
   AnswerTests: omnitest(correctVal='Among distrusting people left voters rate democracy higher, and among trusting people right voters do.')
