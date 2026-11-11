@@ -25,13 +25,13 @@
   Output: R has created a variable called sexWomen, which is 1 for women and 0 for men. A 0/1 variable like that is a dummy variable. The intercept is the prediction when it is 0 - the mean for men - and the coefficient is what to add when it is 1.
 
 - Class: cmd_question
-  Output: Check that against the group means. Type tapply(swe$lr_self, swe$sex, mean, na.rm = TRUE).
-  CorrectAnswer: tapply(swe$lr_self, swe$sex, mean, na.rm = TRUE)
-  AnswerTests: any_of_exprs('tapply(swe$lr_self, swe$sex, mean, na.rm = TRUE)', 'tapply(swe$lr_self, swe$sex, mean, na.rm=TRUE)')
-  Hint: Type tapply(swe$lr_self, swe$sex, mean, na.rm = TRUE).
+  Output: Check that against the group means. Type swe |> filter(!is.na(sex)) |> group_by(sex) |> summarise(mean = mean(lr_self, na.rm = TRUE)).
+  CorrectAnswer: swe |> filter(!is.na(sex)) |> group_by(sex) |> summarise(mean = mean(lr_self, na.rm = TRUE))
+  AnswerTests: any_of_exprs('swe |> filter(!is.na(sex)) |> group_by(sex) |> summarise(mean = mean(lr_self, na.rm = TRUE))', 'swe |> filter(!is.na(sex)) |> group_by(sex) |> summarise(mean = mean(lr_self, na.rm=TRUE))')
+  Hint: Type swe |> filter(!is.na(sex)) |> group_by(sex) |> summarise(mean = mean(lr_self, na.rm = TRUE)).
 
 - Class: mult_question
-  Output: The intercept is 5.638 and the men's mean is 5.638. What is a regression with a single categorical predictor actually doing?
+  Output: The intercept is 5.638 and the men's mean, rounded, is 5.64. What is a regression with a single categorical predictor actually doing?
   CorrectAnswer: Comparing group means - the coefficient is the difference between them.
   AnswerChoices: Comparing group means - the coefficient is the difference between them.; Fitting a curve through the two categories.; Predicting sex from left-right placement.
   AnswerTests: omnitest(correctVal='Comparing group means - the coefficient is the difference between them.')
@@ -66,10 +66,10 @@
   Output: The Left Party is the reference, because it is the first level of the factor - we set the levels in left-to-right order when the data was built. So every coefficient is a comparison with V, and with nothing else.
 
 - Class: cmd_question
-  Output: Add the intercept to each coefficient and you get the group means. Check with tapply(swe$lr_self, swe$vote, mean, na.rm = TRUE).
-  CorrectAnswer: tapply(swe$lr_self, swe$vote, mean, na.rm = TRUE)
-  AnswerTests: any_of_exprs('tapply(swe$lr_self, swe$vote, mean, na.rm = TRUE)', 'tapply(swe$lr_self, swe$vote, mean, na.rm=TRUE)')
-  Hint: Type tapply(swe$lr_self, swe$vote, mean, na.rm = TRUE).
+  Output: Add the intercept to each coefficient and you get the group means. Check with swe |> filter(!is.na(vote)) |> group_by(vote) |> summarise(mean = mean(lr_self, na.rm = TRUE)).
+  CorrectAnswer: swe |> filter(!is.na(vote)) |> group_by(vote) |> summarise(mean = mean(lr_self, na.rm = TRUE))
+  AnswerTests: any_of_exprs('swe |> filter(!is.na(vote)) |> group_by(vote) |> summarise(mean = mean(lr_self, na.rm = TRUE))', 'swe |> filter(!is.na(vote)) |> group_by(vote) |> summarise(mean = mean(lr_self, na.rm=TRUE))')
+  Hint: Type swe |> filter(!is.na(vote)) |> group_by(vote) |> summarise(mean = mean(lr_self, na.rm = TRUE)).
 
 - Class: text
   Output: 1.346 for V, and 1.346 plus 6.514 is 7.86 for SD. The model is a compact way of writing down eight group means.

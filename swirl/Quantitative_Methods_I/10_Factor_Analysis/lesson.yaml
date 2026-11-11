@@ -126,10 +126,10 @@
   Output: Never assign scores into only the complete rows by hand. The lengths will not match, R will recycle, and everybody gets somebody else's score. The broken version does not look broken - when this lesson was written it produced differences between parties of a few hundredths, which reads as a perfectly plausible finding of no difference.
 
 - Class: cmd_question
-  Output: So check the new variable against something you already know. Compare mean trust by party - type tapply(swe$trust, swe$vote, mean, na.rm = TRUE).
-  CorrectAnswer: tapply(swe$trust, swe$vote, mean, na.rm = TRUE)
-  AnswerTests: any_of_exprs('tapply(swe$trust, swe$vote, mean, na.rm = TRUE)', 'tapply(swe$trust, swe$vote, mean, na.rm=TRUE)')
-  Hint: Type tapply(swe$trust, swe$vote, mean, na.rm = TRUE). tapply() applies a function to one variable split by another.
+  Output: So check the new variable against something you already know. Compare mean trust by party - type swe |> filter(!is.na(vote)) |> group_by(vote) |> summarise(mean_trust = mean(trust, na.rm = TRUE)).
+  CorrectAnswer: swe |> filter(!is.na(vote)) |> group_by(vote) |> summarise(mean_trust = mean(trust, na.rm = TRUE))
+  AnswerTests: any_of_exprs('swe |> filter(!is.na(vote)) |> group_by(vote) |> summarise(mean_trust = mean(trust, na.rm = TRUE))', 'swe |> filter(!is.na(vote)) |> group_by(vote) |> summarise(mean_trust = mean(trust, na.rm=TRUE))')
+  Hint: Type swe |> filter(!is.na(vote)) |> group_by(vote) |> summarise(mean_trust = mean(trust, na.rm = TRUE)).
 
 - Class: text
   Output: Sweden Democrat voters are by some distance the least trusting. Green, Centre and Social Democrat voters the most. That is a recognisable pattern - and vote choice was never in the factor analysis.

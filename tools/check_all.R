@@ -16,6 +16,7 @@ checks <- c(
   "check_balance.R",
   "check_encoding.R",
   "check_swirl.R",
+  "check_swirl_code.R",
   "check_slides.R"
 )
 

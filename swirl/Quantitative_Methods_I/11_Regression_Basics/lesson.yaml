@@ -60,10 +60,22 @@
   Output: A model is a machine for producing predicted values, and what it gets wrong for each case is the residual.
 
 - Class: cmd_question
-  Output: Look at the residuals. Type summary(residuals(model1)).
-  CorrectAnswer: summary(residuals(model1))
-  AnswerTests: omnitest(correctExpr='summary(residuals(model1))')
-  Hint: Type summary(residuals(model1)).
+  Output: Ask the model for its prediction for every respondent. Type swe$predicted <- predict(model1, newdata = swe).
+  CorrectAnswer: swe$predicted <- predict(model1, newdata = swe)
+  AnswerTests: omnitest(correctExpr='swe$predicted <- predict(model1, newdata = swe)')
+  Hint: Type swe$predicted <- predict(model1, newdata = swe). newdata says which cases to apply the equation to.
+
+- Class: cmd_question
+  Output: The residual is the observed rating minus the predicted one. Type swe$residual <- swe$demlevel - swe$predicted.
+  CorrectAnswer: swe$residual <- swe$demlevel - swe$predicted
+  AnswerTests: omnitest(correctExpr='swe$residual <- swe$demlevel - swe$predicted')
+  Hint: Type swe$residual <- swe$demlevel - swe$predicted.
+
+- Class: cmd_question
+  Output: Look at the residuals. Type summary(swe$residual).
+  CorrectAnswer: summary(swe$residual)
+  AnswerTests: omnitest(correctExpr='summary(swe$residual)')
+  Hint: Type summary(swe$residual).
 
 - Class: text
   Output: Now the part where regression earns its place. In 2022 the right bloc won the election. Does voting for the winning side go with rating democracy differently?
@@ -99,10 +111,10 @@
   Output: The bloc coefficient has collapsed from minus 0.49 to minus 0.12, and its p-value has gone from below 0.001 to 0.066. It is no longer distinguishable from zero.
 
 - Class: cmd_question
-  Output: Why? Because the two groups differ in trust. Check with tapply(swe$trust, swe$bloc, mean, na.rm = TRUE).
-  CorrectAnswer: tapply(swe$trust, swe$bloc, mean, na.rm = TRUE)
-  AnswerTests: any_of_exprs('tapply(swe$trust, swe$bloc, mean, na.rm = TRUE)', 'tapply(swe$trust, swe$bloc, mean, na.rm=TRUE)')
-  Hint: Type tapply(swe$trust, swe$bloc, mean, na.rm = TRUE).
+  Output: Why? Because the two groups differ in trust. Check with swe |> filter(!is.na(bloc)) |> group_by(bloc) |> summarise(mean_trust = mean(trust, na.rm = TRUE)).
+  CorrectAnswer: swe |> filter(!is.na(bloc)) |> group_by(bloc) |> summarise(mean_trust = mean(trust, na.rm = TRUE))
+  AnswerTests: any_of_exprs('swe |> filter(!is.na(bloc)) |> group_by(bloc) |> summarise(mean_trust = mean(trust, na.rm = TRUE))', 'swe |> filter(!is.na(bloc)) |> group_by(bloc) |> summarise(mean_trust = mean(trust, na.rm=TRUE))')
+  Hint: Type swe |> filter(!is.na(bloc)) |> group_by(bloc) |> summarise(mean_trust = mean(trust, na.rm = TRUE)).
 
 - Class: mult_question
   Output: Left bloc voters are more trusting. What does the coefficient on bloc mean in model3, where trust is also included?
@@ -126,14 +138,8 @@
   AnswerTests: omnitest(correctExpr='summary(model4)')
   Hint: Type summary(model4).
 
-- Class: cmd_question
-  Output: Notice the line about observations deleted due to missingness. Check how many cases the model actually used with nobs(model4).
-  CorrectAnswer: nobs(model4)
-  AnswerTests: omnitest(correctExpr='nobs(model4)')
-  Hint: Type nobs(model4).
-
 - Class: text
-  Output: 2097 of 2845. Every variable you add drops everyone missing on it, and the losses compound. Always report the n the model actually ran on.
+  Output: Notice the line saying 748 observations were deleted due to missingness. The data has 2845 respondents, so the model ran on 2097. Every variable you add drops everyone missing on it, and the losses compound. Always report the n the model actually ran on.
 
 - Class: cmd_question
   Output: Finally, check the model. Type plot(model4, which = 1) for residuals against fitted values.

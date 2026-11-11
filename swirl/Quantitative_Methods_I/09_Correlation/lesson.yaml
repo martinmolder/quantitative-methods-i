@@ -13,10 +13,10 @@
   Output: The rule before anything else - look at it first. Every time.
 
 - Class: cmd_question
-  Output: Do people on the right like the Sweden Democrats more? Plot it with plot(swe$lr_self, swe$like_sd).
-  CorrectAnswer: plot(swe$lr_self, swe$like_sd)
-  AnswerTests: omnitest(correctExpr='plot(swe$lr_self, swe$like_sd)')
-  Hint: Type plot(swe$lr_self, swe$like_sd).
+  Output: Do people on the right like the Sweden Democrats more? Plot it, jittered as in session 4, leaving out anyone missing on either variable. Type swe |> filter(!is.na(lr_self), !is.na(like_sd)) |> ggplot(aes(x = lr_self, y = like_sd)) + geom_jitter(width = 0.25, height = 0.25, alpha = 0.3).
+  CorrectAnswer: swe |> filter(!is.na(lr_self), !is.na(like_sd)) |> ggplot(aes(x = lr_self, y = like_sd)) + geom_jitter(width = 0.25, height = 0.25, alpha = 0.3)
+  AnswerTests: omnitest(correctExpr='swe |> filter(!is.na(lr_self), !is.na(like_sd)) |> ggplot(aes(x = lr_self, y = like_sd)) + geom_jitter(width = 0.25, height = 0.25, alpha = 0.3)')
+  Hint: Type swe |> filter(!is.na(lr_self), !is.na(like_sd)) |> ggplot(aes(x = lr_self, y = like_sd)) + geom_jitter(width = 0.25, height = 0.25, alpha = 0.3).
 
 - Class: text
   Output: A clear pattern running from bottom left to top right, and far from tidy - plenty of people on the right dislike the party, and a few on the left like it. Now we want one number for that.
@@ -96,22 +96,22 @@
   Output: Now four things a single coefficient hides. R ships with Anscombe's quartet, four small data sets built to make the point.
 
 - Class: cmd_question
-  Output: Look at the first pair. Type plot(anscombe$x1, anscombe$y1).
-  CorrectAnswer: plot(anscombe$x1, anscombe$y1)
-  AnswerTests: omnitest(correctExpr='plot(anscombe$x1, anscombe$y1)')
-  Hint: Type plot(anscombe$x1, anscombe$y1).
+  Output: Look at the first pair. Type ggplot(anscombe, aes(x = x1, y = y1)) + geom_point().
+  CorrectAnswer: ggplot(anscombe, aes(x = x1, y = y1)) + geom_point()
+  AnswerTests: omnitest(correctExpr='ggplot(anscombe, aes(x = x1, y = y1)) + geom_point()')
+  Hint: Type ggplot(anscombe, aes(x = x1, y = y1)) + geom_point().
 
 - Class: cmd_question
-  Output: Now the second. Type plot(anscombe$x2, anscombe$y2).
-  CorrectAnswer: plot(anscombe$x2, anscombe$y2)
-  AnswerTests: omnitest(correctExpr='plot(anscombe$x2, anscombe$y2)')
-  Hint: Type plot(anscombe$x2, anscombe$y2).
+  Output: Now the second. Type ggplot(anscombe, aes(x = x2, y = y2)) + geom_point().
+  CorrectAnswer: ggplot(anscombe, aes(x = x2, y = y2)) + geom_point()
+  AnswerTests: omnitest(correctExpr='ggplot(anscombe, aes(x = x2, y = y2)) + geom_point()')
+  Hint: Type ggplot(anscombe, aes(x = x2, y = y2)) + geom_point().
 
 - Class: cmd_question
-  Output: And the fourth. Type plot(anscombe$x4, anscombe$y4).
-  CorrectAnswer: plot(anscombe$x4, anscombe$y4)
-  AnswerTests: omnitest(correctExpr='plot(anscombe$x4, anscombe$y4)')
-  Hint: Type plot(anscombe$x4, anscombe$y4).
+  Output: And the fourth. Type ggplot(anscombe, aes(x = x4, y = y4)) + geom_point().
+  CorrectAnswer: ggplot(anscombe, aes(x = x4, y = y4)) + geom_point()
+  AnswerTests: omnitest(correctExpr='ggplot(anscombe, aes(x = x4, y = y4)) + geom_point()')
+  Hint: Type ggplot(anscombe, aes(x = x4, y = y4)) + geom_point().
 
 - Class: cmd_question
   Output: Three completely different pictures. Now compare their correlations - cor(anscombe$x1, anscombe$y1).

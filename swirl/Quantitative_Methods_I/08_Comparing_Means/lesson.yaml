@@ -62,16 +62,22 @@
   Output: Second case - two separate groups of people. Do men and women place themselves differently?
 
 - Class: cmd_question
-  Output: Look first, with a boxplot. Type boxplot(lr_self ~ sex, data = swe).
-  CorrectAnswer: boxplot(lr_self ~ sex, data = swe)
-  AnswerTests: omnitest(correctExpr='boxplot(lr_self ~ sex, data = swe)')
-  Hint: Type boxplot(lr_self ~ sex, data = swe). The tilde means 'by'.
-
-- Class: text
-  Output: A boxplot shows the spread well, but the thick line in each box is the median, not the mean. The t-test compares means, and its output prints them.
+  Output: Look first. Plot every respondent, jittered so that people with the same answer do not sit on top of each other, and drop the missing placements first. Type swe |> filter(!is.na(lr_self)) |> ggplot(aes(x = sex, y = lr_self)) + geom_jitter(width = 0.25, height = 0.25, alpha = 0.06).
+  CorrectAnswer: swe |> filter(!is.na(lr_self)) |> ggplot(aes(x = sex, y = lr_self)) + geom_jitter(width = 0.25, height = 0.25, alpha = 0.06)
+  AnswerTests: omnitest(correctExpr='swe |> filter(!is.na(lr_self)) |> ggplot(aes(x = sex, y = lr_self)) + geom_jitter(width = 0.25, height = 0.25, alpha = 0.06)')
+  Hint: Type swe |> filter(!is.na(lr_self)) |> ggplot(aes(x = sex, y = lr_self)) + geom_jitter(width = 0.25, height = 0.25, alpha = 0.06).
 
 - Class: cmd_question
-  Output: Now the test, in the same formula notation. Type t.test(lr_self ~ sex, data = swe).
+  Output: Now the means. Type swe |> filter(!is.na(sex)) |> group_by(sex) |> summarise(mean = mean(lr_self, na.rm = TRUE)).
+  CorrectAnswer: swe |> filter(!is.na(sex)) |> group_by(sex) |> summarise(mean = mean(lr_self, na.rm = TRUE))
+  AnswerTests: any_of_exprs('swe |> filter(!is.na(sex)) |> group_by(sex) |> summarise(mean = mean(lr_self, na.rm = TRUE))', 'swe |> filter(!is.na(sex)) |> group_by(sex) |> summarise(mean = mean(lr_self, na.rm=TRUE))')
+  Hint: Type swe |> filter(!is.na(sex)) |> group_by(sex) |> summarise(mean = mean(lr_self, na.rm = TRUE)).
+
+- Class: text
+  Output: Men and women are spread over the whole scale, and the means differ by less than a point. Is that more than chance?
+
+- Class: cmd_question
+  Output: Now the test. Type t.test(lr_self ~ sex, data = swe). The tilde means 'by' - left-right placement by sex.
   CorrectAnswer: t.test(lr_self ~ sex, data = swe)
   AnswerTests: omnitest(correctExpr='t.test(lr_self ~ sex, data = swe)')
   Hint: Type t.test(lr_self ~ sex, data = swe). The data argument says where to find the variables, which is why they appear without swe dollar sign.
