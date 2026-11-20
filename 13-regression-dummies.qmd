@@ -34,15 +34,19 @@ We answered this in session 8 with a t-test. Here it is as a regression.
 ```{r}
 model_sex <- lm(lr_self ~ sex, data = swe)
 
-round(coef(summary(model_sex)), 3)
+summary(model_sex)
 ```
 
-Two coefficients from a two-category variable. R has created a variable called `sexWomen` which is **1 for women and 0 for men**, and put that in the model. A 0/1 variable like this is a **dummy variable**.
+This is the same output as in session 11, and it is read the same way. What is new is the second row of the coefficient table.
+
+R cannot put the words "Men" and "Women" into an equation, so it has made a new variable that is **1 for women and 0 for men**, and put that in the model instead. A 0/1 variable like this is a **dummy variable**.
+
+**Why is it called `sexWomen`?** R names a dummy by gluing the name of the variable to the category the dummy stands for: `sex` + `Women`. The name tells you which category is coded 1. The category that appears in no name — men — is coded 0, and it is what the dummy is compared with. So read `sexWomen` as "being a woman rather than a man".
 
 That makes the two numbers easy to read.
 
 - **`(Intercept)` = `r fmt(coef(model_sex)[1])`** is the predicted value when `sexWomen` is 0 — that is, the mean for **men**.
-- **`sexWomen` = `r fmt(coef(model_sex)[2])`** is what to add when `sexWomen` is 1 — the **difference** between women and men.
+- **`sexWomen` = `r fmt(coef(model_sex)[2])`** is what to add when `sexWomen` is 1 — the **difference** between women and men. It is negative, so women place themselves `r fmt(abs(coef(model_sex)[2]))` points further **left** than men.
 
 So the predicted value for women is `r fmt(coef(model_sex)[1])` + (`r fmt(coef(model_sex)[2])`) = `r fmt(coef(model_sex)[1] + coef(model_sex)[2])`.
 
@@ -68,14 +72,14 @@ Now the interesting case. Where do the voters of each of the eight parties place
 ```{r}
 model_vote <- lm(lr_self ~ vote, data = swe)
 
-round(coef(summary(model_vote)), 3)
+summary(model_vote)
 ```
 
-Eight parties, seven coefficients, one intercept. R has made **seven** dummy variables — one fewer than the number of categories.
+Eight parties, seven coefficients, one intercept. R has made **seven** dummy variables — one fewer than the number of categories. They are named by the same rule as before: `voteMP` is 1 for a Green voter and 0 for everyone else, `voteS` is 1 for a Social Democrat voter, and so on.
 
 That is not an oversight. With eight categories you only need seven yes/no questions to identify which one someone is in: if all seven answers are no, they must be in the eighth. Adding an eighth dummy would tell the model nothing it did not already know, and it would refuse to fit.
 
-The Left Party (V) is the reference, because it is the first level of the factor — we set the levels in left-to-right order when the data was built.
+The Left Party (V) is the one party with no row of its own, so it is the reference. It is the reference because it is the first level of the factor — we set the levels in left-to-right order when the data was built.
 
 So:
 
@@ -99,89 +103,42 @@ swe |>
 
 `r fmt(coef(model_vote)[1])` for V, and `r fmt(coef(model_vote)[1])` + `r fmt(coef(model_vote)[8])` = `r fmt(coef(model_vote)[1] + coef(model_vote)[8])` for SD. The model is a compact way of writing down eight group means.
 
-::: {.discussion}
-**A question.** This model has an R-squared of `r fmt(summary(model_vote)$r.squared, 3)` — vote choice accounts for about `r fmt(100 * summary(model_vote)$r.squared, 0)`% of the variance in where people place themselves on the left-right scale.
-
-That is enormous by the standards of survey research. Does it mean party choice explains ideology? What else could produce a number like that?
-:::
-
 ## Changing the reference
 
-The reference category is a presentational choice, not a statistical one. **The model is identical whichever you pick** — the predicted values, the residuals, the R-squared and the F-test are all unchanged. Only the comparisons on display change.
+The reference category is a presentational choice, not a statistical one. **The model is identical whichever you pick** — the predicted values, the residuals, the R-squared and the F-statistic are all unchanged. Only the comparisons on display change.
 
-Comparing everything to the Left Party, the smallest party in the data, is rarely what you want. The Social Democrats are the obvious benchmark.
+Comparing everything to the Left Party, one of the smallest parties in the data, is rarely what you want. The Social Democrats are the obvious benchmark.
 
 ```{r}
 swe$vote_s <- relevel(swe$vote, ref = "S")
 
 model_vote_s <- lm(lr_self ~ vote_s, data = swe)
 
-round(coef(summary(model_vote_s)), 3)
+summary(model_vote_s)
 ```
 
-`relevel()` moves one level to the front, with `ref` naming which. Now:
+`relevel()` moves one level to the front, with `ref` naming which. The dummies are now named after the new variable, `vote_s`, and the Social Democrats are the party with no row. Now:
 
 - **`(Intercept)` = `r fmt(coef(model_vote_s)[1])`** is the Social Democrat voter.
 - Coefficients are **negative** for parties to their left and **positive** for parties to their right — which is a table you can hand to a reader without explanation.
 
-Confirm nothing else moved:
-
-```{r}
-c(
-  original = summary(model_vote)$r.squared,
-  relevelled = summary(model_vote_s)$r.squared
-)
-```
+Now compare the bottom of this output with the bottom of the previous one. The residuals, the R-squared and the F-statistic are identical. Nothing about the model moved; only the comparisons on display did.
 
 > Pick the reference deliberately. Good choices are the largest category, a natural baseline, or the group your argument is about. A bad choice is whichever one happened to come first alphabetically — which is what you get if you do not choose.
 
-## Does the variable matter as a whole?
+## Does party matter, and how much?
 
-Seven coefficients raise a question the table cannot answer: is *party* related to left-right placement, taken as one thing?
+Seven coefficients raise a question the table cannot answer: is *party*, taken as one thing, related to left-right placement? You cannot answer that by scanning seven p-values.
 
-You cannot answer that by scanning seven p-values. The test for a categorical variable as a whole is an **F-test**, comparing the model with the variable against the model without it.
+The answer is already in the output, on its last line. The **`F-statistic`** tests whether the model as a whole explains anything at all (session 11). This model contains nothing but the seven party dummies, so here it tests party as a whole: F = `r fmt(summary(model_vote)$fstatistic[1], 1)` on `r summary(model_vote)$fstatistic[2]` and `r summary(model_vote)$fstatistic[3]` degrees of freedom — the first number is the seven dummies — with a single p-value for the lot.
 
-```{r}
-anova(model_vote)
-```
+That answers "is there anything there?", and with a real variable and a sample this size the answer is nearly always yes. **The more useful number is `Multiple R-squared`**, on the line just above it: how much of the variation the variable accounts for.
 
-One row for `vote`, with 7 degrees of freedom — the seven dummies — and a single p-value for the lot.
+For party it is `r fmt(summary(model_vote)$r.squared, 3)`: vote choice accounts for about `r fmt(100 * summary(model_vote)$r.squared, 0)`% of the variance in where people place themselves. Compare `model_sex`. Its F-test is just as clearly significant, but its R-squared is `r fmt(summary(model_sex)$r.squared, 3)` — sex accounts for about `r fmt(100 * summary(model_sex)$r.squared, 0)`%. Both variables "matter" in the sense of the test. Only one tells you much about where a person is likely to sit.
 
-This matters more when the individual coefficients are marginal. A variable can have no single significant category and still improve the model.
-
-The same test works for comparing any two nested models — but there is a trap in it, so let us walk into it.
-
-```{r}
-#| error: true
-model_small <- lm(lr_self ~ sex, data = swe)
-model_big <- lm(lr_self ~ sex + educ3, data = swe)
-
-anova(model_small, model_big)
-```
-
-`anova()` with two models asks whether the larger one fits significantly better. It refuses here, and the message says why: the two models were not fitted to the same number of cases.
-
-```{r}
-c(small = nobs(model_small), big = nobs(model_big))
-```
-
-Adding `educ3` dropped everyone missing on education, so the larger model has `r nobs(model_small) - nobs(model_big)` fewer respondents than the smaller one. Comparing them would confound "does education help?" with "are those `r nobs(model_small) - nobs(model_big)` people different?".
-
-The fix is to fit both on the same cases.
-
-```{r}
-complete <- swe |>
-  filter(!is.na(lr_self), !is.na(sex), !is.na(educ3))
-
-model_small <- lm(lr_self ~ sex, data = complete)
-model_big <- lm(lr_self ~ sex + educ3, data = complete)
-
-anova(model_small, model_big)
-```
-
-Now the comparison is honest, and education does improve the model.
-
-Two conditions, then. The models must be **nested** — every predictor in the smaller one present in the larger — and they must be fitted on **the same rows**. R checks the second and will tell you; it does not check the first.
+::: {.discussion}
+**A question.** An R-squared of `r fmt(summary(model_vote)$r.squared, 2)` is enormous by the standards of survey research. Does it mean party choice explains ideology? What else could produce a number like that?
+:::
 
 ## A mistake worth avoiding
 
@@ -190,7 +147,7 @@ Suppose you forget to make the variable a factor and R sees it as a number.
 ```{r}
 swe$vote_number <- as.numeric(swe$vote)
 
-round(coef(summary(lm(lr_self ~ vote_number, data = swe))), 3)
+summary(lm(lr_self ~ vote_number, data = swe))
 ```
 
 One coefficient instead of seven, and it looks like a clean result: each step up the party numbering is worth `r fmt(coef(lm(lr_self ~ vote_number, data = swe))[2])` points of left-right placement.
@@ -235,24 +192,24 @@ ggplot(party_means, aes(x = vote, y = mean)) +
 
 Now the comparison the coefficient table could not make is easy: the Moderates and the Sweden Democrats have overlapping intervals, so their voters are not distinguishable on this scale, while the Christian Democrats sit slightly below both.
 
-Note how few cases some parties have — `r min(party_means$n)` for the smallest. That is why its interval is wide, and it is a good reason to be careful about conclusions involving small parties.
+Note how small some parties are in the sample: the smallest, the Christian Democrats, are `r fmt(100 * min(party_means$n) / sum(party_means$n), 1)`% of the voters here. That is why its interval is wide, and it is a good reason to be careful about conclusions involving small parties.
 
 ::: {.reporting}
 **How to write it up.**
 
-> Left-right self-placement differed sharply by party (F(`r anova(model_vote)$Df[1]`, `r anova(model_vote)$Df[2]`) = `r fmt(anova(model_vote)$"F value"[1], 1)`, *p* < .001, R² = `r fmt(summary(model_vote)$r.squared, 2)`). Taking Social Democrat voters as the reference (mean = `r fmt(coef(model_vote_s)[1])`), Left Party voters placed themselves `r fmt(abs(coef(model_vote_s)[2]))` points further left, while Sweden Democrat voters placed themselves `r fmt(coef(model_vote_s)[8])` points further right (*n* = `r nobs(model_vote)`).
+> Party choice accounted for nearly two-thirds of the variance in left-right self-placement (R² = `r fmt(summary(model_vote)$r.squared, 2)`). Taking Social Democrat voters as the reference (mean = `r fmt(coef(model_vote_s)[1])`), Left Party voters placed themselves `r fmt(abs(coef(model_vote_s)[2]))` points further left, while Sweden Democrat voters placed themselves `r fmt(coef(model_vote_s)[8])` points further right (*n* = `r nobs(model_vote)`).
 
 Say which category is the reference — without it the table cannot be read. Mistakes to avoid:
 
 - **Not naming the reference category.** The single most common failure with dummy variables.
 - **Reading a coefficient as a comparison with the average.** It is a comparison with the reference, and nothing else.
 - **Comparing two non-reference coefficients directly** from the table. To test M against SD, relevel and refit, or use a proper contrast.
-- **Reporting seven p-values instead of one F-test** when the question is whether the variable matters at all.
+- **Reporting significance without fit.** In a large sample almost any categorical variable is significant. Say how much of the variance it accounts for.
 - **Leaving the reference as whatever came first alphabetically.**
 - **Putting a nominal variable in as a number.** Check `class()`.
 - **Ignoring small categories.** A category with a handful of cases produces a coefficient with an interval wide enough to contain almost anything.
 :::
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson **13 Regression Dummies**. Binary and multi-category predictors, reference categories, `relevel()`, testing a factor as a whole, and what happens when a factor is treated as a number. Around 30 minutes.
+**In the seminar.** `swirl` lesson **13 Regression Dummies**. Binary and multi-category predictors, reading the full regression output, reference categories, `relevel()`, model fit, and what happens when a factor is treated as a number. Around 30 minutes.
 :::

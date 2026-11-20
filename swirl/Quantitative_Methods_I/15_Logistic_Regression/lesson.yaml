@@ -142,10 +142,10 @@
   Hint: Type sum(diag(confusion)) / sum(confusion). diag() takes the diagonal.
 
 - Class: cmd_question
-  Output: 87 per cent correct sounds excellent. Now compare with the laziest possible model - predict that nobody voted SD. Type max(table(model$model$vote_sd)) / nobs(model).
-  CorrectAnswer: max(table(model$model$vote_sd)) / nobs(model)
-  AnswerTests: any_of_exprs('max(table(model$model$vote_sd)) / nobs(model)', 'max(table(model$model$vote_sd))/nobs(model)')
-  Hint: Type max(table(model$model$vote_sd)) / nobs(model).
+  Output: 87 per cent correct sounds excellent. Now compare with the laziest possible model - predict that nobody voted SD. Type max(table(model$model$vote_sd)) / length(model$model$vote_sd).
+  CorrectAnswer: max(table(model$model$vote_sd)) / length(model$model$vote_sd)
+  AnswerTests: any_of_exprs('max(table(model$model$vote_sd)) / length(model$model$vote_sd)', 'max(table(model$model$vote_sd))/length(model$model$vote_sd)')
+  Hint: Type max(table(model$model$vote_sd)) / length(model$model$vote_sd).
 
 - Class: mult_question
   Output: 85.6 per cent, from a model with no variables in it at all. What does that tell you about the 87 per cent?

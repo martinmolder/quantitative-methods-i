@@ -253,7 +253,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#two-categories" id="toc-two-categories" class="nav-link active" data-scroll-target="#two-categories"><span class="header-section-number">13.1</span> Two categories</a></li>
   <li><a href="#more-than-two-categories" id="toc-more-than-two-categories" class="nav-link" data-scroll-target="#more-than-two-categories"><span class="header-section-number">13.2</span> More than two categories</a></li>
   <li><a href="#changing-the-reference" id="toc-changing-the-reference" class="nav-link" data-scroll-target="#changing-the-reference"><span class="header-section-number">13.3</span> Changing the reference</a></li>
-  <li><a href="#does-the-variable-matter-as-a-whole" id="toc-does-the-variable-matter-as-a-whole" class="nav-link" data-scroll-target="#does-the-variable-matter-as-a-whole"><span class="header-section-number">13.4</span> Does the variable matter as a whole?</a></li>
+  <li><a href="#does-party-matter-and-how-much" id="toc-does-party-matter-and-how-much" class="nav-link" data-scroll-target="#does-party-matter-and-how-much"><span class="header-section-number">13.4</span> Does party matter, and how much?</a></li>
   <li><a href="#a-mistake-worth-avoiding" id="toc-a-mistake-worth-avoiding" class="nav-link" data-scroll-target="#a-mistake-worth-avoiding"><span class="header-section-number">13.5</span> A mistake worth avoiding</a></li>
   <li><a href="#showing-it" id="toc-showing-it" class="nav-link" data-scroll-target="#showing-it"><span class="header-section-number">13.6</span> Showing it</a></li>
   </ul>
@@ -302,18 +302,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>model_sex <span class="ot">&lt;-</span> <span class="fu">lm</span>(lr_self <span class="sc">~</span> sex, <span class="at">data =</span> swe)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(model_sex)), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_sex)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##             Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)    5.638      0.080  70.600        0
-## sexWomen      -0.787      0.112  -7.039        0</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lr_self ~ sex, data = swe)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.6380 -1.8511  0.1489  2.3620  5.1489 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  5.63803    0.07986  70.600  &lt; 2e-16 ***
+## sexWomen    -0.78695    0.11180  -7.039 2.51e-12 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.765 on 2446 degrees of freedom
+##   (397 observations deleted due to missingness)
+## Multiple R-squared:  0.01985,    Adjusted R-squared:  0.01945 
+## F-statistic: 49.55 on 1 and 2446 DF,  p-value: 2.507e-12</code></pre>
 </div>
 </div>
-<p>Two coefficients from a two-category variable. R has created a variable called <code>sexWomen</code> which is <strong>1 for women and 0 for men</strong>, and put that in the model. A 0/1 variable like this is a <strong>dummy variable</strong>.</p>
+<p>This is the same output as in session 11, and it is read the same way. What is new is the second row of the coefficient table.</p>
+<p>R cannot put the words “Men” and “Women” into an equation, so it has made a new variable that is <strong>1 for women and 0 for men</strong>, and put that in the model instead. A 0/1 variable like this is a <strong>dummy variable</strong>.</p>
+<p><strong>Why is it called <code>sexWomen</code>?</strong> R names a dummy by gluing the name of the variable to the category the dummy stands for: <code>sex</code> + <code>Women</code>. The name tells you which category is coded 1. The category that appears in no name — men — is coded 0, and it is what the dummy is compared with. So read <code>sexWomen</code> as “being a woman rather than a man”.</p>
 <p>That makes the two numbers easy to read.</p>
 <ul>
 <li><strong><code>(Intercept)</code> = 5.64</strong> is the predicted value when <code>sexWomen</code> is 0 — that is, the mean for <strong>men</strong>.</li>
-<li><strong><code>sexWomen</code> = -0.79</strong> is what to add when <code>sexWomen</code> is 1 — the <strong>difference</strong> between women and men.</li>
+<li><strong><code>sexWomen</code> = -0.79</strong> is what to add when <code>sexWomen</code> is 1 — the <strong>difference</strong> between women and men. It is negative, so women place themselves 0.79 points further <strong>left</strong> than men.</li>
 </ul>
 <p>So the predicted value for women is 5.64 + (-0.79) = 4.85.</p>
 <p>Check that against the group means:</p>
@@ -342,22 +360,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>model_vote <span class="ot">&lt;-</span> <span class="fu">lm</span>(lr_self <span class="sc">~</span> vote, <span class="at">data =</span> swe)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(model_vote)), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_vote)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##             Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)    1.346      0.155   8.680        0
-## voteMP         1.172      0.215   5.460        0
-## voteS          1.928      0.168  11.448        0
-## voteC          3.818      0.208  18.327        0
-## voteL          5.099      0.215  23.679        0
-## voteKD         5.942      0.224  26.583        0
-## voteM          6.249      0.178  35.129        0
-## voteSD         6.514      0.186  35.093        0</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lr_self ~ vote, data = swe)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.5955 -1.2743 -0.1646  1.1395  7.4820 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   1.3465     0.1551    8.68  &lt; 2e-16 ***
+## voteMP        1.1715     0.2146    5.46 5.34e-08 ***
+## voteS         1.9278     0.1684   11.45  &lt; 2e-16 ***
+## voteC         3.8181     0.2083   18.33  &lt; 2e-16 ***
+## voteL         5.0988     0.2153   23.68  &lt; 2e-16 ***
+## voteKD        5.9417     0.2235   26.58  &lt; 2e-16 ***
+## voteM         6.2491     0.1779   35.13  &lt; 2e-16 ***
+## voteSD        6.5141     0.1856   35.09  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.748 on 2079 degrees of freedom
+##   (758 observations deleted due to missingness)
+## Multiple R-squared:  0.6262, Adjusted R-squared:  0.6249 
+## F-statistic: 497.4 on 7 and 2079 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p>Eight parties, seven coefficients, one intercept. R has made <strong>seven</strong> dummy variables — one fewer than the number of categories.</p>
+<p>Eight parties, seven coefficients, one intercept. R has made <strong>seven</strong> dummy variables — one fewer than the number of categories. They are named by the same rule as before: <code>voteMP</code> is 1 for a Green voter and 0 for everyone else, <code>voteS</code> is 1 for a Social Democrat voter, and so on.</p>
 <p>That is not an oversight. With eight categories you only need seven yes/no questions to identify which one someone is in: if all seven answers are no, they must be in the eighth. Adding an eighth dummy would tell the model nothing it did not already know, and it would refuse to fit.</p>
-<p>The Left Party (V) is the reference, because it is the first level of the factor — we set the levels in left-to-right order when the data was built.</p>
+<p>The Left Party (V) is the one party with no row of its own, so it is the reference. It is the reference because it is the first level of the factor — we set the levels in left-to-right order when the data was built.</p>
 <p>So:</p>
 <ul>
 <li><strong><code>(Intercept)</code> = 1.35</strong> is the predicted left-right placement of a <strong>Left Party</strong> voter.</li>
@@ -389,127 +423,92 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>1.35 for V, and 1.35 + 6.51 = 7.86 for SD. The model is a compact way of writing down eight group means.</p>
-<div class="discussion">
-<p><strong>A question.</strong> This model has an R-squared of 0.626 — vote choice accounts for about 63% of the variance in where people place themselves on the left-right scale.</p>
-<p>That is enormous by the standards of survey research. Does it mean party choice explains ideology? What else could produce a number like that?</p>
-</div>
 </section>
 <section id="changing-the-reference" class="level2" data-number="13.3">
 <h2 data-number="13.3" class="anchored" data-anchor-id="changing-the-reference"><span class="header-section-number">13.3</span> Changing the reference</h2>
-<p>The reference category is a presentational choice, not a statistical one. <strong>The model is identical whichever you pick</strong> — the predicted values, the residuals, the R-squared and the F-test are all unchanged. Only the comparisons on display change.</p>
-<p>Comparing everything to the Left Party, the smallest party in the data, is rarely what you want. The Social Democrats are the obvious benchmark.</p>
+<p>The reference category is a presentational choice, not a statistical one. <strong>The model is identical whichever you pick</strong> — the predicted values, the residuals, the R-squared and the F-statistic are all unchanged. Only the comparisons on display change.</p>
+<p>Comparing everything to the Left Party, one of the smallest parties in the data, is rarely what you want. The Social Democrats are the obvious benchmark.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>swe<span class="sc">$</span>vote_s <span class="ot">&lt;-</span> <span class="fu">relevel</span>(swe<span class="sc">$</span>vote, <span class="at">ref =</span> <span class="st">"S"</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>model_vote_s <span class="ot">&lt;-</span> <span class="fu">lm</span>(lr_self <span class="sc">~</span> vote_s, <span class="at">data =</span> swe)</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(model_vote_s)), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_vote_s)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##             Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)    3.274      0.066  49.944        0
-## vote_sV       -1.928      0.168 -11.448        0
-## vote_sMP      -0.756      0.162  -4.665        0
-## vote_sC        1.890      0.154  12.295        0
-## vote_sL        3.171      0.163  19.441        0
-## vote_sKD       4.014      0.174  23.099        0
-## vote_sM        4.321      0.109  39.645        0
-## vote_sSD       4.586      0.121  37.837        0</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lr_self ~ vote_s, data = swe)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.5955 -1.2743 -0.1646  1.1395  7.4820 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  3.27426    0.06556  49.944  &lt; 2e-16 ***
+## vote_sV     -1.92780    0.16840 -11.448  &lt; 2e-16 ***
+## vote_sMP    -0.75628    0.16212  -4.665 3.28e-06 ***
+## vote_sC      1.89030    0.15375  12.295  &lt; 2e-16 ***
+## vote_sL      3.17099    0.16311  19.441  &lt; 2e-16 ***
+## vote_sKD     4.01387    0.17377  23.099  &lt; 2e-16 ***
+## vote_sM      4.32127    0.10900  39.645  &lt; 2e-16 ***
+## vote_sSD     4.58628    0.12121  37.837  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.748 on 2079 degrees of freedom
+##   (758 observations deleted due to missingness)
+## Multiple R-squared:  0.6262, Adjusted R-squared:  0.6249 
+## F-statistic: 497.4 on 7 and 2079 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p><code>relevel()</code> moves one level to the front, with <code>ref</code> naming which. Now:</p>
+<p><code>relevel()</code> moves one level to the front, with <code>ref</code> naming which. The dummies are now named after the new variable, <code>vote_s</code>, and the Social Democrats are the party with no row. Now:</p>
 <ul>
 <li><strong><code>(Intercept)</code> = 3.27</strong> is the Social Democrat voter.</li>
 <li>Coefficients are <strong>negative</strong> for parties to their left and <strong>positive</strong> for parties to their right — which is a table you can hand to a reader without explanation.</li>
 </ul>
-<p>Confirm nothing else moved:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">original =</span> <span class="fu">summary</span>(model_vote)<span class="sc">$</span>r.squared,</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">relevelled =</span> <span class="fu">summary</span>(model_vote_s)<span class="sc">$</span>r.squared</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>##   original relevelled 
-##  0.6261557  0.6261557</code></pre>
-</div>
-</div>
+<p>Now compare the bottom of this output with the bottom of the previous one. The residuals, the R-squared and the F-statistic are identical. Nothing about the model moved; only the comparisons on display did.</p>
 <blockquote class="blockquote">
 <p>Pick the reference deliberately. Good choices are the largest category, a natural baseline, or the group your argument is about. A bad choice is whichever one happened to come first alphabetically — which is what you get if you do not choose.</p>
 </blockquote>
 </section>
-<section id="does-the-variable-matter-as-a-whole" class="level2" data-number="13.4">
-<h2 data-number="13.4" class="anchored" data-anchor-id="does-the-variable-matter-as-a-whole"><span class="header-section-number">13.4</span> Does the variable matter as a whole?</h2>
-<p>Seven coefficients raise a question the table cannot answer: is <em>party</em> related to left-right placement, taken as one thing?</p>
-<p>You cannot answer that by scanning seven p-values. The test for a categorical variable as a whole is an <strong>F-test</strong>, comparing the model with the variable against the model without it.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model_vote)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>## Analysis of Variance Table
-## 
-## Response: lr_self
-##             Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
-## vote         7 10640.9 1520.12  497.45 &lt; 2.2e-16 ***
-## Residuals 2079  6353.1    3.06                      
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<section id="does-party-matter-and-how-much" class="level2" data-number="13.4">
+<h2 data-number="13.4" class="anchored" data-anchor-id="does-party-matter-and-how-much"><span class="header-section-number">13.4</span> Does party matter, and how much?</h2>
+<p>Seven coefficients raise a question the table cannot answer: is <em>party</em>, taken as one thing, related to left-right placement? You cannot answer that by scanning seven p-values.</p>
+<p>The answer is already in the output, on its last line. The <strong><code>F-statistic</code></strong> tests whether the model as a whole explains anything at all (session 11). This model contains nothing but the seven party dummies, so here it tests party as a whole: F = 497.4 on 7 and 2079 degrees of freedom — the first number is the seven dummies — with a single p-value for the lot.</p>
+<p>That answers “is there anything there?”, and with a real variable and a sample this size the answer is nearly always yes. <strong>The more useful number is <code>Multiple R-squared</code></strong>, on the line just above it: how much of the variation the variable accounts for.</p>
+<p>For party it is 0.626: vote choice accounts for about 63% of the variance in where people place themselves. Compare <code>model_sex</code>. Its F-test is just as clearly significant, but its R-squared is 0.020 — sex accounts for about 2%. Both variables “matter” in the sense of the test. Only one tells you much about where a person is likely to sit.</p>
+<div class="discussion">
+<p><strong>A question.</strong> An R-squared of 0.63 is enormous by the standards of survey research. Does it mean party choice explains ideology? What else could produce a number like that?</p>
 </div>
-</div>
-<p>One row for <code>vote</code>, with 7 degrees of freedom — the seven dummies — and a single p-value for the lot.</p>
-<p>This matters more when the individual coefficients are marginal. A variable can have no single significant category and still improve the model.</p>
-<p>The same test works for comparing any two nested models — but there is a trap in it, so let us walk into it.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>model_small <span class="ot">&lt;-</span> <span class="fu">lm</span>(lr_self <span class="sc">~</span> sex, <span class="at">data =</span> swe)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>model_big <span class="ot">&lt;-</span> <span class="fu">lm</span>(lr_self <span class="sc">~</span> sex <span class="sc">+</span> educ3, <span class="at">data =</span> swe)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model_small, model_big)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-error">
-<pre><code>## Error in `anova.lmlist()`:
-## ! models were not all fitted to the same size of dataset</code></pre>
-</div>
-</div>
-<p><code>anova()</code> with two models asks whether the larger one fits significantly better. It refuses here, and the message says why: the two models were not fitted to the same number of cases.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">small =</span> <span class="fu">nobs</span>(model_small), <span class="at">big =</span> <span class="fu">nobs</span>(model_big))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>## small   big 
-##  2448  2394</code></pre>
-</div>
-</div>
-<p>Adding <code>educ3</code> dropped everyone missing on education, so the larger model has 54 fewer respondents than the smaller one. Comparing them would confound “does education help?” with “are those 54 people different?”.</p>
-<p>The fix is to fit both on the same cases.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>complete <span class="ot">&lt;-</span> swe <span class="sc">|&gt;</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(lr_self), <span class="sc">!</span><span class="fu">is.na</span>(sex), <span class="sc">!</span><span class="fu">is.na</span>(educ3))</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>model_small <span class="ot">&lt;-</span> <span class="fu">lm</span>(lr_self <span class="sc">~</span> sex, <span class="at">data =</span> complete)</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>model_big <span class="ot">&lt;-</span> <span class="fu">lm</span>(lr_self <span class="sc">~</span> sex <span class="sc">+</span> educ3, <span class="at">data =</span> complete)</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model_small, model_big)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>## Analysis of Variance Table
-## 
-## Model 1: lr_self ~ sex
-## Model 2: lr_self ~ sex + educ3
-##   Res.Df   RSS Df Sum of Sq      F    Pr(&gt;F)    
-## 1   2392 18205                                  
-## 2   2390 18060  2    145.47 9.6256 6.861e-05 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
-</div>
-<p>Now the comparison is honest, and education does improve the model.</p>
-<p>Two conditions, then. The models must be <strong>nested</strong> — every predictor in the smaller one present in the larger — and they must be fitted on <strong>the same rows</strong>. R checks the second and will tell you; it does not check the first.</p>
 </section>
 <section id="a-mistake-worth-avoiding" class="level2" data-number="13.5">
 <h2 data-number="13.5" class="anchored" data-anchor-id="a-mistake-worth-avoiding"><span class="header-section-number">13.5</span> A mistake worth avoiding</h2>
 <p>Suppose you forget to make the variable a factor and R sees it as a number.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>swe<span class="sc">$</span>vote_number <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(swe<span class="sc">$</span>vote)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(<span class="fu">lm</span>(lr_self <span class="sc">~</span> vote_number, <span class="at">data =</span> swe))), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>swe<span class="sc">$</span>vote_number <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(swe<span class="sc">$</span>vote)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(lr_self <span class="sc">~</span> vote_number, <span class="at">data =</span> swe))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##             Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)    0.548      0.091   6.001        0
-## vote_number    0.990      0.018  56.040        0</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lr_self ~ vote_number, data = swe)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.4762 -1.4659  0.4723  1.4826  7.4723 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.54826    0.09136   6.001  2.3e-09 ***
+## vote_number  0.98971    0.01766  56.040  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.803 on 2085 degrees of freedom
+##   (758 observations deleted due to missingness)
+## Multiple R-squared:  0.601,  Adjusted R-squared:  0.6008 
+## F-statistic:  3141 on 1 and 2085 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <p>One coefficient instead of seven, and it looks like a clean result: each step up the party numbering is worth 0.99 points of left-right placement.</p>
@@ -523,27 +522,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="13.6" class="anchored" data-anchor-id="showing-it"><span class="header-section-number">13.6</span> Showing it</h2>
 <p>A table of seven coefficients against a reference is hard to read. Group means with intervals are easier.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>party_means <span class="ot">&lt;-</span> swe <span class="sc">|&gt;</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(vote), <span class="sc">!</span><span class="fu">is.na</span>(lr_self)) <span class="sc">|&gt;</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(vote) <span class="sc">|&gt;</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(lr_self),</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="fu">sd</span>(lr_self) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">n</span>())</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(party_means, <span class="fu">aes</span>(<span class="at">x =</span> vote, <span class="at">y =</span> mean)) <span class="sc">+</span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">ymin =</span> mean <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se, <span class="at">ymax =</span> mean <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se),</span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.15</span></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="sc">+</span></span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Party voted for in 2022"</span>,</span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Left-right self-placement (0 = left, 10 = right)"</span></span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>party_means <span class="ot">&lt;-</span> swe <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(vote), <span class="sc">!</span><span class="fu">is.na</span>(lr_self)) <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(vote) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(lr_self),</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="fu">sd</span>(lr_self) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">n</span>())</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(party_means, <span class="fu">aes</span>(<span class="at">x =</span> vote, <span class="at">y =</span> mean)) <span class="sc">+</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">ymin =</span> mean <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se, <span class="at">ymax =</span> mean <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se),</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.15</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Party voted for in 2022"</span>,</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Left-right self-placement (0 = left, 10 = right)"</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div id="fig-vote" class="quarto-float quarto-figure quarto-figure-center anchored" width="1050">
 <figure class="quarto-float quarto-float-fig figure">
@@ -559,25 +558,25 @@ Figure&nbsp;13.1
 </div>
 <p><code>geom_errorbar()</code> draws the intervals: <code>ymin</code> and <code>ymax</code> give the bottom and top of each bar, and <code>width</code> is the size of the caps. The vertical axis runs the full 0 to 10 because the scale is bounded and session 5 said to show all of it.</p>
 <p>Now the comparison the coefficient table could not make is easy: the Moderates and the Sweden Democrats have overlapping intervals, so their voters are not distinguishable on this scale, while the Christian Democrats sit slightly below both.</p>
-<p>Note how few cases some parties have — 118 for the smallest. That is why its interval is wide, and it is a good reason to be careful about conclusions involving small parties.</p>
+<p>Note how small some parties are in the sample: the smallest, the Christian Democrats, are 5.7% of the voters here. That is why its interval is wide, and it is a good reason to be careful about conclusions involving small parties.</p>
 <div class="reporting">
 <p><strong>How to write it up.</strong></p>
 <blockquote class="blockquote">
-<p>Left-right self-placement differed sharply by party (F(7, 2079) = 497.4, <em>p</em> &lt; .001, R² = 0.63). Taking Social Democrat voters as the reference (mean = 3.27), Left Party voters placed themselves 1.93 points further left, while Sweden Democrat voters placed themselves 4.59 points further right (<em>n</em> = 2087).</p>
+<p>Party choice accounted for nearly two-thirds of the variance in left-right self-placement (R² = 0.63). Taking Social Democrat voters as the reference (mean = 3.27), Left Party voters placed themselves 1.93 points further left, while Sweden Democrat voters placed themselves 4.59 points further right (<em>n</em> = 2087).</p>
 </blockquote>
 <p>Say which category is the reference — without it the table cannot be read. Mistakes to avoid:</p>
 <ul>
 <li><strong>Not naming the reference category.</strong> The single most common failure with dummy variables.</li>
 <li><strong>Reading a coefficient as a comparison with the average.</strong> It is a comparison with the reference, and nothing else.</li>
 <li><strong>Comparing two non-reference coefficients directly</strong> from the table. To test M against SD, relevel and refit, or use a proper contrast.</li>
-<li><strong>Reporting seven p-values instead of one F-test</strong> when the question is whether the variable matters at all.</li>
+<li><strong>Reporting significance without fit.</strong> In a large sample almost any categorical variable is significant. Say how much of the variance it accounts for.</li>
 <li><strong>Leaving the reference as whatever came first alphabetically.</strong></li>
 <li><strong>Putting a nominal variable in as a number.</strong> Check <code>class()</code>.</li>
 <li><strong>Ignoring small categories.</strong> A category with a handful of cases produces a coefficient with an interval wide enough to contain almost anything.</li>
 </ul>
 </div>
 <div class="swirl">
-<p><strong>In the seminar.</strong> <code>swirl</code> lesson <strong>13 Regression Dummies</strong>. Binary and multi-category predictors, reference categories, <code>relevel()</code>, testing a factor as a whole, and what happens when a factor is treated as a number. Around 30 minutes.</p>
+<p><strong>In the seminar.</strong> <code>swirl</code> lesson <strong>13 Regression Dummies</strong>. Binary and multi-category predictors, reading the full regression output, reference categories, <code>relevel()</code>, model fit, and what happens when a factor is treated as a number. Around 30 minutes.</p>
 </div>
 
 
