@@ -15,6 +15,7 @@ This session is about how categorical predictors get into a model, and — more 
 ```{r}
 library(ggplot2)
 library(dplyr)
+library(ggeffects)
 
 swe <- readRDS("data/swe.rds")
 
@@ -160,39 +161,38 @@ Here the levels are at least in left-right order, so the nonsense is mild and th
 
 ## Showing it
 
-A table of seven coefficients against a reference is hard to read. Group means with intervals are easier.
+A table of seven coefficients against a reference is hard to read. The **predicted value for each party** is easier, and `predict_response()` from session 12 gets it from the model.
+
+```{r}
+vote_predictions <- predict_response(model_vote, terms = "vote")
+
+vote_predictions
+```
+
+With a categorical variable in `terms` there is no range of values to choose: we get one prediction for each category, with its 95% confidence interval. No reference category is needed to read it. And since party is the only predictor here, the predictions are the group means we saw above.
+
+`plot()` draws them.
 
 ```{r}
 #| label: fig-vote
 #| fig-height: 3.4
-party_means <- swe |>
-  filter(!is.na(vote), !is.na(lr_self)) |>
-  group_by(vote) |>
-  summarise(
-    n = n(),
-    mean = mean(lr_self),
-    se = sd(lr_self) / sqrt(n())
-  )
-
-ggplot(party_means, aes(x = vote, y = mean)) +
-  geom_point(size = 2) +
-  geom_errorbar(
-    aes(ymin = mean - 1.96 * se, ymax = mean + 1.96 * se),
-    width = 0.15
-  ) +
+plot(vote_predictions) +
   coord_cartesian(ylim = c(0, 10)) +
   labs(
     x = "Party voted for in 2022",
-    y = "Left-right self-placement (0 = left, 10 = right)"
+    y = "Left-right self-placement (0 = left, 10 = right)",
+    title = NULL
   ) +
   theme_bw()
 ```
 
-`geom_errorbar()` draws the intervals: `ymin` and `ymax` give the bottom and top of each bar, and `width` is the size of the caps. The vertical axis runs the full 0 to 10 because the scale is bounded and session 5 said to show all of it.
+The points are the predictions and the vertical lines their intervals. The vertical axis runs the full 0 to 10 because the scale is bounded and session 5 said to show all of it.
 
-Now the comparison the coefficient table could not make is easy: the Moderates and the Sweden Democrats have overlapping intervals, so their voters are not distinguishable on this scale, while the Christian Democrats sit slightly below both.
+Now any two parties can be compared, not just each one with the reference. The Moderates, the Sweden Democrats and the Christian Democrats sit close together at the right end of the scale, and everybody else is clearly to their left.
 
-Note how small some parties are in the sample: the smallest, the Christian Democrats, are `r fmt(100 * min(party_means$n) / sum(party_means$n), 1)`% of the voters here. That is why its interval is wide, and it is a good reason to be careful about conclusions involving small parties.
+> **Overlapping intervals are not a test.** The intervals of the Moderates and the Sweden Democrats overlap, but that does not mean that there is no difference. To test two parties against each other, make one of them the reference and refit. Here the difference is `r fmt(coef(lm(lr_self ~ relevel(vote, ref = "M"), data = swe))[8])` points with *p* = `r fmt(coef(summary(lm(lr_self ~ relevel(vote, ref = "M"), data = swe)))[8, 4], 3)`: just significant, and very small.
+
+Note how small some parties are in the sample: the smallest, the Christian Democrats, are `r fmt(100 * min(table(model_vote$model$vote)) / nobs(model_vote), 1)`% of the voters here. That is why its interval is wide, and it is a good reason to be careful about conclusions involving small parties.
 
 ::: {.reporting}
 **How to write it up.**
@@ -211,5 +211,5 @@ Say which category is the reference — without it the table cannot be read. Mis
 :::
 
 ::: {.swirl}
-**In the seminar.** `swirl` lesson **13 Regression Dummies**. Binary and multi-category predictors, reading the full regression output, reference categories, `relevel()`, model fit, and what happens when a factor is treated as a number. Around 30 minutes.
+**In the seminar.** `swirl` lesson **13 Regression Dummies**. Binary and multi-category predictors, reading the full regression output, reference categories, `relevel()`, model fit, what happens when a factor is treated as a number, and plotting predicted values. Around 30 minutes.
 :::

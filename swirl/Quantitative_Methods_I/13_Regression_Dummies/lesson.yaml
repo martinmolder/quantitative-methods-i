@@ -166,4 +166,32 @@
   Hint: Type class(swe$vote).
 
 - Class: text
-  Output: Factor, as it should be. A table of seven coefficients against a reference is hard to read, so for a reader, group means with confidence intervals are usually better than the coefficient table - and they let you compare any two parties, not just each one against the reference.
+  Output: Factor, as it should be. Now for a reader. A table of seven coefficients against a reference is hard to read. The predicted value for each party is easier, and predict_response() from session 12 gets it from the model.
+
+- Class: cmd_question
+  Output: Get the predictions. Type vote_predictions <- predict_response(model_vote, terms = "vote").
+  CorrectAnswer: vote_predictions <- predict_response(model_vote, terms = "vote")
+  AnswerTests: any_of_exprs('vote_predictions <- predict_response(model_vote, terms = "vote")', 'vote_predictions <- predict_response(model_vote, terms="vote")')
+  Hint: Type vote_predictions <- predict_response(model_vote, terms = "vote").
+
+- Class: cmd_question
+  Output: Look at them. Type vote_predictions.
+  CorrectAnswer: vote_predictions
+  AnswerTests: omnitest(correctExpr='vote_predictions')
+  Hint: Type vote_predictions.
+
+- Class: mult_question
+  Output: The prediction for the Sweden Democrats is 7.86. Where have you seen that number before?
+  CorrectAnswer: It is the mean of the Sweden Democrat voters.
+  AnswerChoices: It is the mean of the Sweden Democrat voters.; It is the coefficient on voteSD.; It is the difference between SD and the Social Democrats.
+  AnswerTests: omnitest(correctVal='It is the mean of the Sweden Democrat voters.')
+  Hint: Party is the only predictor, so what is the best prediction for a Sweden Democrat voter?
+
+- Class: cmd_question
+  Output: Plot them, on the full scale. Type plot(vote_predictions) + coord_cartesian(ylim = c(0, 10)).
+  CorrectAnswer: plot(vote_predictions) + coord_cartesian(ylim = c(0, 10))
+  AnswerTests: omnitest(correctExpr='plot(vote_predictions) + coord_cartesian(ylim = c(0, 10))')
+  Hint: Type plot(vote_predictions) + coord_cartesian(ylim = c(0, 10)).
+
+- Class: text
+  Output: The points are the predictions and the lines their 95 per cent confidence intervals. No reference category is needed to read this, and you can compare any two parties. But overlapping intervals are not a test - to test two parties against each other, make one of them the reference and refit.
