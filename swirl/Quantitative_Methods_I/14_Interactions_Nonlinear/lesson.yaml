@@ -91,73 +91,109 @@
   Output: Now the second assumption - that the relationship is a straight line. Session 5 gave us a case where it cannot be. Income has a floor at zero and no ceiling; life expectancy has both.
 
 - Class: cmd_question
-  Output: Fit a straight line anyway. Type linear <- lm(life ~ gdp, data = world).
-  CorrectAnswer: linear <- lm(life ~ gdp, data = world)
-  AnswerTests: omnitest(correctExpr='linear <- lm(life ~ gdp, data = world)')
-  Hint: Type linear <- lm(life ~ gdp, data = world).
+  Output: First put income in thousands of dollars, so that the coefficients are readable. Type world$gdp_k <- world$gdp / 1000.
+  CorrectAnswer: world$gdp_k <- world$gdp / 1000
+  AnswerTests: omnitest(correctExpr='world$gdp_k <- world$gdp / 1000')
+  Hint: Type world$gdp_k <- world$gdp / 1000.
 
 - Class: cmd_question
-  Output: Check the fit with the adjusted R-squared. Type summary(linear)$adj.r.squared.
-  CorrectAnswer: summary(linear)$adj.r.squared
-  AnswerTests: omnitest(correctExpr='summary(linear)$adj.r.squared')
-  Hint: Type summary(linear)$adj.r.squared.
+  Output: Fit a straight line anyway. Type linear <- lm(life ~ gdp_k, data = world).
+  CorrectAnswer: linear <- lm(life ~ gdp_k, data = world)
+  AnswerTests: omnitest(correctExpr='linear <- lm(life ~ gdp_k, data = world)')
+  Hint: Type linear <- lm(life ~ gdp_k, data = world).
 
 - Class: cmd_question
-  Output: 0.46, and nothing in the output says anything is wrong. Now ask it to predict for a very rich country. Type predict(linear, newdata = data.frame(gdp = 300000)).
-  CorrectAnswer: predict(linear, newdata = data.frame(gdp = 300000))
-  AnswerTests: any_of_exprs('predict(linear, newdata = data.frame(gdp = 300000))', 'predict(linear, newdata=data.frame(gdp=300000))')
-  Hint: Type predict(linear, newdata = data.frame(gdp = 300000)).
+  Output: Look at the output. Type summary(linear).
+  CorrectAnswer: summary(linear)
+  AnswerTests: omnitest(correctExpr='summary(linear)')
+  Hint: Type summary(linear).
+
+- Class: cmd_question
+  Output: Adjusted R-squared is 0.46, the coefficient is clearly significant, and nothing in the output says anything is wrong. Now ask it to predict for a very rich country, with 300 thousand dollars per head. Type predict(linear, newdata = data.frame(gdp_k = 300)).
+  CorrectAnswer: predict(linear, newdata = data.frame(gdp_k = 300))
+  AnswerTests: omnitest(correctExpr='predict(linear, newdata = data.frame(gdp_k = 300))')
+  Hint: Type predict(linear, newdata = data.frame(gdp_k = 300)).
 
 - Class: text
   Output: A life expectancy of 132 years. The model is not confused - it is doing what a straight line does. The mistake was ours, in fitting one.
 
 - Class: text
-  Output: The fix for a relationship that flattens is usually to take the logarithm of the predictor. A logarithm turns multiplication into addition, so the model works in proportional change rather than absolute dollars.
+  Output: To let the line bend, add the square of the predictor as a second predictor. The model can then bend once - up and then down, or down and then up. This is called a quadratic model.
 
 - Class: cmd_question
-  Output: Fit it. Type logged <- lm(life ~ log(gdp), data = world).
-  CorrectAnswer: logged <- lm(life ~ log(gdp), data = world)
-  AnswerTests: omnitest(correctExpr='logged <- lm(life ~ log(gdp), data = world)')
-  Hint: Type logged <- lm(life ~ log(gdp), data = world).
+  Output: Fit it. Type quadratic <- lm(life ~ gdp_k + I(gdp_k^2), data = world).
+  CorrectAnswer: quadratic <- lm(life ~ gdp_k + I(gdp_k^2), data = world)
+  AnswerTests: omnitest(correctExpr='quadratic <- lm(life ~ gdp_k + I(gdp_k^2), data = world)')
+  Hint: Type quadratic <- lm(life ~ gdp_k + I(gdp_k^2), data = world). The I() is needed because inside a formula the caret means something else.
 
 - Class: cmd_question
-  Output: Compare the fits. Type c(linear = summary(linear)$adj.r.squared, logged = summary(logged)$adj.r.squared).
-  CorrectAnswer: c(linear = summary(linear)$adj.r.squared, logged = summary(logged)$adj.r.squared)
-  AnswerTests: omnitest(correctExpr='c(linear = summary(linear)$adj.r.squared, logged = summary(logged)$adj.r.squared)')
-  Hint: Type c(linear = summary(linear)$adj.r.squared, logged = summary(logged)$adj.r.squared).
+  Output: Look at the output. Type summary(quadratic).
+  CorrectAnswer: summary(quadratic)
+  AnswerTests: omnitest(correctExpr='summary(quadratic)')
+  Hint: Type summary(quadratic).
 
-- Class: cmd_question
-  Output: 0.46 against 0.68. And the prediction? Type predict(logged, newdata = data.frame(gdp = 300000)).
-  CorrectAnswer: predict(logged, newdata = data.frame(gdp = 300000))
-  AnswerTests: any_of_exprs('predict(logged, newdata = data.frame(gdp = 300000))', 'predict(logged, newdata=data.frame(gdp=300000))')
-  Hint: Type predict(logged, newdata = data.frame(gdp = 300000)).
+- Class: mult_question
+  Output: The squared term is clearly significant. What does that say?
+  CorrectAnswer: The relationship is not a straight line.
+  AnswerChoices: The relationship is not a straight line.; Income has twice the effect we thought.; Life expectancy falls as countries get richer.
+  AnswerTests: omnitest(correctVal='The relationship is not a straight line.')
+  Hint: A straight line is what you get when the squared term is zero.
 
 - Class: text
-  Output: 89 years instead of 132. Still an extrapolation well beyond the data, but no longer impossible.
+  Output: Adjusted R-squared has gone from 0.46 to 0.62. The adjusted version is the one to compare, because the quadratic has one more term.
+
+- Class: mult_question
+  Output: The coefficient on gdp_k is 0.499 and the one on its square is minus 0.003. Read together, what shape is that?
+  CorrectAnswer: It rises, and rises less and less.
+  AnswerChoices: It rises, and rises less and less.; It rises, and rises faster and faster.; It falls and then rises.
+  AnswerTests: omnitest(correctVal='It rises, and rises less and less.')
+  Hint: The positive term dominates when income is low. The negative squared term grows as income grows.
 
 - Class: text
-  Output: The coefficient on a logged predictor is the change for a one-unit change in the log, which nobody can picture. Multiply it by log(2) and you get the change for a doubling, which everybody can.
+  Output: There is no single effect of income any more, so give predictions at several values. Compare two steps of the same size.
 
 - Class: cmd_question
-  Output: Type coef(logged)[2] * log(2).
-  CorrectAnswer: coef(logged)[2] * log(2)
-  AnswerTests: any_of_exprs('coef(logged)[2] * log(2)', 'coef(logged)[2]*log(2)')
-  Hint: Type coef(logged)[2] * log(2).
+  Output: The first step is from 5 to 15 thousand dollars. Type predict(quadratic, newdata = data.frame(gdp_k = c(5, 15))).
+  CorrectAnswer: predict(quadratic, newdata = data.frame(gdp_k = c(5, 15)))
+  AnswerTests: omnitest(correctExpr='predict(quadratic, newdata = data.frame(gdp_k = c(5, 15)))')
+  Hint: Type predict(quadratic, newdata = data.frame(gdp_k = c(5, 15))).
+
+- Class: cmd_question
+  Output: 67.1 and 71.5, about 4.4 years more. Now from 50 to 60 thousand. Type predict(quadratic, newdata = data.frame(gdp_k = c(50, 60))).
+  CorrectAnswer: predict(quadratic, newdata = data.frame(gdp_k = c(50, 60)))
+  AnswerTests: omnitest(correctExpr='predict(quadratic, newdata = data.frame(gdp_k = c(50, 60)))')
+  Hint: Type predict(quadratic, newdata = data.frame(gdp_k = c(50, 60))).
 
 - Class: text
-  Output: Doubling income per head goes with about 3.65 more years of life expectancy - and the same whether you double from 2000 to 4000 or from 60000 to 120000. That is what the log model claims, and it is worth saying out loud because it might be wrong.
+  Output: 82.1 and 83.8, about 1.7 years more. The same ten thousand dollars goes with much less at the top.
 
 - Class: cmd_question
-  Output: The other common approach is a squared term, which lets the line bend once. Type quadratic <- lm(life ~ gdp + I(gdp^2), data = world).
-  CorrectAnswer: quadratic <- lm(life ~ gdp + I(gdp^2), data = world)
-  AnswerTests: omnitest(correctExpr='quadratic <- lm(life ~ gdp + I(gdp^2), data = world)')
-  Hint: Type quadratic <- lm(life ~ gdp + I(gdp^2), data = world). The I() is needed because inside a formula the caret means something else.
+  Output: The turning point is where the curve stops rising. It is minus the first coefficient divided by twice the second. Save the coefficients. Type b <- coef(quadratic).
+  CorrectAnswer: b <- coef(quadratic)
+  AnswerTests: omnitest(correctExpr='b <- coef(quadratic)')
+  Hint: Type b <- coef(quadratic).
 
 - Class: cmd_question
-  Output: Compare it - type summary(quadratic)$adj.r.squared.
-  CorrectAnswer: summary(quadratic)$adj.r.squared
-  AnswerTests: omnitest(correctExpr='summary(quadratic)$adj.r.squared')
-  Hint: Type summary(quadratic)$adj.r.squared.
+  Output: Now work it out. Type -b[2] / (2 * b[3]).
+  CorrectAnswer: -b[2] / (2 * b[3])
+  AnswerTests: omnitest(correctExpr='-b[2] / (2 * b[3])')
+  Hint: Type -b[2] / (2 * b[3]).
 
 - Class: text
-  Output: 0.62, worse than the log model's 0.68. The adjusted version matters here, because the quadratic has one more term than the others. And a quadratic always turns back on itself eventually, so extended far enough it predicts life expectancy falling as countries get richer. Choose the shape from what the variables are, not from the fit.
+  Output: About 83 thousand dollars. Only two of the 117 countries are richer than that, so the bend downwards after it rests on almost nothing.
+
+- Class: cmd_question
+  Output: A quadratic always turns round eventually, whether or not the world does. Ask it about 300 thousand dollars. Type predict(quadratic, newdata = data.frame(gdp_k = 300)).
+  CorrectAnswer: predict(quadratic, newdata = data.frame(gdp_k = 300))
+  AnswerTests: omnitest(correctExpr='predict(quadratic, newdata = data.frame(gdp_k = 300))')
+  Hint: Type predict(quadratic, newdata = data.frame(gdp_k = 300)).
+
+- Class: mult_question
+  Output: Minus 57 years. What is the right conclusion?
+  CorrectAnswer: Use the quadratic to describe the relationship where the data are, and not beyond.
+  AnswerChoices: Use the quadratic to describe the relationship where the data are, and not beyond.; Life expectancy falls below zero in very rich countries.; The straight line was right after all.
+  AnswerTests: omnitest(correctVal='Use the quadratic to describe the relationship where the data are, and not beyond.')
+  Hint: The richest country in the data is at about 135 thousand dollars.
+
+- Class: text
+  Output: And have a reason for the curve. A squared term belongs in a model when there is an argument for a bend. Adding squared terms to see what becomes significant is hunting, just as it is with interactions.

@@ -106,6 +106,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -258,8 +287,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#non-linear-relationships" id="toc-non-linear-relationships" class="nav-link" data-scroll-target="#non-linear-relationships"><span class="header-section-number">14.2</span> Non-linear relationships</a>
   <ul class="collapse">
-  <li><a href="#logarithms" id="toc-logarithms" class="nav-link" data-scroll-target="#logarithms"><span class="header-section-number">14.2.1</span> Logarithms</a></li>
-  <li><a href="#squared-terms" id="toc-squared-terms" class="nav-link" data-scroll-target="#squared-terms"><span class="header-section-number">14.2.2</span> Squared terms</a></li>
+  <li><a href="#a-squared-term" id="toc-a-squared-term" class="nav-link" data-scroll-target="#a-squared-term"><span class="header-section-number">14.2.1</span> A squared term</a></li>
+  <li><a href="#reading-it-1" id="toc-reading-it-1" class="nav-link" data-scroll-target="#reading-it-1"><span class="header-section-number">14.2.2</span> Reading it</a></li>
+  <li><a href="#where-not-to-trust-it" id="toc-where-not-to-trust-it" class="nav-link" data-scroll-target="#where-not-to-trust-it"><span class="header-section-number">14.2.3</span> Where not to trust it</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -436,110 +466,108 @@ Figure&nbsp;14.2
 <p>The second assumption. Sometimes the relationship is not a straight line at all — and session 5 gave us a case where it <em>cannot</em> be.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"data/world.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> world <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(gdp), <span class="sc">!</span><span class="fu">is.na</span>(life))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> world <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(gdp), <span class="sc">!</span><span class="fu">is.na</span>(life))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>world<span class="sc">$</span>gdp_k <span class="ot">&lt;-</span> world<span class="sc">$</span>gdp <span class="sc">/</span> <span class="dv">1000</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p><code>gdp_k</code> is income per head in <strong>thousands</strong> of dollars. One dollar more or less makes no visible difference to anything, so the coefficient on it would be a number like 0.0002. Changing the unit changes how the coefficient reads and nothing else.</p>
 <p>Income has a floor at zero and no ceiling. Life expectancy has both. We argued in session 5 that this rules out a straight line, because a line rising forever eventually promises impossible lifespans.</p>
 <p>Fit one anyway and see.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>linear <span class="ot">&lt;-</span> <span class="fu">lm</span>(life <span class="sc">~</span> gdp, <span class="at">data =</span> world)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>linear <span class="ot">&lt;-</span> <span class="fu">lm</span>(life <span class="sc">~</span> gdp_k, <span class="at">data =</span> world)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(linear)), <span class="dv">6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(linear)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##              Estimate Std. Error    t value Pr(&gt;|t|)
-## (Intercept) 67.404245   0.616734 109.292296        0
-## gdp          0.000216   0.000022   9.985362        0</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = life ~ gdp_k, data = world)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -14.530  -3.048   0.529   3.955   8.923 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 67.40425    0.61673 109.292   &lt;2e-16 ***
+## gdp_k        0.21588    0.02162   9.985   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.125 on 115 degrees of freedom
+## Multiple R-squared:  0.4644, Adjusted R-squared:  0.4597 
+## F-statistic: 99.71 on 1 and 115 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p>Significant, and adjusted R² = 0.460. Nothing in that output says anything is wrong.</p>
+<p>Each thousand dollars more goes with 0.22 more years of life expectancy. The coefficient is clearly significant, and adjusted R² is 0.460. Nothing in that output says anything is wrong.</p>
 <p>Now ask it to predict.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>extremes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gdp =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">50000</span>, <span class="dv">150000</span>, <span class="dv">300000</span>))</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>extremes<span class="sc">$</span>predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(linear, <span class="at">newdata =</span> extremes)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>extremes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gdp_k =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">50</span>, <span class="dv">150</span>, <span class="dv">300</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>extremes<span class="sc">$</span>linear <span class="ot">&lt;-</span> <span class="fu">predict</span>(linear, <span class="at">newdata =</span> extremes)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(extremes, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##      gdp predicted
-## 1   1000      67.6
-## 2  50000      78.2
-## 3 150000      99.8
-## 4 300000     132.2</code></pre>
+<pre><code>##   gdp_k linear
+## 1     1   67.6
+## 2    50   78.2
+## 3   150   99.8
+## 4   300  132.2</code></pre>
 </div>
 </div>
-<p>A life expectancy of 132 years. The model is not confused — it is doing exactly what a straight line does. The mistake was ours, in fitting one.</p>
-<section id="logarithms" class="level3" data-number="14.2.1">
-<h3 data-number="14.2.1" class="anchored" data-anchor-id="logarithms"><span class="header-section-number">14.2.1</span> Logarithms</h3>
-<p>The fix for a relationship that flattens is usually to take the logarithm of the predictor.</p>
-<p>A logarithm turns multiplication into addition: <code>log(2)</code>, <code>log(4)</code> and <code>log(8)</code> are equally spaced, because each is a doubling. Applying it to income means the model works in <em>proportional</em> change — the same relative increase matters equally whether you are poor or rich — rather than in absolute dollars.</p>
+<p>A life expectancy of 132 years in the last row. The model is not confused — it is doing exactly what a straight line does. The mistake was ours, in fitting one.</p>
+<section id="a-squared-term" class="level3" data-number="14.2.1">
+<h3 data-number="14.2.1" class="anchored" data-anchor-id="a-squared-term"><span class="header-section-number">14.2.1</span> A squared term</h3>
+<p>To let the line bend, add the <strong>square</strong> of the predictor as a second predictor. The model can then bend once: up and then down, or down and then up. This is called a <strong>quadratic</strong> model.</p>
+<p><span class="math display">\[\text{life} = b_0 + b_1 \times \text{income} + b_2 \times \text{income}^2\]</span></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>logged <span class="ot">&lt;-</span> <span class="fu">lm</span>(life <span class="sc">~</span> <span class="fu">log</span>(gdp), <span class="at">data =</span> world)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>quadratic <span class="ot">&lt;-</span> <span class="fu">lm</span>(life <span class="sc">~</span> gdp_k <span class="sc">+</span> <span class="fu">I</span>(gdp_k<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> world)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(logged)), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(quadratic)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##             Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)   22.681      3.094   7.331        0
-## log(gdp)       5.266      0.332  15.839        0</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = life ~ gdp_k + I(gdp_k^2), data = world)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -14.5910  -2.3640   0.4603   2.5556   8.4215 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 64.6857188  0.6528821  99.077  &lt; 2e-16 ***
+## gdp_k        0.4989387  0.0449253  11.106  &lt; 2e-16 ***
+## I(gdp_k^2)  -0.0030122  0.0004369  -6.895 3.18e-10 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 4.324 on 114 degrees of freedom
+## Multiple R-squared:  0.622,  Adjusted R-squared:  0.6154 
+## F-statistic:  93.8 on 2 and 114 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p>Adjusted R² rises from 0.460 to 0.683.</p>
+<p><code>I()</code> is needed around <code>gdp_k^2</code>. Inside a formula <code>^</code> means something else — interactions to a given order — and <code>I()</code> says “treat this as ordinary arithmetic”.</p>
+<p>The squared term is clearly significant, which says that the relationship is <strong>not a straight line</strong>. Adjusted R² rises from 0.460 to 0.615. The adjusted version is the one to compare, because the second model has one more term.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>extremes<span class="sc">$</span>logged <span class="ot">&lt;-</span> <span class="fu">predict</span>(logged, <span class="at">newdata =</span> extremes)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(extremes, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>##      gdp predicted logged
-## 1   1000      67.6   59.1
-## 2  50000      78.2   79.7
-## 3 150000      99.8   85.4
-## 4 300000     132.2   89.1</code></pre>
-</div>
-</div>
-<p>89.1 years at the top instead of 132. Still an extrapolation well beyond the data, but no longer impossible.</p>
-<p><strong>Interpreting a logged predictor.</strong> The coefficient is the change in the outcome for a one-unit change in the <em>log</em>, which nobody can picture. Multiply it by <code>log(2)</code> and you get the change for a <strong>doubling</strong>, which everybody can.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(logged)[<span class="dv">2</span>] <span class="sc">*</span> <span class="fu">log</span>(<span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>## log(gdp) 
-## 3.649911</code></pre>
-</div>
-</div>
-<p>Doubling a country’s income per head is associated with about 3.65 more years of life expectancy — and the same is true whether you double from 2,000 to 4,000 or from 60,000 to 120,000. That is what the log model claims, and it is a claim worth making explicitly, because it might be wrong.</p>
-</section>
-<section id="squared-terms" class="level3" data-number="14.2.2">
-<h3 data-number="14.2.2" class="anchored" data-anchor-id="squared-terms"><span class="header-section-number">14.2.2</span> Squared terms</h3>
-<p>The other common approach is to add the square of the predictor, which lets the line bend once — up then down, or down then up.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>quadratic <span class="ot">&lt;-</span> <span class="fu">lm</span>(life <span class="sc">~</span> gdp <span class="sc">+</span> <span class="fu">I</span>(gdp<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> world)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">summary</span>(quadratic)<span class="sc">$</span>adj.r.squared, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>## [1] 0.615</code></pre>
-</div>
-</div>
-<p><code>I()</code> is needed around <code>gdp^2</code>. Inside a formula <code>^</code> means something else — interactions to a given order — and <code>I()</code> says “treat this as ordinary arithmetic”.</p>
-<p>Adjusted R² of 0.615, worse than the log model’s 0.683. And a quadratic always turns back on itself eventually, so extended far enough it will predict life expectancy <em>falling</em> as countries get richer.</p>
-<p><strong>Choose the shape from what the variables are, not from the fit.</strong> A quadratic is right when the relationship genuinely rises and then falls — the effect of age on income, say. A logarithm is right when the effect diminishes but never reverses, which is what a bounded outcome and an unbounded predictor imply.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(world, <span class="fu">aes</span>(<span class="at">x =</span> gdp, <span class="at">y =</span> life)) <span class="sc">+</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"lm"</span>,</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> y <span class="sc">~</span> x,</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"grey50"</span>,</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">"dashed"</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"lm"</span>,</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> y <span class="sc">~</span> <span class="fu">log</span>(x),</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"black"</span></span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_comma</span>()) <span class="sc">+</span></span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">95</span>)) <span class="sc">+</span></span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"GDP per capita (PPP, constant international dollars)"</span>,</span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Life expectancy at birth (years)"</span></span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(world, <span class="fu">aes</span>(<span class="at">x =</span> gdp_k, <span class="at">y =</span> life)) <span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> y <span class="sc">~</span> x,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"grey50"</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">"dashed"</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>),</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"black"</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"GDP per capita (thousands of PPP dollars)"</span>,</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Life expectancy at birth (years)"</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div id="fig-nonlin" class="quarto-float quarto-figure quarto-figure-center anchored" width="1050">
 <figure class="quarto-float quarto-float-fig figure">
@@ -553,10 +581,60 @@ Figure&nbsp;14.3
 </div>
 </div>
 </div>
-<p>The dashed line is the straight fit and the solid one the logged fit. The straight line is above the data in the middle and below it at both ends — the signature of fitting a line to a curve, and exactly what the residual plot in session 11 was looking for.</p>
+<p>The dashed line is the straight fit and the solid one the quadratic. The straight line is too <strong>high</strong> at both ends and too <strong>low</strong> in the middle — the signature of fitting a line to a curve, and exactly what the residual plot in session 11 was looking for.</p>
+</section>
+<section id="reading-it-1" class="level3" data-number="14.2.2">
+<h3 data-number="14.2.2" class="anchored" data-anchor-id="reading-it-1"><span class="header-section-number">14.2.2</span> Reading it</h3>
+<p>A squared term is like an interaction: the two coefficients <strong>cannot be read separately</strong>. “One more unit of income, holding income squared constant” is not something that can happen. Read them together.</p>
+<p><strong>The signs give the shape.</strong> The first coefficient is positive (0.499) and the squared one is negative (-0.0030): the curve rises, and rises less and less. Had the signs been the other way round, it would fall first and then rise.</p>
+<p><strong>Predictions give the size.</strong> There is no single effect of income any more, so predict at several values, equally far apart.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>steps <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gdp_k =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">50</span>, <span class="dv">60</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>steps<span class="sc">$</span>predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(quadratic, <span class="at">newdata =</span> steps)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(steps, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   gdp_k predicted
+## 1     5      67.1
+## 2    15      71.5
+## 3    50      82.1
+## 4    60      83.8</code></pre>
+</div>
+</div>
+<p>Going from 5,000 to 15,000 dollars goes with about 4.4 more years. Going from 50,000 to 60,000 — the same 10,000 — goes with 1.7.</p>
+<p><strong>The turning point says where it stops rising.</strong> It is minus the first coefficient divided by twice the second.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(quadratic)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>b[<span class="dv">2</span>] <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> b[<span class="dv">3</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##    gdp_k 
+## 82.82076</code></pre>
+</div>
+</div>
+<p>About 83 thousand dollars. Always check where that is in the data. Here only 2 of the 117 countries are richer than that.</p>
+</section>
+<section id="where-not-to-trust-it" class="level3" data-number="14.2.3">
+<h3 data-number="14.2.3" class="anchored" data-anchor-id="where-not-to-trust-it"><span class="header-section-number">14.2.3</span> Where not to trust it</h3>
+<p>A quadratic always turns round eventually, whether or not the world does.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>extremes<span class="sc">$</span>quadratic <span class="ot">&lt;-</span> <span class="fu">predict</span>(quadratic, <span class="at">newdata =</span> extremes)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(extremes, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   gdp_k linear quadratic
+## 1     1   67.6      65.2
+## 2    50   78.2      82.1
+## 3   150   99.8      71.8
+## 4   300  132.2     -56.7</code></pre>
+</div>
+</div>
+<p>At 300,000 dollars the straight line says 132 years and the quadratic says -57. Both are impossible. The richest country in the data is at 135 thousand, and beyond that neither model knows anything.</p>
+<p>So use the quadratic to describe the relationship <strong>where the data are</strong>: steep among poor countries, nearly flat among rich ones. The bend downwards at the far right is how a quadratic is built, and it rests on a couple of countries. It is not a finding that life expectancy falls when countries get very rich.</p>
+<p><strong>Have a reason for the curve.</strong> A squared term belongs in a model when there is an argument for a bend — session 5’s limits, or a relationship that rises and then falls, such as income over the life course. Adding squared terms to see what becomes significant is hunting, just as it is with interactions.</p>
 <div class="discussion">
-<p><strong>A question.</strong> The logged model fits better by every measure, and it is the shape session 5 said the limits of the scales required.</p>
-<p>It still predicts a life expectancy of 95.4 years for a country with an income per head of a million dollars. Is that a problem with the model, and if so what would fix it?</p>
+<p><strong>A question.</strong> The quadratic turns down at about 83 thousand dollars per head.</p>
+<p>What would you need to see in the data before you believed that life expectancy really falls beyond that point?</p>
 </div>
 <div class="reporting">
 <p><strong>How to write it up.</strong></p>
@@ -564,9 +642,9 @@ Figure&nbsp;14.3
 <blockquote class="blockquote">
 <p>The association between trust and evaluations of democracy differed by bloc (b = 0.21, SE = 0.07, <em>p</em> = 0.003). Among left-bloc voters a one-unit increase in the trust score corresponded to a 0.95-point higher rating; among right-bloc voters, 1.17 points (Figure 1).</p>
 </blockquote>
-<p>A transformation:</p>
+<p>A curve:</p>
 <blockquote class="blockquote">
-<p>Life expectancy was modelled as a function of logged GDP per capita, since the two scales are bounded differently and a linear specification predicts impossible values at high incomes. A doubling of income per head was associated with 3.65 additional years of life expectancy (95% CI [3.19, 4.11], adjusted R² = 0.68, <em>n</em> = 117).</p>
+<p>Life expectancy was modelled as a quadratic function of GDP per capita, since a bounded outcome cannot keep rising in a straight line. The squared term was negative and significant (b = -0.0030, SE = 0.0004, <em>p</em> &lt; .001; income in thousands of dollars): the association is steep among poor countries and nearly flat among rich ones. An additional 10,000 dollars per head corresponded to 4.4 more years of life expectancy at 5,000 dollars, but only 1.7 at 50,000 (adjusted R² = 0.62, <em>n</em> = 117; Figure 2).</p>
 </blockquote>
 <p>Mistakes to avoid:</p>
 <ul>
@@ -574,8 +652,9 @@ Figure&nbsp;14.3
 <li><strong>Interpreting a main effect as an average effect</strong> when an interaction is in the model. It is the effect when the other variable is zero.</li>
 <li><strong>Reporting a main effect’s p-value</strong> from a model with an interaction, as though it meant something general. It depends on the reference category.</li>
 <li><strong>Fishing for interactions.</strong> Test the ones you predicted.</li>
-<li><strong>Choosing a transformation by R².</strong> The shape should follow from what the variables are.</li>
-<li><strong>Reading a logged coefficient as a per-unit change.</strong> Convert it to a doubling, or a 10% increase, and say which.</li>
+<li><strong>Adding a squared term only because it raises R².</strong> The shape should follow from what the variables are.</li>
+<li><strong>Reading the two coefficients of a quadratic separately.</strong> Give predicted values, or a plot.</li>
+<li><strong>Not checking where the turning point is.</strong> It may lie outside the data, or rest on a handful of cases.</li>
 <li><strong>Extrapolating a quadratic</strong>, which always turns round in the end.</li>
 </ul>
 </div>

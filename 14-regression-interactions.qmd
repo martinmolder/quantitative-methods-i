@@ -149,80 +149,55 @@ The second assumption. Sometimes the relationship is not a straight line at all 
 ```{r}
 world <- readr::read_csv("data/world.csv", show_col_types = FALSE)
 world <- world |> filter(!is.na(gdp), !is.na(life))
+
+world$gdp_k <- world$gdp / 1000
 ```
+
+`gdp_k` is income per head in **thousands** of dollars. One dollar more or less makes no visible difference to anything, so the coefficient on it would be a number like 0.0002. Changing the unit changes how the coefficient reads and nothing else.
 
 Income has a floor at zero and no ceiling. Life expectancy has both. We argued in session 5 that this rules out a straight line, because a line rising forever eventually promises impossible lifespans.
 
 Fit one anyway and see.
 
 ```{r}
-linear <- lm(life ~ gdp, data = world)
+linear <- lm(life ~ gdp_k, data = world)
 
-round(coef(summary(linear)), 6)
+summary(linear)
 ```
 
-Significant, and adjusted R² = `r fmt(summary(linear)$adj.r.squared, 3)`. Nothing in that output says anything is wrong.
+Each thousand dollars more goes with `r fmt(coef(linear)[2])` more years of life expectancy. The coefficient is clearly significant, and adjusted R² is `r fmt(summary(linear)$adj.r.squared, 3)`. Nothing in that output says anything is wrong.
 
 Now ask it to predict.
 
 ```{r}
-extremes <- data.frame(gdp = c(1000, 50000, 150000, 300000))
-extremes$predicted <- predict(linear, newdata = extremes)
+extremes <- data.frame(gdp_k = c(1, 50, 150, 300))
+extremes$linear <- predict(linear, newdata = extremes)
 
 round(extremes, 1)
 ```
 
-A life expectancy of `r fmt(predict(linear, newdata = data.frame(gdp = 300000)), 0)` years. The model is not confused — it is doing exactly what a straight line does. The mistake was ours, in fitting one.
+A life expectancy of `r fmt(predict(linear, newdata = data.frame(gdp_k = 300)), 0)` years in the last row. The model is not confused — it is doing exactly what a straight line does. The mistake was ours, in fitting one.
 
-### Logarithms
+### A squared term
 
-The fix for a relationship that flattens is usually to take the logarithm of the predictor.
+To let the line bend, add the **square** of the predictor as a second predictor. The model can then bend once: up and then down, or down and then up. This is called a **quadratic** model.
 
-A logarithm turns multiplication into addition: `log(2)`, `log(4)` and `log(8)` are equally spaced, because each is a doubling. Applying it to income means the model works in *proportional* change — the same relative increase matters equally whether you are poor or rich — rather than in absolute dollars.
-
-```{r}
-logged <- lm(life ~ log(gdp), data = world)
-
-round(coef(summary(logged)), 3)
-```
-
-Adjusted R² rises from `r fmt(summary(linear)$adj.r.squared, 3)` to `r fmt(summary(logged)$adj.r.squared, 3)`.
+$$\text{life} = b_0 + b_1 \times \text{income} + b_2 \times \text{income}^2$$
 
 ```{r}
-extremes$logged <- predict(logged, newdata = extremes)
-round(extremes, 1)
+quadratic <- lm(life ~ gdp_k + I(gdp_k^2), data = world)
+
+summary(quadratic)
 ```
 
-`r fmt(predict(logged, newdata = data.frame(gdp = 300000)), 1)` years at the top instead of `r fmt(predict(linear, newdata = data.frame(gdp = 300000)), 0)`. Still an extrapolation well beyond the data, but no longer impossible.
+`I()` is needed around `gdp_k^2`. Inside a formula `^` means something else — interactions to a given order — and `I()` says "treat this as ordinary arithmetic".
 
-**Interpreting a logged predictor.** The coefficient is the change in the outcome for a one-unit change in the *log*, which nobody can picture. Multiply it by `log(2)` and you get the change for a **doubling**, which everybody can.
-
-```{r}
-coef(logged)[2] * log(2)
-```
-
-Doubling a country's income per head is associated with about `r fmt(coef(logged)[2] * log(2))` more years of life expectancy — and the same is true whether you double from 2,000 to 4,000 or from 60,000 to 120,000. That is what the log model claims, and it is a claim worth making explicitly, because it might be wrong.
-
-### Squared terms
-
-The other common approach is to add the square of the predictor, which lets the line bend once — up then down, or down then up.
-
-```{r}
-quadratic <- lm(life ~ gdp + I(gdp^2), data = world)
-
-round(summary(quadratic)$adj.r.squared, 3)
-```
-
-`I()` is needed around `gdp^2`. Inside a formula `^` means something else — interactions to a given order — and `I()` says "treat this as ordinary arithmetic".
-
-Adjusted R² of `r fmt(summary(quadratic)$adj.r.squared, 3)`, worse than the log model's `r fmt(summary(logged)$adj.r.squared, 3)`. And a quadratic always turns back on itself eventually, so extended far enough it will predict life expectancy *falling* as countries get richer.
-
-**Choose the shape from what the variables are, not from the fit.** A quadratic is right when the relationship genuinely rises and then falls — the effect of age on income, say. A logarithm is right when the effect diminishes but never reverses, which is what a bounded outcome and an unbounded predictor imply.
+The squared term is clearly significant, which says that the relationship is **not a straight line**. Adjusted R² rises from `r fmt(summary(linear)$adj.r.squared, 3)` to `r fmt(summary(quadratic)$adj.r.squared, 3)`. The adjusted version is the one to compare, because the second model has one more term.
 
 ```{r}
 #| label: fig-nonlin
 #| fig-height: 3.8
-ggplot(world, aes(x = gdp, y = life)) +
+ggplot(world, aes(x = gdp_k, y = life)) +
   geom_point(alpha = 0.5) +
   geom_smooth(
     method = "lm",
@@ -233,25 +208,67 @@ ggplot(world, aes(x = gdp, y = life)) +
   ) +
   geom_smooth(
     method = "lm",
-    formula = y ~ log(x),
+    formula = y ~ x + I(x^2),
     se = FALSE,
     colour = "black"
   ) +
-  scale_x_continuous(labels = scales::label_comma()) +
-  coord_cartesian(ylim = c(40, 95)) +
+  coord_cartesian(ylim = c(40, 100)) +
   labs(
-    x = "GDP per capita (PPP, constant international dollars)",
+    x = "GDP per capita (thousands of PPP dollars)",
     y = "Life expectancy at birth (years)"
   ) +
   theme_bw()
 ```
 
-The dashed line is the straight fit and the solid one the logged fit. The straight line is above the data in the middle and below it at both ends — the signature of fitting a line to a curve, and exactly what the residual plot in session 11 was looking for.
+The dashed line is the straight fit and the solid one the quadratic. The straight line is too **high** at both ends and too **low** in the middle — the signature of fitting a line to a curve, and exactly what the residual plot in session 11 was looking for.
+
+### Reading it
+
+A squared term is like an interaction: the two coefficients **cannot be read separately**. "One more unit of income, holding income squared constant" is not something that can happen. Read them together.
+
+**The signs give the shape.** The first coefficient is positive (`r fmt(coef(quadratic)[2], 3)`) and the squared one is negative (`r fmt(coef(quadratic)[3], 4)`): the curve rises, and rises less and less. Had the signs been the other way round, it would fall first and then rise.
+
+**Predictions give the size.** There is no single effect of income any more, so predict at several values, equally far apart.
+
+```{r}
+steps <- data.frame(gdp_k = c(5, 15, 50, 60))
+steps$predicted <- predict(quadratic, newdata = steps)
+
+round(steps, 1)
+```
+
+Going from 5,000 to 15,000 dollars goes with about `r fmt(predict(quadratic, data.frame(gdp_k = 15)) - predict(quadratic, data.frame(gdp_k = 5)), 1)` more years. Going from 50,000 to 60,000 — the same 10,000 — goes with `r fmt(predict(quadratic, data.frame(gdp_k = 60)) - predict(quadratic, data.frame(gdp_k = 50)), 1)`.
+
+**The turning point says where it stops rising.** It is minus the first coefficient divided by twice the second.
+
+```{r}
+b <- coef(quadratic)
+
+-b[2] / (2 * b[3])
+```
+
+About `r fmt(-coef(quadratic)[2] / (2 * coef(quadratic)[3]), 0)` thousand dollars. Always check where that is in the data. Here only `r sum(world$gdp_k > -coef(quadratic)[2] / (2 * coef(quadratic)[3]))` of the `r nrow(world)` countries are richer than that.
+
+### Where not to trust it
+
+A quadratic always turns round eventually, whether or not the world does.
+
+```{r}
+extremes$quadratic <- predict(quadratic, newdata = extremes)
+
+round(extremes, 1)
+```
+
+At 300,000 dollars the straight line says `r fmt(predict(linear, newdata = data.frame(gdp_k = 300)), 0)` years and the quadratic says `r fmt(predict(quadratic, newdata = data.frame(gdp_k = 300)), 0)`. Both are impossible. The richest country in the data is at `r fmt(max(world$gdp_k), 0)` thousand, and beyond that neither model knows anything.
+
+So use the quadratic to describe the relationship **where the data are**: steep among poor countries, nearly flat among rich ones. The bend downwards at the far right is how a quadratic is built, and it rests on a couple of countries. It is not a finding that life expectancy falls when countries get very rich.
+
+**Have a reason for the curve.** A squared term belongs in a model when there is an argument for a bend — session 5's limits, or a relationship that rises and then falls, such as income over the life course. Adding squared terms to see what becomes significant is hunting, just as it is with interactions.
 
 ::: {.discussion}
-**A question.** The logged model fits better by every measure, and it is the shape session 5 said the limits of the scales required.
+**A question.** The quadratic turns down at about `r fmt(-coef(quadratic)[2] / (2 * coef(quadratic)[3]), 0)` thousand dollars per head.
 
-It still predicts a life expectancy of `r fmt(predict(logged, newdata = data.frame(gdp = 1000000)), 1)` years for a country with an income per head of a million dollars. Is that a problem with the model, and if so what would fix it?
+What would you need to see in the data before you believed that life expectancy really falls beyond that point?
 :::
 
 ::: {.reporting}
@@ -261,9 +278,9 @@ An interaction:
 
 > The association between trust and evaluations of democracy differed by bloc (b = `r fmt(coef(model_int)[4])`, SE = `r fmt(coef(summary(model_int))[4, 2])`, *p* = `r fmt(coef(summary(model_int))[4, 4], 3)`). Among left-bloc voters a one-unit increase in the trust score corresponded to a `r fmt(coef(model_int)[2])`-point higher rating; among right-bloc voters, `r fmt(coef(model_int)[2] + coef(model_int)[4])` points (Figure 1).
 
-A transformation:
+A curve:
 
-> Life expectancy was modelled as a function of logged GDP per capita, since the two scales are bounded differently and a linear specification predicts impossible values at high incomes. A doubling of income per head was associated with `r fmt(coef(logged)[2] * log(2))` additional years of life expectancy (95% CI [`r fmt(confint(logged)[2,1] * log(2))`, `r fmt(confint(logged)[2,2] * log(2))`], adjusted R² = `r fmt(summary(logged)$adj.r.squared, 2)`, *n* = `r nobs(logged)`).
+> Life expectancy was modelled as a quadratic function of GDP per capita, since a bounded outcome cannot keep rising in a straight line. The squared term was negative and significant (b = `r fmt(coef(quadratic)[3], 4)`, SE = `r fmt(coef(summary(quadratic))[3, 2], 4)`, *p* < .001; income in thousands of dollars): the association is steep among poor countries and nearly flat among rich ones. An additional 10,000 dollars per head corresponded to `r fmt(predict(quadratic, data.frame(gdp_k = 15)) - predict(quadratic, data.frame(gdp_k = 5)), 1)` more years of life expectancy at 5,000 dollars, but only `r fmt(predict(quadratic, data.frame(gdp_k = 60)) - predict(quadratic, data.frame(gdp_k = 50)), 1)` at 50,000 (adjusted R² = `r fmt(summary(quadratic)$adj.r.squared, 2)`, *n* = `r nobs(quadratic)`; Figure 2).
 
 Mistakes to avoid:
 
@@ -271,8 +288,9 @@ Mistakes to avoid:
 - **Interpreting a main effect as an average effect** when an interaction is in the model. It is the effect when the other variable is zero.
 - **Reporting a main effect's p-value** from a model with an interaction, as though it meant something general. It depends on the reference category.
 - **Fishing for interactions.** Test the ones you predicted.
-- **Choosing a transformation by R².** The shape should follow from what the variables are.
-- **Reading a logged coefficient as a per-unit change.** Convert it to a doubling, or a 10% increase, and say which.
+- **Adding a squared term only because it raises R².** The shape should follow from what the variables are.
+- **Reading the two coefficients of a quadratic separately.** Give predicted values, or a plot.
+- **Not checking where the turning point is.** It may lie outside the data, or rest on a handful of cases.
 - **Extrapolating a quadratic**, which always turns round in the end.
 :::
 
