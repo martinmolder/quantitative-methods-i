@@ -161,7 +161,7 @@ linear <- lm(life ~ gdp, data = world)
 round(coef(summary(linear)), 6)
 ```
 
-Significant, and R² = `r fmt(summary(linear)$r.squared, 3)`. Nothing in that output says anything is wrong.
+Significant, and adjusted R² = `r fmt(summary(linear)$adj.r.squared, 3)`. Nothing in that output says anything is wrong.
 
 Now ask it to predict.
 
@@ -186,7 +186,7 @@ logged <- lm(life ~ log(gdp), data = world)
 round(coef(summary(logged)), 3)
 ```
 
-R² rises from `r fmt(summary(linear)$r.squared, 3)` to `r fmt(summary(logged)$r.squared, 3)`.
+Adjusted R² rises from `r fmt(summary(linear)$adj.r.squared, 3)` to `r fmt(summary(logged)$adj.r.squared, 3)`.
 
 ```{r}
 extremes$logged <- predict(logged, newdata = extremes)
@@ -210,12 +210,12 @@ The other common approach is to add the square of the predictor, which lets the 
 ```{r}
 quadratic <- lm(life ~ gdp + I(gdp^2), data = world)
 
-round(summary(quadratic)$r.squared, 3)
+round(summary(quadratic)$adj.r.squared, 3)
 ```
 
 `I()` is needed around `gdp^2`. Inside a formula `^` means something else — interactions to a given order — and `I()` says "treat this as ordinary arithmetic".
 
-R² of `r fmt(summary(quadratic)$r.squared, 3)`, worse than the log model's `r fmt(summary(logged)$r.squared, 3)`. And a quadratic always turns back on itself eventually, so extended far enough it will predict life expectancy *falling* as countries get richer.
+Adjusted R² of `r fmt(summary(quadratic)$adj.r.squared, 3)`, worse than the log model's `r fmt(summary(logged)$adj.r.squared, 3)`. And a quadratic always turns back on itself eventually, so extended far enough it will predict life expectancy *falling* as countries get richer.
 
 **Choose the shape from what the variables are, not from the fit.** A quadratic is right when the relationship genuinely rises and then falls — the effect of age on income, say. A logarithm is right when the effect diminishes but never reverses, which is what a bounded outcome and an unbounded predictor imply.
 
@@ -263,7 +263,7 @@ An interaction:
 
 A transformation:
 
-> Life expectancy was modelled as a function of logged GDP per capita, since the two scales are bounded differently and a linear specification predicts impossible values at high incomes. A doubling of income per head was associated with `r fmt(coef(logged)[2] * log(2))` additional years of life expectancy (95% CI [`r fmt(confint(logged)[2,1] * log(2))`, `r fmt(confint(logged)[2,2] * log(2))`], R² = `r fmt(summary(logged)$r.squared, 2)`, *n* = `r nobs(logged)`).
+> Life expectancy was modelled as a function of logged GDP per capita, since the two scales are bounded differently and a linear specification predicts impossible values at high incomes. A doubling of income per head was associated with `r fmt(coef(logged)[2] * log(2))` additional years of life expectancy (95% CI [`r fmt(confint(logged)[2,1] * log(2))`, `r fmt(confint(logged)[2,2] * log(2))`], adjusted R² = `r fmt(summary(logged)$adj.r.squared, 2)`, *n* = `r nobs(logged)`).
 
 Mistakes to avoid:
 

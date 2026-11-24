@@ -97,10 +97,10 @@
   Hint: Type linear <- lm(life ~ gdp, data = world).
 
 - Class: cmd_question
-  Output: Check the fit with summary(linear)$r.squared.
-  CorrectAnswer: summary(linear)$r.squared
-  AnswerTests: omnitest(correctExpr='summary(linear)$r.squared')
-  Hint: Type summary(linear)$r.squared.
+  Output: Check the fit with the adjusted R-squared. Type summary(linear)$adj.r.squared.
+  CorrectAnswer: summary(linear)$adj.r.squared
+  AnswerTests: omnitest(correctExpr='summary(linear)$adj.r.squared')
+  Hint: Type summary(linear)$adj.r.squared.
 
 - Class: cmd_question
   Output: 0.46, and nothing in the output says anything is wrong. Now ask it to predict for a very rich country. Type predict(linear, newdata = data.frame(gdp = 300000)).
@@ -121,13 +121,13 @@
   Hint: Type logged <- lm(life ~ log(gdp), data = world).
 
 - Class: cmd_question
-  Output: Compare the fits. Type c(linear = summary(linear)$r.squared, logged = summary(logged)$r.squared).
-  CorrectAnswer: c(linear = summary(linear)$r.squared, logged = summary(logged)$r.squared)
-  AnswerTests: omnitest(correctExpr='c(linear = summary(linear)$r.squared, logged = summary(logged)$r.squared)')
-  Hint: Type c(linear = summary(linear)$r.squared, logged = summary(logged)$r.squared).
+  Output: Compare the fits. Type c(linear = summary(linear)$adj.r.squared, logged = summary(logged)$adj.r.squared).
+  CorrectAnswer: c(linear = summary(linear)$adj.r.squared, logged = summary(logged)$adj.r.squared)
+  AnswerTests: omnitest(correctExpr='c(linear = summary(linear)$adj.r.squared, logged = summary(logged)$adj.r.squared)')
+  Hint: Type c(linear = summary(linear)$adj.r.squared, logged = summary(logged)$adj.r.squared).
 
 - Class: cmd_question
-  Output: 0.46 against 0.69. And the prediction? Type predict(logged, newdata = data.frame(gdp = 300000)).
+  Output: 0.46 against 0.68. And the prediction? Type predict(logged, newdata = data.frame(gdp = 300000)).
   CorrectAnswer: predict(logged, newdata = data.frame(gdp = 300000))
   AnswerTests: any_of_exprs('predict(logged, newdata = data.frame(gdp = 300000))', 'predict(logged, newdata=data.frame(gdp=300000))')
   Hint: Type predict(logged, newdata = data.frame(gdp = 300000)).
@@ -154,10 +154,10 @@
   Hint: Type quadratic <- lm(life ~ gdp + I(gdp^2), data = world). The I() is needed because inside a formula the caret means something else.
 
 - Class: cmd_question
-  Output: Compare it - summary(quadratic)$r.squared.
-  CorrectAnswer: summary(quadratic)$r.squared
-  AnswerTests: omnitest(correctExpr='summary(quadratic)$r.squared')
-  Hint: Type summary(quadratic)$r.squared.
+  Output: Compare it - type summary(quadratic)$adj.r.squared.
+  CorrectAnswer: summary(quadratic)$adj.r.squared
+  AnswerTests: omnitest(correctExpr='summary(quadratic)$adj.r.squared')
+  Hint: Type summary(quadratic)$adj.r.squared.
 
 - Class: text
-  Output: 0.62, worse than the log model's 0.69. And a quadratic always turns back on itself eventually, so extended far enough it predicts life expectancy falling as countries get richer. Choose the shape from what the variables are, not from the fit.
+  Output: 0.62, worse than the log model's 0.68. The adjusted version matters here, because the quadratic has one more term than the others. And a quadratic always turns back on itself eventually, so extended far enough it predicts life expectancy falling as countries get richer. Choose the shape from what the variables are, not from the fit.

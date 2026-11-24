@@ -450,7 +450,7 @@ Figure&nbsp;14.2
 ## gdp          0.000216   0.000022   9.985362        0</code></pre>
 </div>
 </div>
-<p>Significant, and R² = 0.464. Nothing in that output says anything is wrong.</p>
+<p>Significant, and adjusted R² = 0.460. Nothing in that output says anything is wrong.</p>
 <p>Now ask it to predict.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>extremes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gdp =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">50000</span>, <span class="dv">150000</span>, <span class="dv">300000</span>))</span>
@@ -480,7 +480,7 @@ Figure&nbsp;14.2
 ## log(gdp)       5.266      0.332  15.839        0</code></pre>
 </div>
 </div>
-<p>R² rises from 0.464 to 0.686.</p>
+<p>Adjusted R² rises from 0.460 to 0.683.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>extremes<span class="sc">$</span>logged <span class="ot">&lt;-</span> <span class="fu">predict</span>(logged, <span class="at">newdata =</span> extremes)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(extremes, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -509,13 +509,13 @@ Figure&nbsp;14.2
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>quadratic <span class="ot">&lt;-</span> <span class="fu">lm</span>(life <span class="sc">~</span> gdp <span class="sc">+</span> <span class="fu">I</span>(gdp<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> world)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">summary</span>(quadratic)<span class="sc">$</span>r.squared, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">summary</span>(quadratic)<span class="sc">$</span>adj.r.squared, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>## [1] 0.622</code></pre>
+<pre><code>## [1] 0.615</code></pre>
 </div>
 </div>
 <p><code>I()</code> is needed around <code>gdp^2</code>. Inside a formula <code>^</code> means something else — interactions to a given order — and <code>I()</code> says “treat this as ordinary arithmetic”.</p>
-<p>R² of 0.622, worse than the log model’s 0.686. And a quadratic always turns back on itself eventually, so extended far enough it will predict life expectancy <em>falling</em> as countries get richer.</p>
+<p>Adjusted R² of 0.615, worse than the log model’s 0.683. And a quadratic always turns back on itself eventually, so extended far enough it will predict life expectancy <em>falling</em> as countries get richer.</p>
 <p><strong>Choose the shape from what the variables are, not from the fit.</strong> A quadratic is right when the relationship genuinely rises and then falls — the effect of age on income, say. A logarithm is right when the effect diminishes but never reverses, which is what a bounded outcome and an unbounded predictor imply.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(world, <span class="fu">aes</span>(<span class="at">x =</span> gdp, <span class="at">y =</span> life)) <span class="sc">+</span></span>
@@ -566,7 +566,7 @@ Figure&nbsp;14.3
 </blockquote>
 <p>A transformation:</p>
 <blockquote class="blockquote">
-<p>Life expectancy was modelled as a function of logged GDP per capita, since the two scales are bounded differently and a linear specification predicts impossible values at high incomes. A doubling of income per head was associated with 3.65 additional years of life expectancy (95% CI [3.19, 4.11], R² = 0.69, <em>n</em> = 117).</p>
+<p>Life expectancy was modelled as a function of logged GDP per capita, since the two scales are bounded differently and a linear specification predicts impossible values at high incomes. A doubling of income per head was associated with 3.65 additional years of life expectancy (95% CI [3.19, 4.11], adjusted R² = 0.68, <em>n</em> = 117).</p>
 </blockquote>
 <p>Mistakes to avoid:</p>
 <ul>
