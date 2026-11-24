@@ -7,91 +7,13 @@
   Version: 1.0.0
 
 - Class: text
-  Output: Every model so far has assumed two things - that each predictor has the same effect for everybody, and that the relationship is a straight line. Both are often wrong. The survey is loaded as swe, with the trust score ready, and a variable called partisan that says whether the respondent feels close to a party.
+  Output: Every model so far has assumed two things - that each predictor has the same effect for everybody, and that the relationship is a straight line. Both are often wrong. The survey is loaded as swe, with the trust score and a readable sex variable ready.
 
 - Class: text
-  Output: First, interactions, with two binary variables. How much people like the Social Democrats depends on their bloc. Does it also depend on whether they feel close to a party?
+  Output: First, interactions. A model with trust plus bloc says the trust slope is identical for left and right voters, and forces it to be. An interaction lets it differ.
 
 - Class: cmd_question
-  Output: Start without an interaction. Type model_add <- lm(like_s ~ bloc + partisan, data = swe).
-  CorrectAnswer: model_add <- lm(like_s ~ bloc + partisan, data = swe)
-  AnswerTests: omnitest(correctExpr='model_add <- lm(like_s ~ bloc + partisan, data = swe)')
-  Hint: Type model_add <- lm(like_s ~ bloc + partisan, data = swe).
-
-- Class: cmd_question
-  Output: Look at the output. Type summary(model_add).
-  CorrectAnswer: summary(model_add)
-  AnswerTests: omnitest(correctExpr='summary(model_add)')
-  Hint: Type summary(model_add).
-
-- Class: mult_question
-  Output: The coefficient on partisanYes is minus 0.02, with a p-value of 0.81. Which of these does the model assume?
-  CorrectAnswer: That feeling close to a party has the same effect in both blocs.
-  AnswerChoices: That feeling close to a party has the same effect in both blocs.; That feeling close to a party has no effect.; That the two blocs are the same size.
-  AnswerTests: omnitest(correctVal='That feeling close to a party has the same effect in both blocs.')
-  Hint: There is one coefficient for partisan, and it applies to everybody in the model.
-
-- Class: text
-  Output: An interaction lets the effect differ between the blocs.
-
-- Class: cmd_question
-  Output: Replace the plus with a star. Type model_pid <- lm(like_s ~ bloc * partisan, data = swe).
-  CorrectAnswer: model_pid <- lm(like_s ~ bloc * partisan, data = swe)
-  AnswerTests: omnitest(correctExpr='model_pid <- lm(like_s ~ bloc * partisan, data = swe)')
-  Hint: Type model_pid <- lm(like_s ~ bloc * partisan, data = swe). The star puts in both variables and their product.
-
-- Class: cmd_question
-  Output: Look at the output. Type summary(model_pid).
-  CorrectAnswer: summary(model_pid)
-  AnswerTests: omnitest(correctExpr='summary(model_pid)')
-  Hint: Type summary(model_pid).
-
-- Class: mult_question
-  Output: The coefficient on partisanYes is now 0.872. What is it the effect for?
-  CorrectAnswer: Left-bloc voters only, because Left is the reference category.
-  AnswerChoices: Left-bloc voters only, because Left is the reference category.; Everybody, averaged across the two blocs.; The difference between the blocs.
-  AnswerTests: omnitest(correctVal='Left-bloc voters only, because Left is the reference category.')
-  Hint: Once an interaction is in the model, the other coefficients are effects when the other variable is zero - and blocRight is zero for left-bloc voters.
-
-- Class: mult_question
-  Output: The interaction, blocRight:partisanYes, is minus 1.976. So what is the effect of closeness among right-bloc voters?
-  CorrectAnswer: 0.872 minus 1.976, which is minus 1.104.
-  AnswerChoices: 0.872 minus 1.976, which is minus 1.104.; Minus 1.976.; Minus 3.114 minus 1.976, which is minus 5.090.
-  AnswerTests: omnitest(correctVal='0.872 minus 1.976, which is minus 1.104.')
-  Hint: The interaction says how much the effect differs in the right bloc from what it is in the left bloc.
-
-- Class: text
-  Output: Left-bloc voters who feel close to a party like the Social Democrats more than those who do not, and right-bloc voters who feel close to a party like them less. Two opposite effects, which the first model averaged into nothing.
-
-- Class: cmd_question
-  Output: Get the four predicted means. Type pid_predictions <- predict_response(model_pid, terms = c("partisan", "bloc")).
-  CorrectAnswer: pid_predictions <- predict_response(model_pid, terms = c("partisan", "bloc"))
-  AnswerTests: any_of_exprs('pid_predictions <- predict_response(model_pid, terms = c("partisan", "bloc"))', 'pid_predictions <- predict_response(model_pid, terms=c("partisan", "bloc"))')
-  Hint: Type pid_predictions <- predict_response(model_pid, terms = c("partisan", "bloc")).
-
-- Class: cmd_question
-  Output: Look at them. Type pid_predictions.
-  CorrectAnswer: pid_predictions
-  AnswerTests: omnitest(correctExpr='pid_predictions')
-  Hint: Type pid_predictions.
-
-- Class: cmd_question
-  Output: And plot them, with a line for each bloc. Type plot(pid_predictions, connect_lines = TRUE).
-  CorrectAnswer: plot(pid_predictions, connect_lines = TRUE)
-  AnswerTests: any_of_exprs('plot(pid_predictions, connect_lines = TRUE)', 'plot(pid_predictions, connect_lines=TRUE)')
-  Hint: Type plot(pid_predictions, connect_lines = TRUE).
-
-- Class: text
-  Output: Two lines that are not parallel. Non-parallel lines are what an interaction is. If you cannot see it on the plot, it is not there in any meaningful sense.
-
-- Class: text
-  Output: If you made the right bloc the reference category instead, the coefficient on partisanYes would change from 0.872 to minus 1.104. Nothing about the data would have changed, and the coefficient would have changed its sign. That is why you never report 'the effect of closeness' from a model with an interaction in it.
-
-- Class: text
-  Output: Now a continuous and a binary variable. A model with trust plus bloc says the trust slope is identical for left and right voters, and forces it to be.
-
-- Class: cmd_question
-  Output: Fit the interaction. Type model_int <- lm(demlevel ~ trust * bloc, data = swe).
+  Output: Fit one. Type model_int <- lm(demlevel ~ trust * bloc, data = swe).
   CorrectAnswer: model_int <- lm(demlevel ~ trust * bloc, data = swe)
   AnswerTests: omnitest(correctExpr='model_int <- lm(demlevel ~ trust * bloc, data = swe)')
   Hint: Type model_int <- lm(demlevel ~ trust * bloc, data = swe). The star puts in both variables and their product.
@@ -135,7 +57,32 @@
   Hint: Look at which line is on top at the left of the plot, and which is on top at the right.
 
 - Class: text
-  Output: So the answer to 'is there a winner-loser gap' is - it depends who you ask. That is what an interaction means, and no single coefficient could have said it.
+  Output: So the answer to 'is there a winner-loser gap' is - it depends who you ask. That is what an interaction means, and no single coefficient could have said it. Non-parallel lines are what an interaction is. If you cannot see it on the plot, it is not there in any meaningful sense.
+
+- Class: text
+  Output: Now a case where the main effect actively misleads.
+
+- Class: cmd_question
+  Output: Fit model_age <- lm(lr_self ~ age * sex, data = swe).
+  CorrectAnswer: model_age <- lm(lr_self ~ age * sex, data = swe)
+  AnswerTests: omnitest(correctExpr='model_age <- lm(lr_self ~ age * sex, data = swe)')
+  Hint: Type model_age <- lm(lr_self ~ age * sex, data = swe).
+
+- Class: cmd_question
+  Output: Look at the output. Type summary(model_age).
+  CorrectAnswer: summary(model_age)
+  AnswerTests: omnitest(correctExpr='summary(model_age)')
+  Hint: Type summary(model_age).
+
+- Class: mult_question
+  Output: The coefficient on age is minus 0.0047 with a p-value of 0.29. Read carelessly, that says age does not matter. What does it actually say?
+  CorrectAnswer: Age does not matter for men, who are the reference category.
+  AnswerChoices: Age does not matter for men, who are the reference category.; Age does not matter for anybody.; Age matters, but the sample is too small to show it.
+  AnswerTests: omnitest(correctVal='Age does not matter for men, who are the reference category.')
+  Hint: Which group has sexWomen equal to zero?
+
+- Class: text
+  Output: For women the slope is minus 0.0047 plus 0.0189, which is plus 0.0142, and the interaction is significant. Swap the reference category from men to women and the age coefficient changes from non-significant to significant, with no change to the data at all. That is why you never report 'the effect of age' from a model with an interaction in it.
 
 - Class: text
   Output: One warning. With ten predictors there are forty-five possible two-way interactions, and a couple would come out significant by chance. Test the ones you had a reason to expect.

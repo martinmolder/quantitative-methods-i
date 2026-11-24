@@ -20,15 +20,15 @@
 
 swe <- readRDS(.path2rds)
 
-# The trust score from session 10, and a readable version of party closeness.
+# The trust score from session 10, and a readable sex variable.
 .trust_items <- c(
   "tr_parl", "tr_govt", "tr_court",
   "tr_sci", "tr_party", "tr_media"
 )
 swe$trust <- psych::fa(swe[, .trust_items], nfactors = 1, fm = "ml")$scores[, 1]
 
-swe$partisan <- factor(
-  swe$pid,
+swe$sex <- factor(
+  swe$female,
   levels = c(0, 1),
-  labels = c("No", "Yes")
+  labels = c("Men", "Women")
 )
