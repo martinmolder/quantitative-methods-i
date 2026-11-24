@@ -9,5 +9,5 @@ introduce, in the order it first appears.
 
 ## Arguments
 
-`na.rm =`, `showWarnings =`, `row.names =`, `show_col_types =`, `binwidth =`, `fill =`, `position =`, `width =`, `height =`, `alpha =`, `base_size =`, `values =`, `legend.position =`, `end =`, `xlim =`, `ylim =`, `xintercept =`, `linewidth =`, `lower.tail =`, `Men =`, `Women =`, `correct =`, `mu =`, `xend =`, `yend =`, `paired =`, `use =`, `colour =`, `method =`, `yintercept =`, `linetype =`, `nfactors =`, `fm =`, `cutoff =`, `se =`, `newdata =`, `mfrow =`, `which =`, `terms =`, `ref =`, `ymin =`, `ymax =`, `probability =`
+`na.rm =`, `showWarnings =`, `row.names =`, `show_col_types =`, `binwidth =`, `fill =`, `position =`, `width =`, `height =`, `alpha =`, `base_size =`, `values =`, `legend.position =`, `end =`, `xlim =`, `ylim =`, `xintercept =`, `linewidth =`, `lower.tail =`, `Men =`, `Women =`, `correct =`, `mu =`, `xend =`, `yend =`, `paired =`, `use =`, `colour =`, `method =`, `yintercept =`, `linetype =`, `nfactors =`, `fm =`, `cutoff =`, `se =`, `newdata =`, `mfrow =`, `which =`, `terms =`, `ref =`, `ymin =`, `ymax =`, `mean =`, `groups =`, `connect_lines =`, `probability =`
 

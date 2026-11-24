@@ -20,23 +20,15 @@
 
 swe <- readRDS(.path2rds)
 
-# The trust score from session 10, and a readable sex variable.
+# The trust score from session 10, and a readable version of party closeness.
 .trust_items <- c(
   "tr_parl", "tr_govt", "tr_court",
   "tr_sci", "tr_party", "tr_media"
 )
 swe$trust <- psych::fa(swe[, .trust_items], nfactors = 1, fm = "ml")$scores[, 1]
 
-swe$sex <- factor(
-  swe$female,
+swe$partisan <- factor(
+  swe$pid,
   levels = c(0, 1),
-  labels = c("Men", "Women")
+  labels = c("No", "Yes")
 )
-
-# The country data from session 4.
-world <- readr::read_csv(
-  file.path(dirname(.path2rds), "world.csv"),
-  show_col_types = FALSE
-)
-world <- as.data.frame(world)
-world <- world[!is.na(world$gdp) & !is.na(world$life), ]

@@ -7,22 +7,100 @@
   Version: 1.0.0
 
 - Class: text
-  Output: Every model so far has assumed two things - that each predictor has the same effect for everybody, and that the relationship is a straight line. Both are often wrong. Two objects are loaded - swe with the trust score ready, and world, the country data from session 5.
+  Output: Every model so far has assumed two things - that each predictor has the same effect for everybody, and that the relationship is a straight line. Both are often wrong. The survey is loaded as swe, with the trust score ready, and a variable called partisan that says whether the respondent feels close to a party.
 
 - Class: text
-  Output: First, interactions. A model with trust plus bloc says the trust slope is identical for left and right voters, and forces it to be. An interaction lets it differ.
+  Output: First, interactions, with two binary variables. How much people like the Social Democrats depends on their bloc. Does it also depend on whether they feel close to a party?
 
 - Class: cmd_question
-  Output: Fit one. Type model_int <- lm(demlevel ~ trust * bloc, data = swe).
+  Output: Start without an interaction. Type model_add <- lm(like_s ~ bloc + partisan, data = swe).
+  CorrectAnswer: model_add <- lm(like_s ~ bloc + partisan, data = swe)
+  AnswerTests: omnitest(correctExpr='model_add <- lm(like_s ~ bloc + partisan, data = swe)')
+  Hint: Type model_add <- lm(like_s ~ bloc + partisan, data = swe).
+
+- Class: cmd_question
+  Output: Look at the output. Type summary(model_add).
+  CorrectAnswer: summary(model_add)
+  AnswerTests: omnitest(correctExpr='summary(model_add)')
+  Hint: Type summary(model_add).
+
+- Class: mult_question
+  Output: The coefficient on partisanYes is minus 0.02, with a p-value of 0.81. Which of these does the model assume?
+  CorrectAnswer: That feeling close to a party has the same effect in both blocs.
+  AnswerChoices: That feeling close to a party has the same effect in both blocs.; That feeling close to a party has no effect.; That the two blocs are the same size.
+  AnswerTests: omnitest(correctVal='That feeling close to a party has the same effect in both blocs.')
+  Hint: There is one coefficient for partisan, and it applies to everybody in the model.
+
+- Class: text
+  Output: An interaction lets the effect differ between the blocs.
+
+- Class: cmd_question
+  Output: Replace the plus with a star. Type model_pid <- lm(like_s ~ bloc * partisan, data = swe).
+  CorrectAnswer: model_pid <- lm(like_s ~ bloc * partisan, data = swe)
+  AnswerTests: omnitest(correctExpr='model_pid <- lm(like_s ~ bloc * partisan, data = swe)')
+  Hint: Type model_pid <- lm(like_s ~ bloc * partisan, data = swe). The star puts in both variables and their product.
+
+- Class: cmd_question
+  Output: Look at the output. Type summary(model_pid).
+  CorrectAnswer: summary(model_pid)
+  AnswerTests: omnitest(correctExpr='summary(model_pid)')
+  Hint: Type summary(model_pid).
+
+- Class: mult_question
+  Output: The coefficient on partisanYes is now 0.872. What is it the effect for?
+  CorrectAnswer: Left-bloc voters only, because Left is the reference category.
+  AnswerChoices: Left-bloc voters only, because Left is the reference category.; Everybody, averaged across the two blocs.; The difference between the blocs.
+  AnswerTests: omnitest(correctVal='Left-bloc voters only, because Left is the reference category.')
+  Hint: Once an interaction is in the model, the other coefficients are effects when the other variable is zero - and blocRight is zero for left-bloc voters.
+
+- Class: mult_question
+  Output: The interaction, blocRight:partisanYes, is minus 1.976. So what is the effect of closeness among right-bloc voters?
+  CorrectAnswer: 0.872 minus 1.976, which is minus 1.104.
+  AnswerChoices: 0.872 minus 1.976, which is minus 1.104.; Minus 1.976.; Minus 3.114 minus 1.976, which is minus 5.090.
+  AnswerTests: omnitest(correctVal='0.872 minus 1.976, which is minus 1.104.')
+  Hint: The interaction says how much the effect differs in the right bloc from what it is in the left bloc.
+
+- Class: text
+  Output: Left-bloc voters who feel close to a party like the Social Democrats more than those who do not, and right-bloc voters who feel close to a party like them less. Two opposite effects, which the first model averaged into nothing.
+
+- Class: cmd_question
+  Output: Get the four predicted means. Type pid_predictions <- predict_response(model_pid, terms = c("partisan", "bloc")).
+  CorrectAnswer: pid_predictions <- predict_response(model_pid, terms = c("partisan", "bloc"))
+  AnswerTests: any_of_exprs('pid_predictions <- predict_response(model_pid, terms = c("partisan", "bloc"))', 'pid_predictions <- predict_response(model_pid, terms=c("partisan", "bloc"))')
+  Hint: Type pid_predictions <- predict_response(model_pid, terms = c("partisan", "bloc")).
+
+- Class: cmd_question
+  Output: Look at them. Type pid_predictions.
+  CorrectAnswer: pid_predictions
+  AnswerTests: omnitest(correctExpr='pid_predictions')
+  Hint: Type pid_predictions.
+
+- Class: cmd_question
+  Output: And plot them, with a line for each bloc. Type plot(pid_predictions, connect_lines = TRUE).
+  CorrectAnswer: plot(pid_predictions, connect_lines = TRUE)
+  AnswerTests: any_of_exprs('plot(pid_predictions, connect_lines = TRUE)', 'plot(pid_predictions, connect_lines=TRUE)')
+  Hint: Type plot(pid_predictions, connect_lines = TRUE).
+
+- Class: text
+  Output: Two lines that are not parallel. Non-parallel lines are what an interaction is. If you cannot see it on the plot, it is not there in any meaningful sense.
+
+- Class: text
+  Output: If you made the right bloc the reference category instead, the coefficient on partisanYes would change from 0.872 to minus 1.104. Nothing about the data would have changed, and the coefficient would have changed its sign. That is why you never report 'the effect of closeness' from a model with an interaction in it.
+
+- Class: text
+  Output: Now a continuous and a binary variable. A model with trust plus bloc says the trust slope is identical for left and right voters, and forces it to be.
+
+- Class: cmd_question
+  Output: Fit the interaction. Type model_int <- lm(demlevel ~ trust * bloc, data = swe).
   CorrectAnswer: model_int <- lm(demlevel ~ trust * bloc, data = swe)
   AnswerTests: omnitest(correctExpr='model_int <- lm(demlevel ~ trust * bloc, data = swe)')
   Hint: Type model_int <- lm(demlevel ~ trust * bloc, data = swe). The star puts in both variables and their product.
 
 - Class: cmd_question
-  Output: Show the coefficients - round(coef(summary(model_int)), 3).
-  CorrectAnswer: round(coef(summary(model_int)), 3)
-  AnswerTests: omnitest(correctExpr='round(coef(summary(model_int)), 3)')
-  Hint: Type round(coef(summary(model_int)), 3).
+  Output: Look at the output. Type summary(model_int).
+  CorrectAnswer: summary(model_int)
+  AnswerTests: omnitest(correctExpr='summary(model_int)')
+  Hint: Type summary(model_int).
 
 - Class: mult_question
   Output: The coefficient on trust is 0.955. What is it the slope for?
@@ -57,50 +135,19 @@
   Hint: Look at which line is on top at the left of the plot, and which is on top at the right.
 
 - Class: text
-  Output: So the answer to 'is there a winner-loser gap' is - it depends who you ask. That is what an interaction means, and no single coefficient could have said it. Non-parallel lines are what an interaction is. If you cannot see it on the plot, it is not there in any meaningful sense.
-
-- Class: text
-  Output: Now a case where the main effect actively misleads.
-
-- Class: cmd_question
-  Output: Fit model_age <- lm(lr_self ~ age * sex, data = swe).
-  CorrectAnswer: model_age <- lm(lr_self ~ age * sex, data = swe)
-  AnswerTests: omnitest(correctExpr='model_age <- lm(lr_self ~ age * sex, data = swe)')
-  Hint: Type model_age <- lm(lr_self ~ age * sex, data = swe).
-
-- Class: cmd_question
-  Output: Look at it - round(coef(summary(model_age)), 4).
-  CorrectAnswer: round(coef(summary(model_age)), 4)
-  AnswerTests: omnitest(correctExpr='round(coef(summary(model_age)), 4)')
-  Hint: Type round(coef(summary(model_age)), 4).
-
-- Class: mult_question
-  Output: The coefficient on age is minus 0.0047 with a p-value of 0.29. Read carelessly, that says age does not matter. What does it actually say?
-  CorrectAnswer: Age does not matter for men, who are the reference category.
-  AnswerChoices: Age does not matter for men, who are the reference category.; Age does not matter for anybody.; Age matters, but the sample is too small to show it.
-  AnswerTests: omnitest(correctVal='Age does not matter for men, who are the reference category.')
-  Hint: Which group has sexWomen equal to zero?
-
-- Class: text
-  Output: For women the slope is minus 0.0047 plus 0.0189, which is plus 0.0142, and the interaction is significant. Swap the reference category from men to women and the age coefficient changes from non-significant to significant, with no change to the data at all. That is why you never report 'the effect of age' from a model with an interaction in it.
+  Output: So the answer to 'is there a winner-loser gap' is - it depends who you ask. That is what an interaction means, and no single coefficient could have said it.
 
 - Class: text
   Output: One warning. With ten predictors there are forty-five possible two-way interactions, and a couple would come out significant by chance. Test the ones you had a reason to expect.
 
 - Class: text
-  Output: Now the second assumption - that the relationship is a straight line. Session 5 gave us a case where it cannot be. Income has a floor at zero and no ceiling; life expectancy has both.
+  Output: Now the second assumption - that the relationship is a straight line. Who likes the Liberals? People tend to like parties that are close to them, and respondents place the Liberals at 6.4 on the left-right scale. So the rating should rise towards the party and fall again on the other side of it.
 
 - Class: cmd_question
-  Output: First put income in thousands of dollars, so that the coefficients are readable. Type world$gdp_k <- world$gdp / 1000.
-  CorrectAnswer: world$gdp_k <- world$gdp / 1000
-  AnswerTests: omnitest(correctExpr='world$gdp_k <- world$gdp / 1000')
-  Hint: Type world$gdp_k <- world$gdp / 1000.
-
-- Class: cmd_question
-  Output: Fit a straight line anyway. Type linear <- lm(life ~ gdp_k, data = world).
-  CorrectAnswer: linear <- lm(life ~ gdp_k, data = world)
-  AnswerTests: omnitest(correctExpr='linear <- lm(life ~ gdp_k, data = world)')
-  Hint: Type linear <- lm(life ~ gdp_k, data = world).
+  Output: Fit a straight line anyway. Type linear <- lm(like_l ~ lr_self, data = swe).
+  CorrectAnswer: linear <- lm(like_l ~ lr_self, data = swe)
+  AnswerTests: omnitest(correctExpr='linear <- lm(like_l ~ lr_self, data = swe)')
+  Hint: Type linear <- lm(like_l ~ lr_self, data = swe).
 
 - Class: cmd_question
   Output: Look at the output. Type summary(linear).
@@ -108,23 +155,26 @@
   AnswerTests: omnitest(correctExpr='summary(linear)')
   Hint: Type summary(linear).
 
+- Class: text
+  Output: Each point further right goes with a rating 0.30 points higher, clearly significant, and adjusted R-squared is 0.11. Nothing in the output says anything is wrong. Read as it stands, it says that the further right people are, the more they like the Liberals.
+
 - Class: cmd_question
-  Output: Adjusted R-squared is 0.46, the coefficient is clearly significant, and nothing in the output says anything is wrong. Now ask it to predict for a very rich country, with 300 thousand dollars per head. Type predict(linear, newdata = data.frame(gdp_k = 300)).
-  CorrectAnswer: predict(linear, newdata = data.frame(gdp_k = 300))
-  AnswerTests: omnitest(correctExpr='predict(linear, newdata = data.frame(gdp_k = 300))')
-  Hint: Type predict(linear, newdata = data.frame(gdp_k = 300)).
+  Output: Look at the mean rating at each point of the scale. Type swe |> filter(!is.na(lr_self)) |> group_by(lr_self) |> summarise(mean = mean(like_l, na.rm = TRUE)).
+  CorrectAnswer: swe |> filter(!is.na(lr_self)) |> group_by(lr_self) |> summarise(mean = mean(like_l, na.rm = TRUE))
+  AnswerTests: any_of_exprs('swe |> filter(!is.na(lr_self)) |> group_by(lr_self) |> summarise(mean = mean(like_l, na.rm = TRUE))', 'swe |> filter(!is.na(lr_self)) |> group_by(lr_self) |> summarise(mean = mean(like_l, na.rm=TRUE))')
+  Hint: Type swe |> filter(!is.na(lr_self)) |> group_by(lr_self) |> summarise(mean = mean(like_l, na.rm = TRUE)).
 
 - Class: text
-  Output: A life expectancy of 132 years. The model is not confused - it is doing what a straight line does. The mistake was ours, in fitting one.
+  Output: It rises to about 6, stays there until 8, and then falls. People at 10 like the party less than people at 5.
 
 - Class: text
   Output: To let the line bend, add the square of the predictor as a second predictor. The model can then bend once - up and then down, or down and then up. This is called a quadratic model.
 
 - Class: cmd_question
-  Output: Fit it. Type quadratic <- lm(life ~ gdp_k + I(gdp_k^2), data = world).
-  CorrectAnswer: quadratic <- lm(life ~ gdp_k + I(gdp_k^2), data = world)
-  AnswerTests: omnitest(correctExpr='quadratic <- lm(life ~ gdp_k + I(gdp_k^2), data = world)')
-  Hint: Type quadratic <- lm(life ~ gdp_k + I(gdp_k^2), data = world). The I() is needed because inside a formula the caret means something else.
+  Output: Fit it. Type quadratic <- lm(like_l ~ lr_self + I(lr_self^2), data = swe).
+  CorrectAnswer: quadratic <- lm(like_l ~ lr_self + I(lr_self^2), data = swe)
+  AnswerTests: omnitest(correctExpr='quadratic <- lm(like_l ~ lr_self + I(lr_self^2), data = swe)')
+  Hint: Type quadratic <- lm(like_l ~ lr_self + I(lr_self^2), data = swe). The I() is needed because inside a formula the caret means something else.
 
 - Class: cmd_question
   Output: Look at the output. Type summary(quadratic).
@@ -135,40 +185,43 @@
 - Class: mult_question
   Output: The squared term is clearly significant. What does that say?
   CorrectAnswer: The relationship is not a straight line.
-  AnswerChoices: The relationship is not a straight line.; Income has twice the effect we thought.; Life expectancy falls as countries get richer.
+  AnswerChoices: The relationship is not a straight line.; Left-right placement has twice the effect we thought.; People on the left like the Liberals most.
   AnswerTests: omnitest(correctVal='The relationship is not a straight line.')
   Hint: A straight line is what you get when the squared term is zero.
 
 - Class: text
-  Output: Adjusted R-squared has gone from 0.46 to 0.62. The adjusted version is the one to compare, because the quadratic has one more term.
+  Output: Adjusted R-squared has gone from 0.11 to 0.16. The adjusted version is the one to compare, because the quadratic has one more term.
 
 - Class: mult_question
-  Output: The coefficient on gdp_k is 0.499 and the one on its square is minus 0.003. Read together, what shape is that?
-  CorrectAnswer: It rises, and rises less and less.
-  AnswerChoices: It rises, and rises less and less.; It rises, and rises faster and faster.; It falls and then rises.
-  AnswerTests: omnitest(correctVal='It rises, and rises less and less.')
-  Hint: The positive term dominates when income is low. The negative squared term grows as income grows.
+  Output: The coefficient on lr_self is 1.019 and the one on its square is minus 0.072. Read together, what shape is that?
+  CorrectAnswer: It rises, rises less and less, and then falls.
+  AnswerChoices: It rises, rises less and less, and then falls.; It rises, and rises faster and faster.; It falls and then rises.
+  AnswerTests: omnitest(correctVal='It rises, rises less and less, and then falls.')
+  Hint: The positive term dominates at the left end of the scale. The negative squared term grows as you move right.
 
 - Class: text
-  Output: There is no single effect of income any more, so give predictions at several values. Compare two steps of the same size.
+  Output: There is no single effect of left-right placement any more, so compare one-point steps in different places.
 
 - Class: cmd_question
-  Output: The first step is from 5 to 15 thousand dollars. Type predict(quadratic, newdata = data.frame(gdp_k = c(5, 15))).
-  CorrectAnswer: predict(quadratic, newdata = data.frame(gdp_k = c(5, 15)))
-  AnswerTests: omnitest(correctExpr='predict(quadratic, newdata = data.frame(gdp_k = c(5, 15)))')
-  Hint: Type predict(quadratic, newdata = data.frame(gdp_k = c(5, 15))).
+  Output: The step from 1 to 2 first. Type predict(quadratic, newdata = data.frame(lr_self = c(1, 2))).
+  CorrectAnswer: predict(quadratic, newdata = data.frame(lr_self = c(1, 2)))
+  AnswerTests: omnitest(correctExpr='predict(quadratic, newdata = data.frame(lr_self = c(1, 2)))')
+  Hint: Type predict(quadratic, newdata = data.frame(lr_self = c(1, 2))).
 
 - Class: cmd_question
-  Output: 67.1 and 71.5, about 4.4 years more. Now from 50 to 60 thousand. Type predict(quadratic, newdata = data.frame(gdp_k = c(50, 60))).
-  CorrectAnswer: predict(quadratic, newdata = data.frame(gdp_k = c(50, 60)))
-  AnswerTests: omnitest(correctExpr='predict(quadratic, newdata = data.frame(gdp_k = c(50, 60)))')
-  Hint: Type predict(quadratic, newdata = data.frame(gdp_k = c(50, 60))).
+  Output: From 2.868 to 3.671, a rise of 0.803. Now from 9 to 10. Type predict(quadratic, newdata = data.frame(lr_self = c(9, 10))).
+  CorrectAnswer: predict(quadratic, newdata = data.frame(lr_self = c(9, 10)))
+  AnswerTests: omnitest(correctExpr='predict(quadratic, newdata = data.frame(lr_self = c(9, 10)))')
+  Hint: Type predict(quadratic, newdata = data.frame(lr_self = c(9, 10))).
 
 - Class: text
-  Output: 82.1 and 83.8, about 1.7 years more. The same ten thousand dollars goes with much less at the top.
+  Output: From 5.246 to 4.894, a fall of 0.352.
+
+- Class: text
+  Output: The turning point is where the curve stops rising. It is minus the first coefficient divided by twice the second.
 
 - Class: cmd_question
-  Output: The turning point is where the curve stops rising. It is minus the first coefficient divided by twice the second. Save the coefficients. Type b <- coef(quadratic).
+  Output: Save the coefficients. Type b <- coef(quadratic).
   CorrectAnswer: b <- coef(quadratic)
   AnswerTests: omnitest(correctExpr='b <- coef(quadratic)')
   Hint: Type b <- coef(quadratic).
@@ -179,21 +232,12 @@
   AnswerTests: omnitest(correctExpr='-b[2] / (2 * b[3])')
   Hint: Type -b[2] / (2 * b[3]).
 
-- Class: text
-  Output: About 83 thousand dollars. Only two of the 117 countries are richer than that, so the bend downwards after it rests on almost nothing.
-
-- Class: cmd_question
-  Output: A quadratic always turns round eventually, whether or not the world does. Ask it about 300 thousand dollars. Type predict(quadratic, newdata = data.frame(gdp_k = 300)).
-  CorrectAnswer: predict(quadratic, newdata = data.frame(gdp_k = 300))
-  AnswerTests: omnitest(correctExpr='predict(quadratic, newdata = data.frame(gdp_k = 300))')
-  Hint: Type predict(quadratic, newdata = data.frame(gdp_k = 300)).
-
 - Class: mult_question
-  Output: Minus 57 years. What is the right conclusion?
-  CorrectAnswer: Use the quadratic to describe the relationship where the data are, and not beyond.
-  AnswerChoices: Use the quadratic to describe the relationship where the data are, and not beyond.; Life expectancy falls below zero in very rich countries.; The straight line was right after all.
-  AnswerTests: omnitest(correctVal='Use the quadratic to describe the relationship where the data are, and not beyond.')
-  Hint: The richest country in the data is at about 135 thousand dollars.
+  Output: 7.06, not far from where respondents place the party. About a quarter of the respondents are to the right of it. Why does that matter?
+  CorrectAnswer: A quadratic always turns round somewhere, so the fall is only a finding if there are enough cases beyond the turning point.
+  AnswerChoices: A quadratic always turns round somewhere, so the fall is only a finding if there are enough cases beyond the turning point.; The turning point has to be in the middle of the scale.; Without them the model could not be fitted.
+  AnswerTests: omnitest(correctVal='A quadratic always turns round somewhere, so the fall is only a finding if there are enough cases beyond the turning point.')
+  Hint: What would you think of the downturn if only two respondents were to the right of 7?
 
 - Class: text
-  Output: And have a reason for the curve. A squared term belongs in a model when there is an argument for a bend. Adding squared terms to see what becomes significant is hunting, just as it is with interactions.
+  Output: And have a reason for the curve. We had one - people like parties that are close to them. Adding squared terms to see what becomes significant is hunting, just as it is with interactions.

@@ -26,44 +26,122 @@ trust_items <- c(
 )
 swe$trust <- fa(swe[, trust_items], nfactors = 1, fm = "ml")$scores[, 1]
 
-swe$sex <- factor(
-  swe$female,
+swe$partisan <- factor(
+  swe$pid,
   levels = c(0, 1),
-  labels = c("Men", "Women")
+  labels = c("No", "Yes")
 )
 ```
 
+`partisan` says whether the respondent feels close to a political party.
+
 ## Interactions
 
-In session 11 we found that trust in institutions predicts how democratic people think Sweden is, and that it does so about equally on both sides of the political divide once you control for it.
+### Two binary variables
 
-But "controlling for" and "the same for everybody" are different claims. A model with `trust + bloc` says the trust slope is identical for left and right voters, and forces it to be. An **interaction** lets it differ.
+How much people like the Social Democrats depends on which bloc they vote for. Does it also depend on whether they feel **close to a party**?
+
+Start with a model that has both variables in it.
+
+```{r}
+model_add <- lm(like_s ~ bloc + partisan, data = swe)
+
+summary(model_add)
+```
+
+Right-bloc voters rate the Social Democrats `r fmt(abs(coef(model_add)[2]))` points lower than left-bloc voters. No surprise. And feeling close to a party makes no difference at all: `r fmt(coef(model_add)[3])`, *p* = `r fmt(coef(summary(model_add))[3, 4])`.
+
+Now look at the means.
+
+```{r}
+swe |>
+  filter(!is.na(bloc), !is.na(partisan), !is.na(like_s)) |>
+  group_by(bloc, partisan) |>
+  summarise(n = n(), mean = mean(like_s), .groups = "drop")
+```
+
+Grouping by two variables gives one row for each combination, and `.groups = "drop"` removes the grouping afterwards.
+
+Closeness makes a great deal of difference. Among left-bloc voters, those who feel close to a party like the Social Democrats **more** than those who do not. Among right-bloc voters, they like them **less**. Partisans like their own side more and the other side less, which is what research on **affective polarisation** would lead us to expect.
+
+The model missed it because it was not allowed to see it. `bloc + partisan` assumes that closeness has **the same effect in both blocs**. Two opposite effects, averaged, came out as nothing. "Controlling for" a variable and "this effect is the same for everybody" are different claims, and a model without an interaction makes both.
+
+An **interaction** lets the effect differ.
+
+```{r}
+model_pid <- lm(like_s ~ bloc * partisan, data = swe)
+
+summary(model_pid)
+```
+
+`bloc * partisan` is shorthand. It puts in `bloc`, `partisan`, and the product of the two — the interaction term, printed as `blocRight:partisanYes`. You could write `bloc + partisan + bloc:partisan` and get the same model. The product of two dummies is 1 only when **both** are 1: here, for a right-bloc voter who feels close to a party.
+
+Four coefficients, and from them the four means:
+
+- **`(Intercept)` = `r fmt(coef(model_pid)[1], 3)`** — left bloc, not close. Both dummies are 0.
+- **`partisanYes` = `r fmt(coef(model_pid)[3], 3)`** — the effect of closeness **in the left bloc**. Left bloc, close: `r fmt(coef(model_pid)[1], 3)` + `r fmt(coef(model_pid)[3], 3)` = `r fmt(coef(model_pid)[1] + coef(model_pid)[3], 3)`.
+- **`blocRight` = `r fmt(coef(model_pid)[2], 3)`** — the difference between the blocs **among people who are not close to a party**. Right bloc, not close: `r fmt(coef(model_pid)[1], 3)` + (`r fmt(coef(model_pid)[2], 3)`) = `r fmt(coef(model_pid)[1] + coef(model_pid)[2], 3)`.
+- **`blocRight:partisanYes` = `r fmt(coef(model_pid)[4], 3)`** — how much the effect of closeness **differs** in the right bloc. There it is `r fmt(coef(model_pid)[3], 3)` + (`r fmt(coef(model_pid)[4], 3)`) = `r fmt(coef(model_pid)[3] + coef(model_pid)[4], 3)`. Right bloc, close: all four added up, `r fmt(sum(coef(model_pid)), 3)`.
+
+The p-value of the interaction tests whether that difference is zero. It is not (*p* < .001).
+
+> **Once you add an interaction, the other two coefficients change meaning.** They are no longer average effects. They are the effect of one variable *when the other is zero*.
+
+```{r}
+#| label: fig-pid
+#| fig-height: 3.6
+pid_predictions <- predict_response(
+  model_pid,
+  terms = c("partisan", "bloc")
+)
+
+plot(pid_predictions, connect_lines = TRUE) +
+  scale_colour_viridis_d(end = 0.7) +
+  coord_cartesian(ylim = c(0, 10)) +
+  labs(
+    x = "Feels close to a party",
+    y = "Predicted rating of the Social Democrats",
+    colour = "Bloc",
+    title = NULL
+  ) +
+  theme_bw()
+```
+
+Giving `terms` two variables produces one line per group of the second, and `connect_lines = TRUE` joins the points. `scale_colour_viridis_d()` puts the two lines on the colourblind-safe palette from session 4.
+
+**Non-parallel lines are what an interaction is.** Without the interaction the model would have had to draw them parallel. If you cannot see it on the plot, it is not there in any meaningful sense, whatever the p-value says.
+
+You can also read it the other way round. Among people who are not close to a party, the blocs are `r fmt(abs(coef(model_pid)[2]))` points apart. Among those who are, they are `r fmt(abs(coef(model_pid)[2] + coef(model_pid)[4]))` points apart. It is the same interaction.
+
+::: {.discussion}
+**A question.** Make the right bloc the reference category and the coefficient on `partisanYes` changes from `r fmt(coef(model_pid)[3])` to `r fmt(coef(model_pid)[3] + coef(model_pid)[4])`. It changes its sign.
+
+Nothing about the data has changed. What does that tell you about reporting "the effect of closeness to a party" from a model containing an interaction?
+:::
+
+### A continuous and a binary variable
+
+In session 11 we found that trust in institutions predicts how democratic people think Sweden is. A model with `trust + bloc` says that the trust slope is identical for left and right voters, and forces it to be. Let it differ.
 
 ```{r}
 model_int <- lm(demlevel ~ trust * bloc, data = swe)
 
-round(coef(summary(model_int)), 3)
+summary(model_int)
 ```
-
-`trust * bloc` is shorthand. It puts in `trust`, `bloc`, and the product of the two — the interaction term, printed as `trust:blocRight`. You could write `trust + bloc + trust:bloc` and get the same model.
-
-### Reading it
 
 Four numbers, and the trap is in the middle two.
 
-**`(Intercept)` = `r fmt(coef(model_int)[1])`** — predicted rating for a left-bloc voter with average trust.
+**`(Intercept)` = `r fmt(coef(model_int)[1], 3)`** — predicted rating for a left-bloc voter with average trust.
 
-**`trust` = `r fmt(coef(model_int)[2])`** — the trust slope **for left-bloc voters only**. Not for everyone. Not on average.
+**`trust` = `r fmt(coef(model_int)[2], 3)`** — the trust slope **for left-bloc voters only**. Not for everyone. Not on average.
 
-**`blocRight` = `r fmt(coef(model_int)[3])`** — the bloc difference **at trust = 0**. Not overall.
+**`blocRight` = `r fmt(coef(model_int)[3], 3)`** — the bloc difference **at trust = 0**. Not overall.
 
-**`trust:blocRight` = `r fmt(coef(model_int)[4])`** — how much the trust slope *changes* for right-bloc voters. So their slope is `r fmt(coef(model_int)[2])` + `r fmt(coef(model_int)[4])` = `r fmt(coef(model_int)[2] + coef(model_int)[4])`.
+**`trust:blocRight` = `r fmt(coef(model_int)[4], 3)`** — how much the trust slope *changes* for right-bloc voters. So their slope is `r fmt(coef(model_int)[2], 3)` + `r fmt(coef(model_int)[4], 3)` = `r fmt(coef(model_int)[2] + coef(model_int)[4], 3)`.
 
-> **Once you add an interaction, the other two coefficients change meaning.** They are no longer average effects. They are the effect of one variable *when the other is zero*, which is why it matters enormously whether zero is a meaningful value.
->
-> Here it happens to be fine, because `trust` is a factor score, so zero is the average. Had we used raw age, `blocRight` would have been the bloc difference among newborns.
+> **Check that zero means something.** The other two coefficients are effects *when the other variable is zero*, so it matters enormously whether zero is a meaningful value. Here it is, because `trust` is a factor score, so zero is the average. Had we used raw age, `blocRight` would have been the bloc difference among newborns.
 
-The interaction is significant (*p* = `r fmt(coef(summary(model_int))[4, 4], 3)`), so trust does more work for right-bloc voters than for left-bloc voters: `r fmt(coef(model_int)[2] + coef(model_int)[4])` points per unit of trust against `r fmt(coef(model_int)[2])`.
+The interaction is significant (*p* = `r fmt(coef(summary(model_int))[4, 4], 3)`), so trust does more work for right-bloc voters than for left-bloc voters: `r fmt(coef(model_int)[2] + coef(model_int)[4], 3)` points per unit of trust against `r fmt(coef(model_int)[2], 3)`.
 
 ### Plot it, always
 
@@ -90,115 +168,72 @@ plot(predictions) +
   theme_bw()
 ```
 
-Giving `terms` two variables produces one line per group of the second, and `scale_colour_viridis_d()` and `scale_fill_viridis_d()` put the two lines on the colourblind-safe palette from session 4. Now the interaction is obvious: two lines that are not parallel, and that **cross**.
+`scale_fill_viridis_d()` does for the shaded bands what `scale_colour_viridis_d()` does for the lines. Now the interaction is obvious: two lines that are not parallel, and that **cross**.
 
 Read what it says. Among people who distrust institutions, left-bloc voters rate Swedish democracy *higher* than right-bloc voters. Among people who trust institutions, it is the other way round. The lines meet at a trust score of about `r fmt(-coef(model_int)[3] / coef(model_int)[4])`.
 
 So the answer to "is there a winner–loser gap?" is: it depends who you ask. That is what an interaction means, and no single coefficient could have said it.
 
-**Non-parallel lines are what an interaction is.** If you cannot see it on this plot, it is not there in any meaningful sense, whatever the p-value says.
-
 Note also the top right corner: the model predicts `r fmt(max(as.data.frame(predictions)$predicted))` for the most trusting right-bloc voters, on a scale that stops at 10. Session 12 again, and one more reason not to read predictions at the edges too literally.
-
-### When the main effect misleads
-
-A second example, because this catches people.
-
-```{r}
-model_age <- lm(lr_self ~ age * sex, data = swe)
-
-round(coef(summary(model_age)), 4)
-```
-
-The coefficient on `age` is `r fmt(coef(model_age)[2], 4)` with *p* = `r fmt(coef(summary(model_age))[2, 4], 3)` — nothing. Read carelessly, that says age does not matter.
-
-It says no such thing. It says age does not matter **for men**, since men are the reference category. For women the slope is `r fmt(coef(model_age)[2], 4)` + `r fmt(coef(model_age)[4], 4)` = `r fmt(coef(model_age)[2] + coef(model_age)[4], 4)` — positive, and the interaction is significant at *p* = `r fmt(coef(summary(model_age))[4, 4], 3)`.
-
-```{r}
-#| label: fig-int2
-#| fig-height: 3.4
-age_predictions <- predict_response(model_age, terms = c("age", "sex"))
-
-plot(age_predictions) +
-  scale_colour_viridis_d(end = 0.7) +
-  scale_fill_viridis_d(end = 0.7) +
-  labs(
-    x = "Age (years)",
-    y = "Predicted left-right self-placement",
-    colour = "Sex",
-    fill = "Sex",
-    title = NULL
-  ) +
-  theme_bw()
-```
-
-Older women place themselves further right than younger women; among men, age makes little difference. Two groups, two different stories, and a model without the interaction would have averaged them into one weak effect.
-
-::: {.discussion}
-**A question.** In `model_age`, swapping the reference category from men to women would change the coefficient on `age` from `r fmt(coef(model_age)[2], 4)` to `r fmt(coef(model_age)[2] + coef(model_age)[4], 4)`, and its p-value from non-significant to significant.
-
-Nothing about the data has changed. What does that tell you about reporting "the effect of age" from a model containing an interaction?
-:::
 
 > **Do not go hunting.** With ten predictors there are forty-five possible two-way interactions, and at the conventional threshold you would expect a couple to come out significant by chance alone. Test interactions you have a reason to expect. An interaction found by searching needs replicating before it means anything.
 
 ## Non-linear relationships
 
-The second assumption. Sometimes the relationship is not a straight line at all — and session 5 gave us a case where it *cannot* be.
+The second assumption. Sometimes there is a reason to expect that the relationship is **not a straight line**.
+
+Who likes the Liberals? The theory of **proximity voting** says that people like the parties that are close to them. Respondents see the Liberals as a party a little to the right of the centre: on average they place it at `r fmt(mean(swe$lr_l, na.rm = TRUE), 1)` on the 0–10 scale. So the rating should rise as we move from the left towards the party, and **fall again** on the other side of it. Up, and then down.
+
+### A straight line
+
+Fit a straight line anyway and see.
 
 ```{r}
-world <- readr::read_csv("data/world.csv", show_col_types = FALSE)
-world <- world |> filter(!is.na(gdp), !is.na(life))
-
-world$gdp_k <- world$gdp / 1000
-```
-
-`gdp_k` is income per head in **thousands** of dollars. One dollar more or less makes no visible difference to anything, so the coefficient on it would be a number like 0.0002. Changing the unit changes how the coefficient reads and nothing else.
-
-Income has a floor at zero and no ceiling. Life expectancy has both. We argued in session 5 that this rules out a straight line, because a line rising forever eventually promises impossible lifespans.
-
-Fit one anyway and see.
-
-```{r}
-linear <- lm(life ~ gdp_k, data = world)
+linear <- lm(like_l ~ lr_self, data = swe)
 
 summary(linear)
 ```
 
-Each thousand dollars more goes with `r fmt(coef(linear)[2])` more years of life expectancy. The coefficient is clearly significant, and adjusted R² is `r fmt(summary(linear)$adj.r.squared, 3)`. Nothing in that output says anything is wrong.
+Each point further right goes with a rating `r fmt(coef(linear)[2])` points higher, and the coefficient is clearly significant. Adjusted R² is `r fmt(summary(linear)$adj.r.squared, 3)`. Nothing in that output says anything is wrong. Read as it stands, it says: **the further right people are, the more they like the Liberals**.
 
-Now ask it to predict.
+Now look at the mean rating at each point of the scale.
 
 ```{r}
-extremes <- data.frame(gdp_k = c(1, 50, 150, 300))
-extremes$linear <- predict(linear, newdata = extremes)
+lr_means <- swe |>
+  filter(!is.na(lr_self), !is.na(like_l)) |>
+  group_by(lr_self) |>
+  summarise(n = n(), mean = mean(like_l))
 
-round(extremes, 1)
+lr_means
 ```
 
-A life expectancy of `r fmt(predict(linear, newdata = data.frame(gdp_k = 300)), 0)` years in the last row. The model is not confused — it is doing exactly what a straight line does. The mistake was ours, in fitting one.
+The ratings rise until about 6, stay there until 8, and then fall. People at 10 like the party less than people at 5.
 
 ### A squared term
 
 To let the line bend, add the **square** of the predictor as a second predictor. The model can then bend once: up and then down, or down and then up. This is called a **quadratic** model.
 
-$$\text{life} = b_0 + b_1 \times \text{income} + b_2 \times \text{income}^2$$
+$$\text{rating} = b_0 + b_1 \times \text{left-right} + b_2 \times \text{left-right}^2$$
 
 ```{r}
-quadratic <- lm(life ~ gdp_k + I(gdp_k^2), data = world)
+quadratic <- lm(like_l ~ lr_self + I(lr_self^2), data = swe)
 
 summary(quadratic)
 ```
 
-`I()` is needed around `gdp_k^2`. Inside a formula `^` means something else — interactions to a given order — and `I()` says "treat this as ordinary arithmetic".
+`I()` is needed around `lr_self^2`. Inside a formula `^` means something else — interactions to a given order — and `I()` says "treat this as ordinary arithmetic".
 
 The squared term is clearly significant, which says that the relationship is **not a straight line**. Adjusted R² rises from `r fmt(summary(linear)$adj.r.squared, 3)` to `r fmt(summary(quadratic)$adj.r.squared, 3)`. The adjusted version is the one to compare, because the second model has one more term.
 
 ```{r}
 #| label: fig-nonlin
 #| fig-height: 3.8
-ggplot(world, aes(x = gdp_k, y = life)) +
-  geom_point(alpha = 0.5) +
+set.seed(2026)
+
+swe |>
+  filter(!is.na(lr_self), !is.na(like_l)) |>
+  ggplot(aes(x = lr_self, y = like_l)) +
+  geom_jitter(width = 0.25, height = 0.25, alpha = 0.06) +
   geom_smooth(
     method = "lm",
     formula = y ~ x,
@@ -212,32 +247,33 @@ ggplot(world, aes(x = gdp_k, y = life)) +
     se = FALSE,
     colour = "black"
   ) +
-  coord_cartesian(ylim = c(40, 100)) +
+  geom_point(data = lr_means, aes(y = mean), size = 2.5) +
+  scale_x_continuous(breaks = 0:10) +
   labs(
-    x = "GDP per capita (thousands of PPP dollars)",
-    y = "Life expectancy at birth (years)"
+    x = "Left-right self-placement (0 = left, 10 = right)",
+    y = "Rating of the Liberals (0-10)"
   ) +
   theme_bw()
 ```
 
-The dashed line is the straight fit and the solid one the quadratic. The straight line is too **high** at both ends and too **low** in the middle — the signature of fitting a line to a curve, and exactly what the residual plot in session 11 was looking for.
+The grey points are the respondents and the black ones the mean at each point of the scale. The dashed line is the straight fit and the solid one the quadratic. The straight line is too **high** at both ends and too **low** in the middle — the signature of fitting a line to a curve, and exactly what the residual plot in session 11 was looking for.
 
-### Reading it
+### Reading a quadratic
 
-A squared term is like an interaction: the two coefficients **cannot be read separately**. "One more unit of income, holding income squared constant" is not something that can happen. Read them together.
+A squared term is like an interaction: the two coefficients **cannot be read separately**. "One point further right, holding the square of left-right constant" is not something that can happen. Read them together.
 
-**The signs give the shape.** The first coefficient is positive (`r fmt(coef(quadratic)[2], 3)`) and the squared one is negative (`r fmt(coef(quadratic)[3], 4)`): the curve rises, and rises less and less. Had the signs been the other way round, it would fall first and then rise.
+**The signs give the shape.** The first coefficient is positive (`r fmt(coef(quadratic)[2])`) and the squared one is negative (`r fmt(coef(quadratic)[3], 3)`): the curve rises, rises less and less, and then falls. Had the signs been the other way round, it would fall first and then rise.
 
-**Predictions give the size.** There is no single effect of income any more, so predict at several values, equally far apart.
+**Predictions give the size.** There is no single effect of left-right placement any more, so compare one-point steps in different places.
 
 ```{r}
-steps <- data.frame(gdp_k = c(5, 15, 50, 60))
+steps <- data.frame(lr_self = c(1, 2, 6, 7, 9, 10))
 steps$predicted <- predict(quadratic, newdata = steps)
 
-round(steps, 1)
+round(steps, 3)
 ```
 
-Going from 5,000 to 15,000 dollars goes with about `r fmt(predict(quadratic, data.frame(gdp_k = 15)) - predict(quadratic, data.frame(gdp_k = 5)), 1)` more years. Going from 50,000 to 60,000 — the same 10,000 — goes with `r fmt(predict(quadratic, data.frame(gdp_k = 60)) - predict(quadratic, data.frame(gdp_k = 50)), 1)`.
+From 1 to 2 the predicted rating rises by `r fmt(diff(predict(quadratic, data.frame(lr_self = 1:2))), 3)`. From 6 to 7 it barely moves (`r fmt(diff(predict(quadratic, data.frame(lr_self = 6:7))), 3)`). From 9 to 10 it **falls** by `r fmt(abs(diff(predict(quadratic, data.frame(lr_self = 9:10)))), 3)`.
 
 **The turning point says where it stops rising.** It is minus the first coefficient divided by twice the second.
 
@@ -247,28 +283,22 @@ b <- coef(quadratic)
 -b[2] / (2 * b[3])
 ```
 
-About `r fmt(-coef(quadratic)[2] / (2 * coef(quadratic)[3]), 0)` thousand dollars. Always check where that is in the data. Here only `r sum(world$gdp_k > -coef(quadratic)[2] / (2 * coef(quadratic)[3]))` of the `r nrow(world)` countries are richer than that.
+`r fmt(-coef(quadratic)[2] / (2 * coef(quadratic)[3]), 1)`, not far from where respondents place the party. That is what proximity would lead us to expect.
 
-### Where not to trust it
+### What to check
 
-A quadratic always turns round eventually, whether or not the world does.
+**Is the turning point inside the data?** A quadratic always turns round somewhere, whether or not the world does. If the turning point lies outside the data, or only a handful of cases lie beyond it, the bend downwards is how a quadratic is built and not a finding. Here about `r fmt(100 * mean(swe$lr_self[!is.na(swe$like_l) & !is.na(swe$lr_self)] > -coef(quadratic)[2] / (2 * coef(quadratic)[3])), 0)`% of the respondents are beyond it, and their means do fall.
 
-```{r}
-extremes$quadratic <- predict(quadratic, newdata = extremes)
+**Is the curve close to the data?** A quadratic is symmetric around its turning point, and the world need not be. Here the prediction for people at 10 is `r fmt(predict(quadratic, data.frame(lr_self = 10)))`, but their actual mean is `r fmt(mean(swe$like_l[which(swe$lr_self == 10)], na.rm = TRUE))`. The curve gets the shape right, not every point on it.
 
-round(extremes, 1)
-```
+**Do not go beyond the data.** Carried far enough, a quadratic predicts things that cannot exist, exactly like a straight line.
 
-At 300,000 dollars the straight line says `r fmt(predict(linear, newdata = data.frame(gdp_k = 300)), 0)` years and the quadratic says `r fmt(predict(quadratic, newdata = data.frame(gdp_k = 300)), 0)`. Both are impossible. The richest country in the data is at `r fmt(max(world$gdp_k), 0)` thousand, and beyond that neither model knows anything.
-
-So use the quadratic to describe the relationship **where the data are**: steep among poor countries, nearly flat among rich ones. The bend downwards at the far right is how a quadratic is built, and it rests on a couple of countries. It is not a finding that life expectancy falls when countries get very rich.
-
-**Have a reason for the curve.** A squared term belongs in a model when there is an argument for a bend — session 5's limits, or a relationship that rises and then falls, such as income over the life course. Adding squared terms to see what becomes significant is hunting, just as it is with interactions.
+**Have a reason for the curve.** We had one: people like parties that are close to them. Adding squared terms to see what becomes significant is hunting, just as it is with interactions.
 
 ::: {.discussion}
-**A question.** The quadratic turns down at about `r fmt(-coef(quadratic)[2] / (2 * coef(quadratic)[3]), 0)` thousand dollars per head.
+**A question.** The rating of the Moderates by left-right self-placement is close to a straight line. The rating of the Liberals is not.
 
-What would you need to see in the data before you believed that life expectancy really falls beyond that point?
+If people like parties that are close to them, why should the two look so different?
 :::
 
 ::: {.reporting}
@@ -276,11 +306,11 @@ What would you need to see in the data before you believed that life expectancy 
 
 An interaction:
 
-> The association between trust and evaluations of democracy differed by bloc (b = `r fmt(coef(model_int)[4])`, SE = `r fmt(coef(summary(model_int))[4, 2])`, *p* = `r fmt(coef(summary(model_int))[4, 4], 3)`). Among left-bloc voters a one-unit increase in the trust score corresponded to a `r fmt(coef(model_int)[2])`-point higher rating; among right-bloc voters, `r fmt(coef(model_int)[2] + coef(model_int)[4])` points (Figure 1).
+> The association between closeness to a party and the rating of the Social Democrats differed by bloc (b = `r fmt(coef(model_pid)[4])`, SE = `r fmt(coef(summary(model_pid))[4, 2])`, *p* < .001). Among left-bloc voters, those who felt close to a party rated the Social Democrats `r fmt(coef(model_pid)[3])` points higher than those who did not; among right-bloc voters, `r fmt(abs(coef(model_pid)[3] + coef(model_pid)[4]))` points lower (Figure 1; adjusted R² = `r fmt(summary(model_pid)$adj.r.squared, 2)`, *n* = `r nobs(model_pid)`).
 
 A curve:
 
-> Life expectancy was modelled as a quadratic function of GDP per capita, since a bounded outcome cannot keep rising in a straight line. The squared term was negative and significant (b = `r fmt(coef(quadratic)[3], 4)`, SE = `r fmt(coef(summary(quadratic))[3, 2], 4)`, *p* < .001; income in thousands of dollars): the association is steep among poor countries and nearly flat among rich ones. An additional 10,000 dollars per head corresponded to `r fmt(predict(quadratic, data.frame(gdp_k = 15)) - predict(quadratic, data.frame(gdp_k = 5)), 1)` more years of life expectancy at 5,000 dollars, but only `r fmt(predict(quadratic, data.frame(gdp_k = 60)) - predict(quadratic, data.frame(gdp_k = 50)), 1)` at 50,000 (adjusted R² = `r fmt(summary(quadratic)$adj.r.squared, 2)`, *n* = `r nobs(quadratic)`; Figure 2).
+> The rating of the Liberals was modelled as a quadratic function of left-right self-placement, since people are expected to like parties that are close to them. The squared term was negative and significant (b = `r fmt(coef(quadratic)[3], 3)`, SE = `r fmt(coef(summary(quadratic))[3, 2], 3)`, *p* < .001): the rating rose from the left, peaked at about `r fmt(-coef(quadratic)[2] / (2 * coef(quadratic)[3]), 1)` on the 0-10 scale and fell towards the right (Figure 3; adjusted R² = `r fmt(summary(quadratic)$adj.r.squared, 2)`, *n* = `r nobs(quadratic)`).
 
 Mistakes to avoid:
 

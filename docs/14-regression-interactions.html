@@ -281,15 +281,16 @@ window.Quarto = {
   <ul>
   <li><a href="#interactions" id="toc-interactions" class="nav-link active" data-scroll-target="#interactions"><span class="header-section-number">14.1</span> Interactions</a>
   <ul class="collapse">
-  <li><a href="#reading-it" id="toc-reading-it" class="nav-link" data-scroll-target="#reading-it"><span class="header-section-number">14.1.1</span> Reading it</a></li>
-  <li><a href="#plot-it-always" id="toc-plot-it-always" class="nav-link" data-scroll-target="#plot-it-always"><span class="header-section-number">14.1.2</span> Plot it, always</a></li>
-  <li><a href="#when-the-main-effect-misleads" id="toc-when-the-main-effect-misleads" class="nav-link" data-scroll-target="#when-the-main-effect-misleads"><span class="header-section-number">14.1.3</span> When the main effect misleads</a></li>
+  <li><a href="#two-binary-variables" id="toc-two-binary-variables" class="nav-link" data-scroll-target="#two-binary-variables"><span class="header-section-number">14.1.1</span> Two binary variables</a></li>
+  <li><a href="#a-continuous-and-a-binary-variable" id="toc-a-continuous-and-a-binary-variable" class="nav-link" data-scroll-target="#a-continuous-and-a-binary-variable"><span class="header-section-number">14.1.2</span> A continuous and a binary variable</a></li>
+  <li><a href="#plot-it-always" id="toc-plot-it-always" class="nav-link" data-scroll-target="#plot-it-always"><span class="header-section-number">14.1.3</span> Plot it, always</a></li>
   </ul></li>
   <li><a href="#non-linear-relationships" id="toc-non-linear-relationships" class="nav-link" data-scroll-target="#non-linear-relationships"><span class="header-section-number">14.2</span> Non-linear relationships</a>
   <ul class="collapse">
-  <li><a href="#a-squared-term" id="toc-a-squared-term" class="nav-link" data-scroll-target="#a-squared-term"><span class="header-section-number">14.2.1</span> A squared term</a></li>
-  <li><a href="#reading-it-1" id="toc-reading-it-1" class="nav-link" data-scroll-target="#reading-it-1"><span class="header-section-number">14.2.2</span> Reading it</a></li>
-  <li><a href="#where-not-to-trust-it" id="toc-where-not-to-trust-it" class="nav-link" data-scroll-target="#where-not-to-trust-it"><span class="header-section-number">14.2.3</span> Where not to trust it</a></li>
+  <li><a href="#a-straight-line" id="toc-a-straight-line" class="nav-link" data-scroll-target="#a-straight-line"><span class="header-section-number">14.2.1</span> A straight line</a></li>
+  <li><a href="#a-squared-term" id="toc-a-squared-term" class="nav-link" data-scroll-target="#a-squared-term"><span class="header-section-number">14.2.2</span> A squared term</a></li>
+  <li><a href="#reading-a-quadratic" id="toc-reading-a-quadratic" class="nav-link" data-scroll-target="#reading-a-quadratic"><span class="header-section-number">14.2.3</span> Reading a quadratic</a></li>
+  <li><a href="#what-to-check" id="toc-what-to-check" class="nav-link" data-scroll-target="#what-to-check"><span class="header-section-number">14.2.4</span> What to check</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -332,62 +333,205 @@ window.Quarto = {
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>swe<span class="sc">$</span>trust <span class="ot">&lt;-</span> <span class="fu">fa</span>(swe[, trust_items], <span class="at">nfactors =</span> <span class="dv">1</span>, <span class="at">fm =</span> <span class="st">"ml"</span>)<span class="sc">$</span>scores[, <span class="dv">1</span>]</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>swe<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  swe<span class="sc">$</span>female,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>swe<span class="sc">$</span>partisan <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  swe<span class="sc">$</span>pid,</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Men"</span>, <span class="st">"Women"</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>)</span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p><code>partisan</code> says whether the respondent feels close to a political party.</p>
 <section id="interactions" class="level2" data-number="14.1">
 <h2 data-number="14.1" class="anchored" data-anchor-id="interactions"><span class="header-section-number">14.1</span> Interactions</h2>
-<p>In session 11 we found that trust in institutions predicts how democratic people think Sweden is, and that it does so about equally on both sides of the political divide once you control for it.</p>
-<p>But “controlling for” and “the same for everybody” are different claims. A model with <code>trust + bloc</code> says the trust slope is identical for left and right voters, and forces it to be. An <strong>interaction</strong> lets it differ.</p>
+<section id="two-binary-variables" class="level3" data-number="14.1.1">
+<h3 data-number="14.1.1" class="anchored" data-anchor-id="two-binary-variables"><span class="header-section-number">14.1.1</span> Two binary variables</h3>
+<p>How much people like the Social Democrats depends on which bloc they vote for. Does it also depend on whether they feel <strong>close to a party</strong>?</p>
+<p>Start with a model that has both variables in it.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>model_int <span class="ot">&lt;-</span> <span class="fu">lm</span>(demlevel <span class="sc">~</span> trust <span class="sc">*</span> bloc, <span class="at">data =</span> swe)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>model_add <span class="ot">&lt;-</span> <span class="fu">lm</span>(like_s <span class="sc">~</span> bloc <span class="sc">+</span> partisan, <span class="at">data =</span> swe)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(model_int)), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_add)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##                 Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)        7.936      0.044 178.797    0.000
-## trust              0.955      0.050  19.002    0.000
-## blocRight         -0.134      0.064  -2.076    0.038
-## trust:blocRight    0.211      0.072   2.941    0.003</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = like_s ~ bloc + partisan, data = swe)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -8.3658 -1.3426  0.6342  1.6574  5.7706 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  8.36584    0.08388   99.73   &lt;2e-16 ***
+## blocRight   -4.11319    0.09700  -42.41   &lt;2e-16 ***
+## partisanYes -0.02321    0.09657   -0.24     0.81    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.232 on 2150 degrees of freedom
+##   (692 observations deleted due to missingness)
+## Multiple R-squared:  0.4568, Adjusted R-squared:  0.4563 
+## F-statistic: 904.1 on 2 and 2150 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p><code>trust * bloc</code> is shorthand. It puts in <code>trust</code>, <code>bloc</code>, and the product of the two — the interaction term, printed as <code>trust:blocRight</code>. You could write <code>trust + bloc + trust:bloc</code> and get the same model.</p>
-<section id="reading-it" class="level3" data-number="14.1.1">
-<h3 data-number="14.1.1" class="anchored" data-anchor-id="reading-it"><span class="header-section-number">14.1.1</span> Reading it</h3>
-<p>Four numbers, and the trap is in the middle two.</p>
-<p><strong><code>(Intercept)</code> = 7.94</strong> — predicted rating for a left-bloc voter with average trust.</p>
-<p><strong><code>trust</code> = 0.95</strong> — the trust slope <strong>for left-bloc voters only</strong>. Not for everyone. Not on average.</p>
-<p><strong><code>blocRight</code> = -0.13</strong> — the bloc difference <strong>at trust = 0</strong>. Not overall.</p>
-<p><strong><code>trust:blocRight</code> = 0.21</strong> — how much the trust slope <em>changes</em> for right-bloc voters. So their slope is 0.95 + 0.21 = 1.17.</p>
+<p>Right-bloc voters rate the Social Democrats 4.11 points lower than left-bloc voters. No surprise. And feeling close to a party makes no difference at all: -0.02, <em>p</em> = 0.81.</p>
+<p>Now look at the means.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>swe <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(bloc), <span class="sc">!</span><span class="fu">is.na</span>(partisan), <span class="sc">!</span><span class="fu">is.na</span>(like_s)) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(bloc, partisan) <span class="sc">|&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">mean =</span> <span class="fu">mean</span>(like_s), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## # A tibble: 4 × 4
+##   bloc  partisan     n  mean
+##   &lt;fct&gt; &lt;fct&gt;    &lt;int&gt; &lt;dbl&gt;
+## 1 Left  No         532  7.87
+## 2 Left  Yes        649  8.75
+## 3 Right No         516  4.76
+## 4 Right Yes        456  3.66</code></pre>
+</div>
+</div>
+<p>Grouping by two variables gives one row for each combination, and <code>.groups = "drop"</code> removes the grouping afterwards.</p>
+<p>Closeness makes a great deal of difference. Among left-bloc voters, those who feel close to a party like the Social Democrats <strong>more</strong> than those who do not. Among right-bloc voters, they like them <strong>less</strong>. Partisans like their own side more and the other side less, which is what research on <strong>affective polarisation</strong> would lead us to expect.</p>
+<p>The model missed it because it was not allowed to see it. <code>bloc + partisan</code> assumes that closeness has <strong>the same effect in both blocs</strong>. Two opposite effects, averaged, came out as nothing. “Controlling for” a variable and “this effect is the same for everybody” are different claims, and a model without an interaction makes both.</p>
+<p>An <strong>interaction</strong> lets the effect differ.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>model_pid <span class="ot">&lt;-</span> <span class="fu">lm</span>(like_s <span class="sc">~</span> bloc <span class="sc">*</span> partisan, <span class="at">data =</span> swe)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_pid)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## 
+## Call:
+## lm(formula = like_s ~ bloc * partisan, data = swe)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -8.7458 -1.6557  0.2542  1.2542  6.3443 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)            7.87406    0.09445  83.368  &lt; 2e-16 ***
+## blocRight             -3.11437    0.13460 -23.137  &lt; 2e-16 ***
+## partisanYes            0.87170    0.12741   6.842 1.02e-11 ***
+## blocRight:partisanYes -1.97569    0.18931 -10.436  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.178 on 2149 degrees of freedom
+##   (692 observations deleted due to missingness)
+## Multiple R-squared:  0.483,  Adjusted R-squared:  0.4823 
+## F-statistic: 669.3 on 3 and 2149 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><code>bloc * partisan</code> is shorthand. It puts in <code>bloc</code>, <code>partisan</code>, and the product of the two — the interaction term, printed as <code>blocRight:partisanYes</code>. You could write <code>bloc + partisan + bloc:partisan</code> and get the same model. The product of two dummies is 1 only when <strong>both</strong> are 1: here, for a right-bloc voter who feels close to a party.</p>
+<p>Four coefficients, and from them the four means:</p>
+<ul>
+<li><strong><code>(Intercept)</code> = 7.874</strong> — left bloc, not close. Both dummies are 0.</li>
+<li><strong><code>partisanYes</code> = 0.872</strong> — the effect of closeness <strong>in the left bloc</strong>. Left bloc, close: 7.874 + 0.872 = 8.746.</li>
+<li><strong><code>blocRight</code> = -3.114</strong> — the difference between the blocs <strong>among people who are not close to a party</strong>. Right bloc, not close: 7.874 + (-3.114) = 4.760.</li>
+<li><strong><code>blocRight:partisanYes</code> = -1.976</strong> — how much the effect of closeness <strong>differs</strong> in the right bloc. There it is 0.872 + (-1.976) = -1.104. Right bloc, close: all four added up, 3.656.</li>
+</ul>
+<p>The p-value of the interaction tests whether that difference is zero. It is not (<em>p</em> &lt; .001).</p>
 <blockquote class="blockquote">
-<p><strong>Once you add an interaction, the other two coefficients change meaning.</strong> They are no longer average effects. They are the effect of one variable <em>when the other is zero</em>, which is why it matters enormously whether zero is a meaningful value.</p>
-<p>Here it happens to be fine, because <code>trust</code> is a factor score, so zero is the average. Had we used raw age, <code>blocRight</code> would have been the bloc difference among newborns.</p>
+<p><strong>Once you add an interaction, the other two coefficients change meaning.</strong> They are no longer average effects. They are the effect of one variable <em>when the other is zero</em>.</p>
 </blockquote>
-<p>The interaction is significant (<em>p</em> = 0.003), so trust does more work for right-bloc voters than for left-bloc voters: 1.17 points per unit of trust against 0.95.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pid_predictions <span class="ot">&lt;-</span> <span class="fu">predict_response</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  model_pid,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"partisan"</span>, <span class="st">"bloc"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pid_predictions, <span class="at">connect_lines =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_viridis_d</span>(<span class="at">end =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Feels close to a party"</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Predicted rating of the Social Democrats"</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Bloc"</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="cn">NULL</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pid" class="quarto-float quarto-figure quarto-figure-center anchored" width="1050">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="14-regression-interactions_files/figure-html/fig-pid-1.png" id="fig-pid" class="img-fluid figure-img" width="1050">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-pid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14.1
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Giving <code>terms</code> two variables produces one line per group of the second, and <code>connect_lines = TRUE</code> joins the points. <code>scale_colour_viridis_d()</code> puts the two lines on the colourblind-safe palette from session 4.</p>
+<p><strong>Non-parallel lines are what an interaction is.</strong> Without the interaction the model would have had to draw them parallel. If you cannot see it on the plot, it is not there in any meaningful sense, whatever the p-value says.</p>
+<p>You can also read it the other way round. Among people who are not close to a party, the blocs are 3.11 points apart. Among those who are, they are 5.09 points apart. It is the same interaction.</p>
+<div class="discussion">
+<p><strong>A question.</strong> Make the right bloc the reference category and the coefficient on <code>partisanYes</code> changes from 0.87 to -1.10. It changes its sign.</p>
+<p>Nothing about the data has changed. What does that tell you about reporting “the effect of closeness to a party” from a model containing an interaction?</p>
+</div>
 </section>
-<section id="plot-it-always" class="level3" data-number="14.1.2">
-<h3 data-number="14.1.2" class="anchored" data-anchor-id="plot-it-always"><span class="header-section-number">14.1.2</span> Plot it, always</h3>
+<section id="a-continuous-and-a-binary-variable" class="level3" data-number="14.1.2">
+<h3 data-number="14.1.2" class="anchored" data-anchor-id="a-continuous-and-a-binary-variable"><span class="header-section-number">14.1.2</span> A continuous and a binary variable</h3>
+<p>In session 11 we found that trust in institutions predicts how democratic people think Sweden is. A model with <code>trust + bloc</code> says that the trust slope is identical for left and right voters, and forces it to be. Let it differ.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>model_int <span class="ot">&lt;-</span> <span class="fu">lm</span>(demlevel <span class="sc">~</span> trust <span class="sc">*</span> bloc, <span class="at">data =</span> swe)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_int)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## 
+## Call:
+## lm(formula = demlevel ~ trust * bloc, data = swe)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -10.0522  -0.7242   0.0809   0.8974   4.9494 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)      7.93607    0.04439 178.797  &lt; 2e-16 ***
+## trust            0.95493    0.05026  19.002  &lt; 2e-16 ***
+## blocRight       -0.13372    0.06443  -2.076  0.03805 *  
+## trust:blocRight  0.21117    0.07181   2.941  0.00331 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.448 on 2140 degrees of freedom
+##   (701 observations deleted due to missingness)
+## Multiple R-squared:  0.3061, Adjusted R-squared:  0.3052 
+## F-statistic: 314.7 on 3 and 2140 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Four numbers, and the trap is in the middle two.</p>
+<p><strong><code>(Intercept)</code> = 7.936</strong> — predicted rating for a left-bloc voter with average trust.</p>
+<p><strong><code>trust</code> = 0.955</strong> — the trust slope <strong>for left-bloc voters only</strong>. Not for everyone. Not on average.</p>
+<p><strong><code>blocRight</code> = -0.134</strong> — the bloc difference <strong>at trust = 0</strong>. Not overall.</p>
+<p><strong><code>trust:blocRight</code> = 0.211</strong> — how much the trust slope <em>changes</em> for right-bloc voters. So their slope is 0.955 + 0.211 = 1.166.</p>
+<blockquote class="blockquote">
+<p><strong>Check that zero means something.</strong> The other two coefficients are effects <em>when the other variable is zero</em>, so it matters enormously whether zero is a meaningful value. Here it is, because <code>trust</code> is a factor score, so zero is the average. Had we used raw age, <code>blocRight</code> would have been the bloc difference among newborns.</p>
+</blockquote>
+<p>The interaction is significant (<em>p</em> = 0.003), so trust does more work for right-bloc voters than for left-bloc voters: 1.166 points per unit of trust against 0.955.</p>
+</section>
+<section id="plot-it-always" class="level3" data-number="14.1.3">
+<h3 data-number="14.1.3" class="anchored" data-anchor-id="plot-it-always"><span class="header-section-number">14.1.3</span> Plot it, always</h3>
 <p>Interaction coefficients are close to unreadable in a table. Nobody should have to do that arithmetic in their head, and the sign of an interaction term tells you almost nothing on its own.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">predict_response</span>(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  model_int,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"trust [-2:2 by=0.5]"</span>, <span class="st">"bloc"</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(predictions) <span class="sc">+</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_viridis_d</span>(<span class="at">end =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">end =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Trust in institutions (factor score)"</span>,</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Predicted rating of Swedish democracy"</span>,</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Bloc"</span>,</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Bloc"</span>,</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="cn">NULL</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">predict_response</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  model_int,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"trust [-2:2 by=0.5]"</span>, <span class="st">"bloc"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(predictions) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_viridis_d</span>(<span class="at">end =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">end =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Trust in institutions (factor score)"</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Predicted rating of Swedish democracy"</span>,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Bloc"</span>,</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Bloc"</span>,</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="cn">NULL</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div id="fig-int" class="quarto-float quarto-figure quarto-figure-center anchored" width="1050">
 <figure class="quarto-float quarto-float-fig figure">
@@ -395,67 +539,16 @@ window.Quarto = {
 <img src="14-regression-interactions_files/figure-html/fig-int-1.png" id="fig-int" class="img-fluid figure-img" width="1050">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-int-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;14.1
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>Giving <code>terms</code> two variables produces one line per group of the second, and <code>scale_colour_viridis_d()</code> and <code>scale_fill_viridis_d()</code> put the two lines on the colourblind-safe palette from session 4. Now the interaction is obvious: two lines that are not parallel, and that <strong>cross</strong>.</p>
-<p>Read what it says. Among people who distrust institutions, left-bloc voters rate Swedish democracy <em>higher</em> than right-bloc voters. Among people who trust institutions, it is the other way round. The lines meet at a trust score of about 0.63.</p>
-<p>So the answer to “is there a winner–loser gap?” is: it depends who you ask. That is what an interaction means, and no single coefficient could have said it.</p>
-<p><strong>Non-parallel lines are what an interaction is.</strong> If you cannot see it on this plot, it is not there in any meaningful sense, whatever the p-value says.</p>
-<p>Note also the top right corner: the model predicts 10.13 for the most trusting right-bloc voters, on a scale that stops at 10. Session 12 again, and one more reason not to read predictions at the edges too literally.</p>
-</section>
-<section id="when-the-main-effect-misleads" class="level3" data-number="14.1.3">
-<h3 data-number="14.1.3" class="anchored" data-anchor-id="when-the-main-effect-misleads"><span class="header-section-number">14.1.3</span> When the main effect misleads</h3>
-<p>A second example, because this catches people.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model_age <span class="ot">&lt;-</span> <span class="fu">lm</span>(lr_self <span class="sc">~</span> age <span class="sc">*</span> sex, <span class="at">data =</span> swe)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(model_age)), <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>##              Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)    5.9015     0.2629 22.4514   0.0000
-## age           -0.0047     0.0045 -1.0520   0.2929
-## sexWomen      -1.8319     0.3594 -5.0977   0.0000
-## age:sexWomen   0.0189     0.0061  3.0750   0.0021</code></pre>
-</div>
-</div>
-<p>The coefficient on <code>age</code> is -0.0047 with <em>p</em> = 0.293 — nothing. Read carelessly, that says age does not matter.</p>
-<p>It says no such thing. It says age does not matter <strong>for men</strong>, since men are the reference category. For women the slope is -0.0047 + 0.0189 = 0.0142 — positive, and the interaction is significant at <em>p</em> = 0.002.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>age_predictions <span class="ot">&lt;-</span> <span class="fu">predict_response</span>(model_age, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>))</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(age_predictions) <span class="sc">+</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_viridis_d</span>(<span class="at">end =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">end =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age (years)"</span>,</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Predicted left-right self-placement"</span>,</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Sex"</span>,</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Sex"</span>,</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="cn">NULL</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div id="fig-int2" class="quarto-float quarto-figure quarto-figure-center anchored" width="1050">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-int2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="14-regression-interactions_files/figure-html/fig-int2-1.png" id="fig-int2" class="img-fluid figure-img" width="1050">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-int2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;14.2
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Older women place themselves further right than younger women; among men, age makes little difference. Two groups, two different stories, and a model without the interaction would have averaged them into one weak effect.</p>
-<div class="discussion">
-<p><strong>A question.</strong> In <code>model_age</code>, swapping the reference category from men to women would change the coefficient on <code>age</code> from -0.0047 to 0.0142, and its p-value from non-significant to significant.</p>
-<p>Nothing about the data has changed. What does that tell you about reporting “the effect of age” from a model containing an interaction?</p>
-</div>
+<p><code>scale_fill_viridis_d()</code> does for the shaded bands what <code>scale_colour_viridis_d()</code> does for the lines. Now the interaction is obvious: two lines that are not parallel, and that <strong>cross</strong>.</p>
+<p>Read what it says. Among people who distrust institutions, left-bloc voters rate Swedish democracy <em>higher</em> than right-bloc voters. Among people who trust institutions, it is the other way round. The lines meet at a trust score of about 0.63.</p>
+<p>So the answer to “is there a winner–loser gap?” is: it depends who you ask. That is what an interaction means, and no single coefficient could have said it.</p>
+<p>Note also the top right corner: the model predicts 10.13 for the most trusting right-bloc voters, on a scale that stops at 10. Session 12 again, and one more reason not to read predictions at the edges too literally.</p>
 <blockquote class="blockquote">
 <p><strong>Do not go hunting.</strong> With ten predictors there are forty-five possible two-way interactions, and at the conventional threshold you would expect a couple to come out significant by chance alone. Test interactions you have a reason to expect. An interaction found by searching needs replicating before it means anything.</p>
 </blockquote>
@@ -463,111 +556,125 @@ Figure&nbsp;14.2
 </section>
 <section id="non-linear-relationships" class="level2" data-number="14.2">
 <h2 data-number="14.2" class="anchored" data-anchor-id="non-linear-relationships"><span class="header-section-number">14.2</span> Non-linear relationships</h2>
-<p>The second assumption. Sometimes the relationship is not a straight line at all — and session 5 gave us a case where it <em>cannot</em> be.</p>
+<p>The second assumption. Sometimes there is a reason to expect that the relationship is <strong>not a straight line</strong>.</p>
+<p>Who likes the Liberals? The theory of <strong>proximity voting</strong> says that people like the parties that are close to them. Respondents see the Liberals as a party a little to the right of the centre: on average they place it at 6.4 on the 0–10 scale. So the rating should rise as we move from the left towards the party, and <strong>fall again</strong> on the other side of it. Up, and then down.</p>
+<section id="a-straight-line" class="level3" data-number="14.2.1">
+<h3 data-number="14.2.1" class="anchored" data-anchor-id="a-straight-line"><span class="header-section-number">14.2.1</span> A straight line</h3>
+<p>Fit a straight line anyway and see.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"data/world.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> world <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(gdp), <span class="sc">!</span><span class="fu">is.na</span>(life))</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>world<span class="sc">$</span>gdp_k <span class="ot">&lt;-</span> world<span class="sc">$</span>gdp <span class="sc">/</span> <span class="dv">1000</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p><code>gdp_k</code> is income per head in <strong>thousands</strong> of dollars. One dollar more or less makes no visible difference to anything, so the coefficient on it would be a number like 0.0002. Changing the unit changes how the coefficient reads and nothing else.</p>
-<p>Income has a floor at zero and no ceiling. Life expectancy has both. We argued in session 5 that this rules out a straight line, because a line rising forever eventually promises impossible lifespans.</p>
-<p>Fit one anyway and see.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>linear <span class="ot">&lt;-</span> <span class="fu">lm</span>(life <span class="sc">~</span> gdp_k, <span class="at">data =</span> world)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(linear)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>linear <span class="ot">&lt;-</span> <span class="fu">lm</span>(like_l <span class="sc">~</span> lr_self, <span class="at">data =</span> swe)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(linear)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## 
 ## Call:
-## lm(formula = life ~ gdp_k, data = world)
+## lm(formula = like_l ~ lr_self, data = swe)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -14.530  -3.048   0.529   3.955   8.923 
+## -6.1310 -1.4694  0.2349  1.6434  5.9392 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 67.40425    0.61673 109.292   &lt;2e-16 ***
-## gdp_k        0.21588    0.02162   9.985   &lt;2e-16 ***
+## (Intercept)  3.17364    0.10412   30.48   &lt;2e-16 ***
+## lr_self      0.29573    0.01762   16.78   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 5.125 on 115 degrees of freedom
-## Multiple R-squared:  0.4644, Adjusted R-squared:  0.4597 
-## F-statistic: 99.71 on 1 and 115 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 2.342 on 2288 degrees of freedom
+##   (555 observations deleted due to missingness)
+## Multiple R-squared:  0.1096, Adjusted R-squared:  0.1092 
+## F-statistic: 281.6 on 1 and 2288 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p>Each thousand dollars more goes with 0.22 more years of life expectancy. The coefficient is clearly significant, and adjusted R² is 0.460. Nothing in that output says anything is wrong.</p>
-<p>Now ask it to predict.</p>
+<p>Each point further right goes with a rating 0.30 points higher, and the coefficient is clearly significant. Adjusted R² is 0.109. Nothing in that output says anything is wrong. Read as it stands, it says: <strong>the further right people are, the more they like the Liberals</strong>.</p>
+<p>Now look at the mean rating at each point of the scale.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>extremes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gdp_k =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">50</span>, <span class="dv">150</span>, <span class="dv">300</span>))</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>extremes<span class="sc">$</span>linear <span class="ot">&lt;-</span> <span class="fu">predict</span>(linear, <span class="at">newdata =</span> extremes)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(extremes, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>lr_means <span class="ot">&lt;-</span> swe <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(lr_self), <span class="sc">!</span><span class="fu">is.na</span>(like_l)) <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(lr_self) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">mean =</span> <span class="fu">mean</span>(like_l))</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>lr_means</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##   gdp_k linear
-## 1     1   67.6
-## 2    50   78.2
-## 3   150   99.8
-## 4   300  132.2</code></pre>
+<pre><code>## # A tibble: 11 × 3
+##    lr_self     n  mean
+##      &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
+##  1       0   131  2.55
+##  2       1   126  2.83
+##  3       2   205  3.34
+##  4       3   223  4.17
+##  5       4   171  4.46
+##  6       5   376  5.03
+##  7       6   209  5.86
+##  8       7   282  5.74
+##  9       8   294  5.83
+## 10       9   138  5.23
+## 11      10   135  4.17</code></pre>
 </div>
 </div>
-<p>A life expectancy of 132 years in the last row. The model is not confused — it is doing exactly what a straight line does. The mistake was ours, in fitting one.</p>
-<section id="a-squared-term" class="level3" data-number="14.2.1">
-<h3 data-number="14.2.1" class="anchored" data-anchor-id="a-squared-term"><span class="header-section-number">14.2.1</span> A squared term</h3>
+<p>The ratings rise until about 6, stay there until 8, and then fall. People at 10 like the party less than people at 5.</p>
+</section>
+<section id="a-squared-term" class="level3" data-number="14.2.2">
+<h3 data-number="14.2.2" class="anchored" data-anchor-id="a-squared-term"><span class="header-section-number">14.2.2</span> A squared term</h3>
 <p>To let the line bend, add the <strong>square</strong> of the predictor as a second predictor. The model can then bend once: up and then down, or down and then up. This is called a <strong>quadratic</strong> model.</p>
-<p><span class="math display">\[\text{life} = b_0 + b_1 \times \text{income} + b_2 \times \text{income}^2\]</span></p>
+<p><span class="math display">\[\text{rating} = b_0 + b_1 \times \text{left-right} + b_2 \times \text{left-right}^2\]</span></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>quadratic <span class="ot">&lt;-</span> <span class="fu">lm</span>(life <span class="sc">~</span> gdp_k <span class="sc">+</span> <span class="fu">I</span>(gdp_k<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> world)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(quadratic)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>quadratic <span class="ot">&lt;-</span> <span class="fu">lm</span>(like_l <span class="sc">~</span> lr_self <span class="sc">+</span> <span class="fu">I</span>(lr_self<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> swe)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(quadratic)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## 
 ## Call:
-## lm(formula = life ~ gdp_k + I(gdp_k^2), data = world)
+## lm(formula = like_l ~ lr_self + I(lr_self^2), data = swe)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -14.5910  -2.3640   0.4603   2.5556   8.4215 
+##     Min      1Q  Median      3Q     Max 
+## -5.5177 -1.4541  0.1064  1.5630  7.0789 
 ## 
 ## Coefficients:
 ##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 64.6857188  0.6528821  99.077  &lt; 2e-16 ***
-## gdp_k        0.4989387  0.0449253  11.106  &lt; 2e-16 ***
-## I(gdp_k^2)  -0.0030122  0.0004369  -6.895 3.18e-10 ***
+## (Intercept)   1.921091   0.144601   13.29   &lt;2e-16 ***
+## lr_self       1.019095   0.062180   16.39   &lt;2e-16 ***
+## I(lr_self^2) -0.072184   0.005966  -12.10   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 4.324 on 114 degrees of freedom
-## Multiple R-squared:  0.622,  Adjusted R-squared:  0.6154 
-## F-statistic:  93.8 on 2 and 114 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 2.271 on 2287 degrees of freedom
+##   (555 observations deleted due to missingness)
+## Multiple R-squared:  0.1632, Adjusted R-squared:  0.1624 
+## F-statistic: 222.9 on 2 and 2287 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p><code>I()</code> is needed around <code>gdp_k^2</code>. Inside a formula <code>^</code> means something else — interactions to a given order — and <code>I()</code> says “treat this as ordinary arithmetic”.</p>
-<p>The squared term is clearly significant, which says that the relationship is <strong>not a straight line</strong>. Adjusted R² rises from 0.460 to 0.615. The adjusted version is the one to compare, because the second model has one more term.</p>
+<p><code>I()</code> is needed around <code>lr_self^2</code>. Inside a formula <code>^</code> means something else — interactions to a given order — and <code>I()</code> says “treat this as ordinary arithmetic”.</p>
+<p>The squared term is clearly significant, which says that the relationship is <strong>not a straight line</strong>. Adjusted R² rises from 0.109 to 0.162. The adjusted version is the one to compare, because the second model has one more term.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(world, <span class="fu">aes</span>(<span class="at">x =</span> gdp_k, <span class="at">y =</span> life)) <span class="sc">+</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"lm"</span>,</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> y <span class="sc">~</span> x,</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"grey50"</span>,</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">"dashed"</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"lm"</span>,</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>),</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"black"</span></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">100</span>)) <span class="sc">+</span></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"GDP per capita (thousands of PPP dollars)"</span>,</span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Life expectancy at birth (years)"</span></span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>swe <span class="sc">|&gt;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(lr_self), <span class="sc">!</span><span class="fu">is.na</span>(like_l)) <span class="sc">|&gt;</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> lr_self, <span class="at">y =</span> like_l)) <span class="sc">+</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.25</span>, <span class="at">height =</span> <span class="fl">0.25</span>, <span class="at">alpha =</span> <span class="fl">0.06</span>) <span class="sc">+</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> y <span class="sc">~</span> x,</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"grey50"</span>,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">"dashed"</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>),</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"black"</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> lr_means, <span class="fu">aes</span>(<span class="at">y =</span> mean), <span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Left-right self-placement (0 = left, 10 = right)"</span>,</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Rating of the Liberals (0-10)"</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div id="fig-nonlin" class="quarto-float quarto-figure quarto-figure-center anchored" width="1050">
 <figure class="quarto-float quarto-float-fig figure">
@@ -581,70 +688,60 @@ Figure&nbsp;14.3
 </div>
 </div>
 </div>
-<p>The dashed line is the straight fit and the solid one the quadratic. The straight line is too <strong>high</strong> at both ends and too <strong>low</strong> in the middle — the signature of fitting a line to a curve, and exactly what the residual plot in session 11 was looking for.</p>
+<p>The grey points are the respondents and the black ones the mean at each point of the scale. The dashed line is the straight fit and the solid one the quadratic. The straight line is too <strong>high</strong> at both ends and too <strong>low</strong> in the middle — the signature of fitting a line to a curve, and exactly what the residual plot in session 11 was looking for.</p>
 </section>
-<section id="reading-it-1" class="level3" data-number="14.2.2">
-<h3 data-number="14.2.2" class="anchored" data-anchor-id="reading-it-1"><span class="header-section-number">14.2.2</span> Reading it</h3>
-<p>A squared term is like an interaction: the two coefficients <strong>cannot be read separately</strong>. “One more unit of income, holding income squared constant” is not something that can happen. Read them together.</p>
-<p><strong>The signs give the shape.</strong> The first coefficient is positive (0.499) and the squared one is negative (-0.0030): the curve rises, and rises less and less. Had the signs been the other way round, it would fall first and then rise.</p>
-<p><strong>Predictions give the size.</strong> There is no single effect of income any more, so predict at several values, equally far apart.</p>
+<section id="reading-a-quadratic" class="level3" data-number="14.2.3">
+<h3 data-number="14.2.3" class="anchored" data-anchor-id="reading-a-quadratic"><span class="header-section-number">14.2.3</span> Reading a quadratic</h3>
+<p>A squared term is like an interaction: the two coefficients <strong>cannot be read separately</strong>. “One point further right, holding the square of left-right constant” is not something that can happen. Read them together.</p>
+<p><strong>The signs give the shape.</strong> The first coefficient is positive (1.02) and the squared one is negative (-0.072): the curve rises, rises less and less, and then falls. Had the signs been the other way round, it would fall first and then rise.</p>
+<p><strong>Predictions give the size.</strong> There is no single effect of left-right placement any more, so compare one-point steps in different places.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>steps <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gdp_k =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">50</span>, <span class="dv">60</span>))</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>steps<span class="sc">$</span>predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(quadratic, <span class="at">newdata =</span> steps)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(steps, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>steps <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">lr_self =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">10</span>))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>steps<span class="sc">$</span>predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(quadratic, <span class="at">newdata =</span> steps)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(steps, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##   gdp_k predicted
-## 1     5      67.1
-## 2    15      71.5
-## 3    50      82.1
-## 4    60      83.8</code></pre>
+<pre><code>##   lr_self predicted
+## 1       1     2.868
+## 2       2     3.671
+## 3       6     5.437
+## 4       7     5.518
+## 5       9     5.246
+## 6      10     4.894</code></pre>
 </div>
 </div>
-<p>Going from 5,000 to 15,000 dollars goes with about 4.4 more years. Going from 50,000 to 60,000 — the same 10,000 — goes with 1.7.</p>
+<p>From 1 to 2 the predicted rating rises by 0.803. From 6 to 7 it barely moves (0.081). From 9 to 10 it <strong>falls</strong> by 0.352.</p>
 <p><strong>The turning point says where it stops rising.</strong> It is minus the first coefficient divided by twice the second.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(quadratic)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>b[<span class="dv">2</span>] <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> b[<span class="dv">3</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(quadratic)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>b[<span class="dv">2</span>] <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> b[<span class="dv">3</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##    gdp_k 
-## 82.82076</code></pre>
+<pre><code>##  lr_self 
+## 7.059006</code></pre>
 </div>
 </div>
-<p>About 83 thousand dollars. Always check where that is in the data. Here only 2 of the 117 countries are richer than that.</p>
+<p>7.1, not far from where respondents place the party. That is what proximity would lead us to expect.</p>
 </section>
-<section id="where-not-to-trust-it" class="level3" data-number="14.2.3">
-<h3 data-number="14.2.3" class="anchored" data-anchor-id="where-not-to-trust-it"><span class="header-section-number">14.2.3</span> Where not to trust it</h3>
-<p>A quadratic always turns round eventually, whether or not the world does.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>extremes<span class="sc">$</span>quadratic <span class="ot">&lt;-</span> <span class="fu">predict</span>(quadratic, <span class="at">newdata =</span> extremes)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(extremes, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>##   gdp_k linear quadratic
-## 1     1   67.6      65.2
-## 2    50   78.2      82.1
-## 3   150   99.8      71.8
-## 4   300  132.2     -56.7</code></pre>
-</div>
-</div>
-<p>At 300,000 dollars the straight line says 132 years and the quadratic says -57. Both are impossible. The richest country in the data is at 135 thousand, and beyond that neither model knows anything.</p>
-<p>So use the quadratic to describe the relationship <strong>where the data are</strong>: steep among poor countries, nearly flat among rich ones. The bend downwards at the far right is how a quadratic is built, and it rests on a couple of countries. It is not a finding that life expectancy falls when countries get very rich.</p>
-<p><strong>Have a reason for the curve.</strong> A squared term belongs in a model when there is an argument for a bend — session 5’s limits, or a relationship that rises and then falls, such as income over the life course. Adding squared terms to see what becomes significant is hunting, just as it is with interactions.</p>
+<section id="what-to-check" class="level3" data-number="14.2.4">
+<h3 data-number="14.2.4" class="anchored" data-anchor-id="what-to-check"><span class="header-section-number">14.2.4</span> What to check</h3>
+<p><strong>Is the turning point inside the data?</strong> A quadratic always turns round somewhere, whether or not the world does. If the turning point lies outside the data, or only a handful of cases lie beyond it, the bend downwards is how a quadratic is built and not a finding. Here about 25% of the respondents are beyond it, and their means do fall.</p>
+<p><strong>Is the curve close to the data?</strong> A quadratic is symmetric around its turning point, and the world need not be. Here the prediction for people at 10 is 4.89, but their actual mean is 4.17. The curve gets the shape right, not every point on it.</p>
+<p><strong>Do not go beyond the data.</strong> Carried far enough, a quadratic predicts things that cannot exist, exactly like a straight line.</p>
+<p><strong>Have a reason for the curve.</strong> We had one: people like parties that are close to them. Adding squared terms to see what becomes significant is hunting, just as it is with interactions.</p>
 <div class="discussion">
-<p><strong>A question.</strong> The quadratic turns down at about 83 thousand dollars per head.</p>
-<p>What would you need to see in the data before you believed that life expectancy really falls beyond that point?</p>
+<p><strong>A question.</strong> The rating of the Moderates by left-right self-placement is close to a straight line. The rating of the Liberals is not.</p>
+<p>If people like parties that are close to them, why should the two look so different?</p>
 </div>
 <div class="reporting">
 <p><strong>How to write it up.</strong></p>
 <p>An interaction:</p>
 <blockquote class="blockquote">
-<p>The association between trust and evaluations of democracy differed by bloc (b = 0.21, SE = 0.07, <em>p</em> = 0.003). Among left-bloc voters a one-unit increase in the trust score corresponded to a 0.95-point higher rating; among right-bloc voters, 1.17 points (Figure 1).</p>
+<p>The association between closeness to a party and the rating of the Social Democrats differed by bloc (b = -1.98, SE = 0.19, <em>p</em> &lt; .001). Among left-bloc voters, those who felt close to a party rated the Social Democrats 0.87 points higher than those who did not; among right-bloc voters, 1.10 points lower (Figure 1; adjusted R² = 0.48, <em>n</em> = 2153).</p>
 </blockquote>
 <p>A curve:</p>
 <blockquote class="blockquote">
-<p>Life expectancy was modelled as a quadratic function of GDP per capita, since a bounded outcome cannot keep rising in a straight line. The squared term was negative and significant (b = -0.0030, SE = 0.0004, <em>p</em> &lt; .001; income in thousands of dollars): the association is steep among poor countries and nearly flat among rich ones. An additional 10,000 dollars per head corresponded to 4.4 more years of life expectancy at 5,000 dollars, but only 1.7 at 50,000 (adjusted R² = 0.62, <em>n</em> = 117; Figure 2).</p>
+<p>The rating of the Liberals was modelled as a quadratic function of left-right self-placement, since people are expected to like parties that are close to them. The squared term was negative and significant (b = -0.072, SE = 0.006, <em>p</em> &lt; .001): the rating rose from the left, peaked at about 7.1 on the 0-10 scale and fell towards the right (Figure 3; adjusted R² = 0.16, <em>n</em> = 2290).</p>
 </blockquote>
 <p>Mistakes to avoid:</p>
 <ul>
