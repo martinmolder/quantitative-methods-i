@@ -109,7 +109,7 @@
   Output: The dummies now carry the new variable's name, and the Social Democrats are the party with no row. The intercept is the Social Democrat voter, and the coefficients are negative for parties to their left and positive for parties to their right. That is a table you can hand to a reader without explanation.
 
 - Class: mult_question
-  Output: Now look at the bottom lines - Multiple R-squared and the F-statistic. How do they compare with those of model_vote, which had the Left Party as reference?
+  Output: Now look at the bottom lines - the R-squared values and the F-statistic. How do they compare with those of model_vote, which had the Left Party as reference?
   CorrectAnswer: They are identical - only the comparisons on display changed.
   AnswerChoices: They are identical - only the comparisons on display changed.; The fit is better, because the Social Democrats are the largest party.; The fit is worse, because more coefficients are negative.
   AnswerTests: omnitest(correctVal='They are identical - only the comparisons on display changed.')
@@ -125,14 +125,14 @@
   Output: The answer is already in the output, on its last line. The F-statistic tests whether the model explains anything at all, and this model is nothing but the party dummies - so here it tests party as a whole. F is 497.4 on 7 and 2079 degrees of freedom - the 7 is the seven dummies - with a single p-value for the lot.
 
 - Class: text
-  Output: With a real variable and a sample this size, the answer to 'is there anything there?' is nearly always yes. The more useful number is Multiple R-squared, on the line just above - how much of the variation the variable accounts for.
+  Output: With a real variable and a sample this size, the answer to 'is there anything there?' is nearly always yes. The more useful number is Adjusted R-squared, on the line just above - how much of the variation the variable accounts for, corrected for the number of dummies it took to do it.
 
 - Class: mult_question
-  Output: The F-test for model_sex was just as clearly significant. But its Multiple R-squared is 0.020, against 0.626 for model_vote. What does that tell you?
-  CorrectAnswer: Party accounts for about 63 per cent of the variation in left-right placement, sex for about 2 per cent.
-  AnswerChoices: Party accounts for about 63 per cent of the variation in left-right placement, sex for about 2 per cent.; Party is more statistically significant than sex.; Sex has no relationship with left-right placement.
-  AnswerTests: omnitest(correctVal='Party accounts for about 63 per cent of the variation in left-right placement, sex for about 2 per cent.')
-  Hint: R-squared is the share of the variance in the outcome the model accounts for. Both relationships are significant - what differs is how much.
+  Output: The F-test for model_sex was just as clearly significant. But its Adjusted R-squared is 0.019, against 0.625 for model_vote. What does that tell you?
+  CorrectAnswer: Party accounts for about 62 per cent of the variation in left-right placement, sex for about 2 per cent.
+  AnswerChoices: Party accounts for about 62 per cent of the variation in left-right placement, sex for about 2 per cent.; Party is more statistically significant than sex.; Sex has no relationship with left-right placement.
+  AnswerTests: omnitest(correctVal='Party accounts for about 62 per cent of the variation in left-right placement, sex for about 2 per cent.')
+  Hint: Adjusted R-squared is the share of the variance in the outcome the model accounts for. Both relationships are significant - what differs is how much.
 
 - Class: text
   Output: Now a mistake worth meeting deliberately. Suppose you forget to make the variable a factor and R sees it as a number.

@@ -97,7 +97,7 @@ With one predictor, R-squared is exactly the correlation squared:
 cor(swe$trust, swe$demlevel, use = "complete.obs")^2
 ```
 
-**`Adjusted R-squared`** corrects for the fact that adding *any* variable, even a useless one, raises R-squared a little by chance. The adjustment penalises extra predictors. Use it when comparing models with different numbers of variables.
+**`Adjusted R-squared`** corrects for the fact that adding *any* variable, even a useless one, raises R-squared a little by chance. The adjustment penalises extra predictors. Use it when comparing models with different numbers of variables, and in regression tables: it is the one to report.
 
 **`F-statistic`** tests whether the model as a whole explains anything at all. With a decent predictor it is always significant, and it is rarely the interesting part.
 
@@ -216,7 +216,7 @@ The other assumptions are not things a plot will tell you:
 > OLS is fairly robust. Mild violations of normality and constant variance usually do not change the conclusions, especially with thousands of cases. Non-linearity and a missing variable are the two that will actually mislead you.
 
 ::: {.discussion}
-**A question.** `model4` explains `r fmt(100 * summary(model4)$r.squared, 1)`% of the variance in how democratic people think Sweden is.
+**A question.** `model4` has an adjusted R-squared of `r fmt(summary(model4)$adj.r.squared, 3)`: it accounts for about `r fmt(100 * summary(model4)$adj.r.squared, 1)`% of the variance in how democratic people think Sweden is.
 
 Is that a good model? What would you need to know to answer, and is there a number of R-squared that would settle it by itself?
 :::
@@ -224,7 +224,7 @@ Is that a good model? What would you need to know to answer, and is there a numb
 ::: {.reporting}
 **How to write it up.**
 
-> Trust in institutions was strongly associated with evaluations of Swedish democracy (b = `r fmt(coef(model4)[2])`, SE = `r fmt(coef(summary(model4))[2, 2])`, *p* < .001): a one-unit increase in the trust score corresponded to a `r fmt(coef(model4)[2])`-point higher rating on the 0-10 scale. Voting for the right-wing bloc was associated with a `r fmt(abs(coef(model4)[3]))`-point lower rating (*p* = `r fmt(coef(summary(model4))[3, 4], 3)`) once trust was accounted for. The model explained `r fmt(100 * summary(model4)$r.squared, 1)`% of the variance (*n* = `r nobs(model4)`).
+> Trust in institutions was strongly associated with evaluations of Swedish democracy (b = `r fmt(coef(model4)[2])`, SE = `r fmt(coef(summary(model4))[2, 2])`, *p* < .001): a one-unit increase in the trust score corresponded to a `r fmt(coef(model4)[2])`-point higher rating on the 0-10 scale. Voting for the right-wing bloc was associated with a `r fmt(abs(coef(model4)[3]))`-point lower rating (*p* = `r fmt(coef(summary(model4))[3, 4], 3)`) once trust was accounted for. The model explained `r fmt(100 * summary(model4)$adj.r.squared, 1)`% of the variance (adjusted R², *n* = `r nobs(model4)`).
 
 Give the coefficient, its standard error, the p-value, and — most importantly — **what a one-unit change means in the units of the data**. Mistakes to avoid:
 

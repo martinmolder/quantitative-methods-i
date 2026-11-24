@@ -389,7 +389,7 @@ Figure&nbsp;11.1
 <pre><code>## [1] 0.3012942</code></pre>
 </div>
 </div>
-<p><strong><code>Adjusted R-squared</code></strong> corrects for the fact that adding <em>any</em> variable, even a useless one, raises R-squared a little by chance. The adjustment penalises extra predictors. Use it when comparing models with different numbers of variables.</p>
+<p><strong><code>Adjusted R-squared</code></strong> corrects for the fact that adding <em>any</em> variable, even a useless one, raises R-squared a little by chance. The adjustment penalises extra predictors. Use it when comparing models with different numbers of variables, and in regression tables: it is the one to report.</p>
 <p><strong><code>F-statistic</code></strong> tests whether the model as a whole explains anything at all. With a decent predictor it is always significant, and it is rarely the interesting part.</p>
 </section>
 </section>
@@ -542,13 +542,13 @@ Figure&nbsp;11.2
 <p>OLS is fairly robust. Mild violations of normality and constant variance usually do not change the conclusions, especially with thousands of cases. Non-linearity and a missing variable are the two that will actually mislead you.</p>
 </blockquote>
 <div class="discussion">
-<p><strong>A question.</strong> <code>model4</code> explains 31.0% of the variance in how democratic people think Sweden is.</p>
+<p><strong>A question.</strong> <code>model4</code> has an adjusted R-squared of 0.309: it accounts for about 30.9% of the variance in how democratic people think Sweden is.</p>
 <p>Is that a good model? What would you need to know to answer, and is there a number of R-squared that would settle it by itself?</p>
 </div>
 <div class="reporting">
 <p><strong>How to write it up.</strong></p>
 <blockquote class="blockquote">
-<p>Trust in institutions was strongly associated with evaluations of Swedish democracy (b = 1.04, SE = 0.04, <em>p</em> &lt; .001): a one-unit increase in the trust score corresponded to a 1.04-point higher rating on the 0-10 scale. Voting for the right-wing bloc was associated with a 0.13-point lower rating (<em>p</em> = 0.049) once trust was accounted for. The model explained 31.0% of the variance (<em>n</em> = 2097).</p>
+<p>Trust in institutions was strongly associated with evaluations of Swedish democracy (b = 1.04, SE = 0.04, <em>p</em> &lt; .001): a one-unit increase in the trust score corresponded to a 1.04-point higher rating on the 0-10 scale. Voting for the right-wing bloc was associated with a 0.13-point lower rating (<em>p</em> = 0.049) once trust was accounted for. The model explained 30.9% of the variance (adjusted R², <em>n</em> = 2097).</p>
 </blockquote>
 <p>Give the coefficient, its standard error, the p-value, and — most importantly — <strong>what a one-unit change means in the units of the data</strong>. Mistakes to avoid:</p>
 <ul>

@@ -60,13 +60,13 @@ modelsummary(
        "Plus bloc" = model2,
        "Full model" = model3),
   coef_map = labels,
-  gof_map = c("nobs", "r.squared", "adj.r.squared"),
+  gof_map = c("nobs", "adj.r.squared"),
   stars = c("*" = 0.05, "**" = 0.01, "***" = 0.001),
   title = "Evaluations of Swedish democracy (0-10)"
 )
 ```
 
-`coef_map` renames the coefficients and, importantly, also **sets their order** — anything left out of the map is dropped from the table. Naming the list of models gives the columns headings. `gof_map` picks which goodness-of-fit rows to keep. `stars` adds significance stars and a footnote explaining them: each symbol is given the p-value it stands for. (`stars = TRUE` would use the package's own levels, which also mark *p* < 0.1 with a plus sign. We do not treat that as significant, so we leave it out.)
+`coef_map` renames the coefficients and, importantly, also **sets their order** — anything left out of the map is dropped from the table. Naming the list of models gives the columns headings. `gof_map` picks which goodness-of-fit rows to keep: here the number of respondents and the adjusted R-squared. Adjusted rather than ordinary R-squared, because the columns have different numbers of predictors (session 11). `stars` adds significance stars and a footnote explaining them: each symbol is given the p-value it stands for. (`stars = TRUE` would use the package's own levels, which also mark *p* < 0.1 with a plus sign. We do not treat that as significant, so we leave it out.)
 
 The number in brackets under each coefficient is its standard error. Some journals want confidence intervals instead:
 
@@ -74,7 +74,7 @@ The number in brackets under each coefficient is its standard error. Some journa
 modelsummary(
   list("Full model" = model3),
   coef_map = labels,
-  gof_map = c("nobs", "r.squared"),
+  gof_map = c("nobs", "adj.r.squared"),
   estimate = "{estimate}",
   statistic = "conf.int"
 )
@@ -209,7 +209,7 @@ The rules from session 4 apply, plus a few specific to model output.
 ::: {.reporting}
 **How to write it up.**
 
-> Table 1 reports OLS models of how democratic respondents consider Sweden to be, on a 0-10 scale. Trust in institutions is the dominant predictor: a one-unit increase in the trust score corresponds to a `r fmt(coef(model3)[2])`-point higher rating (95% CI [`r fmt(confint(model3)[2, 1])`, `r fmt(confint(model3)[2, 2])`]). Having voted for the right-wing bloc is associated with a `r fmt(abs(coef(model3)[3]))`-point lower rating, an estimate that is only marginally distinguishable from zero once trust is accounted for (*p* = `r fmt(coef(summary(model3))[3, 4], 3)`). Education has a small positive association and age none. The full model accounts for `r fmt(100 * summary(model3)$r.squared, 1)`% of the variance (*n* = `r nobs(model3)`).
+> Table 1 reports OLS models of how democratic respondents consider Sweden to be, on a 0-10 scale. Trust in institutions is the dominant predictor: a one-unit increase in the trust score corresponds to a `r fmt(coef(model3)[2])`-point higher rating (95% CI [`r fmt(confint(model3)[2, 1])`, `r fmt(confint(model3)[2, 2])`]). Having voted for the right-wing bloc is associated with a `r fmt(abs(coef(model3)[3]))`-point lower rating, an estimate that is only marginally distinguishable from zero once trust is accounted for (*p* = `r fmt(coef(summary(model3))[3, 4], 3)`). Education has a small positive association and age none. The full model accounts for `r fmt(100 * summary(model3)$adj.r.squared, 1)`% of the variance (adjusted R², *n* = `r nobs(model3)`).
 
 Walk the reader through the table rather than repeating it. Mistakes to avoid:
 

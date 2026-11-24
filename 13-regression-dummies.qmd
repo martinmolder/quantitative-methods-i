@@ -132,12 +132,12 @@ Seven coefficients raise a question the table cannot answer: is *party*, taken a
 
 The answer is already in the output, on its last line. The **`F-statistic`** tests whether the model as a whole explains anything at all (session 11). This model contains nothing but the seven party dummies, so here it tests party as a whole: F = `r fmt(summary(model_vote)$fstatistic[1], 1)` on `r summary(model_vote)$fstatistic[2]` and `r summary(model_vote)$fstatistic[3]` degrees of freedom — the first number is the seven dummies — with a single p-value for the lot.
 
-That answers "is there anything there?", and with a real variable and a sample this size the answer is nearly always yes. **The more useful number is `Multiple R-squared`**, on the line just above it: how much of the variation the variable accounts for.
+That answers "is there anything there?", and with a real variable and a sample this size the answer is nearly always yes. **The more useful number is `Adjusted R-squared`**, on the line just above it: how much of the variation the variable accounts for, corrected for the number of dummies it took to do it.
 
-For party it is `r fmt(summary(model_vote)$r.squared, 3)`: vote choice accounts for about `r fmt(100 * summary(model_vote)$r.squared, 0)`% of the variance in where people place themselves. Compare `model_sex`. Its F-test is just as clearly significant, but its R-squared is `r fmt(summary(model_sex)$r.squared, 3)` — sex accounts for about `r fmt(100 * summary(model_sex)$r.squared, 0)`%. Both variables "matter" in the sense of the test. Only one tells you much about where a person is likely to sit.
+For party it is `r fmt(summary(model_vote)$adj.r.squared, 3)`: vote choice accounts for about `r fmt(100 * summary(model_vote)$adj.r.squared, 0)`% of the variance in where people place themselves. Compare `model_sex`. Its F-test is just as clearly significant, but its adjusted R-squared is `r fmt(summary(model_sex)$adj.r.squared, 3)` — sex accounts for about `r fmt(100 * summary(model_sex)$adj.r.squared, 0)`%. Both variables "matter" in the sense of the test. Only one tells you much about where a person is likely to sit.
 
 ::: {.discussion}
-**A question.** An R-squared of `r fmt(summary(model_vote)$r.squared, 2)` is enormous by the standards of survey research. Does it mean party choice explains ideology? What else could produce a number like that?
+**A question.** An adjusted R-squared of `r fmt(summary(model_vote)$adj.r.squared, 2)` is enormous by the standards of survey research. Does it mean party choice explains ideology? What else could produce a number like that?
 :::
 
 ## A mistake worth avoiding
@@ -154,7 +154,7 @@ One coefficient instead of seven, and it looks like a clean result: each step up
 
 It is nonsense. The model has assumed the eight parties are **equally spaced**, in the order the levels happen to be in, and that the gap between V and MP is the same as the gap between M and SD. Look at the group means and you can see they are not.
 
-Here the levels are at least in left-right order, so the nonsense is mild and the R-squared only drops from `r fmt(summary(model_vote)$r.squared, 3)` to `r fmt(summary(lm(lr_self ~ vote_number, data = swe))$r.squared, 3)`. Had the levels been alphabetical — C, KD, L, M, MP, S, SD, V — the model would have been fitting a straight line through an arbitrary ordering, and it would still have produced a coefficient, a standard error and a p-value.
+Here the levels are at least in left-right order, so the nonsense is mild and the adjusted R-squared only drops from `r fmt(summary(model_vote)$adj.r.squared, 3)` to `r fmt(summary(lm(lr_self ~ vote_number, data = swe))$adj.r.squared, 3)`. Had the levels been alphabetical — C, KD, L, M, MP, S, SD, V — the model would have been fitting a straight line through an arbitrary ordering, and it would still have produced a coefficient, a standard error and a p-value.
 
 > **Check the class of every categorical predictor before fitting.** `class(swe$vote)` should say `factor`. R will happily run a model on a nominal variable stored as numbers, and nothing in the output will look wrong.
 
@@ -197,7 +197,7 @@ Note how small some parties are in the sample: the smallest, the Christian Democ
 ::: {.reporting}
 **How to write it up.**
 
-> Party choice accounted for nearly two-thirds of the variance in left-right self-placement (R² = `r fmt(summary(model_vote)$r.squared, 2)`). Taking Social Democrat voters as the reference (mean = `r fmt(coef(model_vote_s)[1])`), Left Party voters placed themselves `r fmt(abs(coef(model_vote_s)[2]))` points further left, while Sweden Democrat voters placed themselves `r fmt(coef(model_vote_s)[8])` points further right (*n* = `r nobs(model_vote)`).
+> Party choice accounted for nearly two-thirds of the variance in left-right self-placement (adjusted R² = `r fmt(summary(model_vote)$adj.r.squared, 2)`). Taking Social Democrat voters as the reference (mean = `r fmt(coef(model_vote_s)[1])`), Left Party voters placed themselves `r fmt(abs(coef(model_vote_s)[2]))` points further left, while Sweden Democrat voters placed themselves `r fmt(coef(model_vote_s)[8])` points further right (*n* = `r nobs(model_vote)`).
 
 Say which category is the reference — without it the table cannot be read. Mistakes to avoid:
 

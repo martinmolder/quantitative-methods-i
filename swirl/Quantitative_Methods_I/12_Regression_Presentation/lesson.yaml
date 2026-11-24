@@ -47,18 +47,18 @@
   Hint: Type labels <- c("trust" = "Trust in institutions", "blocRight" = "Voted for the right bloc", "age" = "Age (years)", "educ" = "Education (ISCED level)").
 
 - Class: cmd_question
-  Output: Use it, and trim the bottom panel. Type modelsummary(list(model1, model2, model3), coef_map = labels, gof_map = c("nobs", "r.squared")).
-  CorrectAnswer: modelsummary(list(model1, model2, model3), coef_map = labels, gof_map = c("nobs", "r.squared"))
-  AnswerTests: any_of_exprs('modelsummary(list(model1, model2, model3), coef_map = labels, gof_map = c("nobs", "r.squared"))', 'modelsummary(list(model1, model2, model3), coef_map=labels, gof_map=c("nobs","r.squared"))')
-  Hint: Type modelsummary(list(model1, model2, model3), coef_map = labels, gof_map = c("nobs", "r.squared")).
+  Output: Use it, and trim the bottom panel. Type modelsummary(list(model1, model2, model3), coef_map = labels, gof_map = c("nobs", "adj.r.squared")).
+  CorrectAnswer: modelsummary(list(model1, model2, model3), coef_map = labels, gof_map = c("nobs", "adj.r.squared"))
+  AnswerTests: any_of_exprs('modelsummary(list(model1, model2, model3), coef_map = labels, gof_map = c("nobs", "adj.r.squared"))', 'modelsummary(list(model1, model2, model3), coef_map=labels, gof_map=c("nobs","adj.r.squared"))')
+  Hint: Type modelsummary(list(model1, model2, model3), coef_map = labels, gof_map = c("nobs", "adj.r.squared")).
 
 - Class: text
-  Output: coef_map renames the coefficients and also sets their order - and anything left out of it is dropped, which is how the intercept disappeared. gof_map picks which goodness-of-fit rows to keep.
+  Output: coef_map renames the coefficients and also sets their order - and anything left out of it is dropped, which is how the intercept disappeared. gof_map picks which goodness-of-fit rows to keep - here the number of respondents and the adjusted R-squared, which is the one to report because the columns have different numbers of predictors.
 
 - Class: cmd_question
-  Output: Name the columns by naming the list. Type modelsummary(list("Trust only" = model1, "Plus bloc" = model2, "Full model" = model3), coef_map = labels, gof_map = c("nobs", "r.squared")).
-  CorrectAnswer: modelsummary(list("Trust only" = model1, "Plus bloc" = model2, "Full model" = model3), coef_map = labels, gof_map = c("nobs", "r.squared"))
-  AnswerTests: any_of_exprs('modelsummary(list("Trust only" = model1, "Plus bloc" = model2, "Full model" = model3), coef_map = labels, gof_map = c("nobs", "r.squared"))', 'modelsummary(list("Trust only"=model1, "Plus bloc"=model2, "Full model"=model3), coef_map=labels, gof_map=c("nobs","r.squared"))')
+  Output: Name the columns by naming the list. Type modelsummary(list("Trust only" = model1, "Plus bloc" = model2, "Full model" = model3), coef_map = labels, gof_map = c("nobs", "adj.r.squared")).
+  CorrectAnswer: modelsummary(list("Trust only" = model1, "Plus bloc" = model2, "Full model" = model3), coef_map = labels, gof_map = c("nobs", "adj.r.squared"))
+  AnswerTests: any_of_exprs('modelsummary(list("Trust only" = model1, "Plus bloc" = model2, "Full model" = model3), coef_map = labels, gof_map = c("nobs", "adj.r.squared"))', 'modelsummary(list("Trust only"=model1, "Plus bloc"=model2, "Full model"=model3), coef_map=labels, gof_map=c("nobs","adj.r.squared"))')
   Hint: Give each element of the list a name in quotation marks.
 
 - Class: text
