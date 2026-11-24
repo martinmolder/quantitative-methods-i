@@ -61,12 +61,12 @@ modelsummary(
        "Full model" = model3),
   coef_map = labels,
   gof_map = c("nobs", "r.squared", "adj.r.squared"),
-  stars = TRUE,
+  stars = c("*" = 0.05, "**" = 0.01, "***" = 0.001),
   title = "Evaluations of Swedish democracy (0-10)"
 )
 ```
 
-`coef_map` renames the coefficients and, importantly, also **sets their order** — anything left out of the map is dropped from the table. Naming the list of models gives the columns headings. `gof_map` picks which goodness-of-fit rows to keep. `stars = TRUE` adds significance stars and a footnote explaining them.
+`coef_map` renames the coefficients and, importantly, also **sets their order** — anything left out of the map is dropped from the table. Naming the list of models gives the columns headings. `gof_map` picks which goodness-of-fit rows to keep. `stars` adds significance stars and a footnote explaining them: each symbol is given the p-value it stands for. (`stars = TRUE` would use the package's own levels, which also mark *p* < 0.1 with a plus sign. We do not treat that as significant, so we leave it out.)
 
 The number in brackets under each coefficient is its standard error. Some journals want confidence intervals instead:
 
